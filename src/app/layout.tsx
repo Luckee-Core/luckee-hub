@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js App",
-  description: "Next.js template with Redux and Tailwind",
+  title: "Luckee Dev Hub",
+  description: "Central launcher for Luckee open-source studios",
 };
 
 export default function RootLayout({
