@@ -13,7 +13,7 @@ Luckee Hub Run spawns embedded PTYs in hub-express. The web UI must show Cursor-
 ### Layout
 
 - [`src/components/app-layout/index.tsx`](../src/components/app-layout/index.tsx) — flex column; optional `terminalDock` slot below scrollable main
-- [`src/packages/dev-hub/terminal-dock/`](../src/packages/dev-hub/terminal-dock/) — tabs, xterm panel, collapse toggle
+- [`src/packages/terminal-dock/`](../src/packages/terminal-dock/) — tabs, xterm panel, collapse toggle
 
 ### xterm.js
 
@@ -22,10 +22,15 @@ Luckee Hub Run spawns embedded PTYs in hub-express. The web UI must show Cursor-
 
 ### State (centralized)
 
-- `devHubBuilder.terminalSessions`, `activeTerminalSessionId`, `terminalDockOpen`
-- Run thunk opens dock and sets sessions from `POST /api/launcher/studios/:id/run` response
-- WebSocket connect lives in `src/api/dev-hub/terminal-connection.ts`; panel calls it on active tab change
+- `projectsBuilder.terminalSessions`, `activeTerminalSessionId`, `terminalDockOpen`
+- Run thunk opens dock and sets sessions from `POST /api/launcher/projects/:id/run` response
+- WebSocket connect lives in `src/api/projects/terminal-connection.ts`; panel calls it on active tab change
 
 ### No store inside package
 
-Follow ADR 011 — thunks and API in `src/store/`, `src/api/`, `src/model/`.
+Follow ADR 013 — thunks and API in `src/store/`, `src/api/`, `src/model/`.
+
+## Related
+
+- [013 – Projects and project detail](./013-projects-and-project-detail.md)
+- [011 – Dev hub feature](./011-dev-hub-feature.md) (superseded)

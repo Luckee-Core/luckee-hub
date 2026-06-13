@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useMemo, useState } from 'react';
 import { PanelLeft, PanelLeftClose, Rows3 } from 'lucide-react';
-import { DASHBOARD_PATH } from '@/config/routes';
+import { PROJECTS_PATH } from '@/config/routes';
 import { getHubSidebarSections } from './get-hub-sidebar-sections';
 
 export const Sidebar = () => {
@@ -14,8 +14,8 @@ export const Sidebar = () => {
 
   const isActiveHref = useCallback(
     (href: string) => {
-      if (href === DASHBOARD_PATH) {
-        return pathname === DASHBOARD_PATH;
+      if (href === PROJECTS_PATH) {
+        return pathname === PROJECTS_PATH || pathname.startsWith(`${PROJECTS_PATH}/`);
       }
       return pathname === href || pathname.startsWith(`${href}/`);
     },
@@ -25,7 +25,7 @@ export const Sidebar = () => {
   return (
     <aside className={styles.sidebar(collapsed)}>
       <div className={styles.logoArea}>
-        <Link href={DASHBOARD_PATH} className={styles.logoLink}>
+        <Link href={PROJECTS_PATH} className={styles.logoLink}>
           <span className={styles.logoMark}>LH</span>
           {!collapsed ? <span className={styles.logoText}>Luckee Dev Hub</span> : null}
         </Link>

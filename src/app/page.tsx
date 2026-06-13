@@ -1,5 +1,6 @@
-import { DevHub } from '@/packages/dev-hub';
+import { redirect } from 'next/navigation';
+import { PROJECTS_PATH } from '@/config/routes';
 
 export default function Page() {
-  return <DevHub />;
+  redirect(PROJECTS_PATH);
 }
