@@ -1,4 +1,4 @@
-import { DASHBOARD_PATH } from '@/config/routes';
+import { PROJECTS_PATH } from '@/config/routes';
 
 export type HubSidebarLink = {
   name: string;
@@ -16,6 +16,6 @@ export type HubSidebarSection = {
 export const getHubSidebarSections = (): HubSidebarSection[] => [
   {
     title: '',
-    links: [{ name: 'Studios', href: DASHBOARD_PATH }],
+    links: [{ name: 'Projects', href: PROJECTS_PATH }],
   },
 ];

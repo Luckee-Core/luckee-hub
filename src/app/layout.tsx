@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Luckee Dev Hub",
-  description: "Central launcher for Luckee open-source studios",
+  description: "Central launcher for Luckee open-source projects",
 };
 
 export default function RootLayout({

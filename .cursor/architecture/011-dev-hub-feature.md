@@ -1,8 +1,10 @@
 # 011 — Dev Hub feature (Luckee Hub)
 
+> **Superseded** for list/detail routing and package layout by [013 – Projects and project detail](./013-projects-and-project-detail.md). Current UI lives in [`src/packages/projects/`](../../src/packages/projects/).
+
 ## Status
 
-Accepted
+Accepted (historical)
 
 ## Context
 

@@ -23,8 +23,9 @@ ADRs keep implementation consistent by documenting:
 7. [007 – Starter template layout](./007-starter-template-layout.md) — Minimal shipped store and folder growth path.
 8. [008 – Detail page routing](./008-detail-page-routing.md) — `{entity}-detail-page`, no `[id]` routes.
 10. [010 – Public content reads from Express](./010-public-blog-express-fetch.md) — Server Component reads + Redux list hydration.
-11. [011 – Dev hub feature](./011-dev-hub-feature.md) — `packages/dev-hub`, centralized store/api/model.
+11. [011 – Dev hub feature](./011-dev-hub-feature.md) — legacy; see 013 for projects routing.
 12. [012 – Terminal dock UI](./012-terminal-dock-ui.md) — bottom panel, xterm, WebSocket sessions.
+13. [013 – Projects and project detail](./013-projects-and-project-detail.md) — `/projects`, `/projects/detail`, local DB panel.
 
 ## How to use
 

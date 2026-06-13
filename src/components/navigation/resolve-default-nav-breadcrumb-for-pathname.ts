@@ -1,4 +1,4 @@
-import { DASHBOARD_PATH } from '@/config/routes';
+import { PROJECTS_PATH } from '@/config/routes';
 import { getNavigationLinks } from './get-navigation-links';
 
 export type DefaultNavBreadcrumb = {
@@ -13,8 +13,8 @@ export const resolveDefaultNavBreadcrumbForPathname = (
   pathname: string,
 ): DefaultNavBreadcrumb | null => {
   for (const link of getNavigationLinks()) {
-    if (link.href === DASHBOARD_PATH) {
-      if (pathname === DASHBOARD_PATH) {
+    if (link.href === PROJECTS_PATH) {
+      if (pathname === PROJECTS_PATH || pathname.startsWith(`${PROJECTS_PATH}/`)) {
         return { label: link.name, href: link.href };
       }
       continue;

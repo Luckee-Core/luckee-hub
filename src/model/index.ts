@@ -1,7 +1,9 @@
 export type {
-  DevHubStudio,
   HookStatus,
+  HubProject,
   LauncherJob,
-  RunStudioResponse,
+  LocalDatabaseProbe,
+  LocalDatabaseSetupResult,
+  RunProjectResponse,
   TerminalSession,
-} from './dev-hub-studio';
+} from './hub-project';
