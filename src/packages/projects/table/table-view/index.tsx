@@ -4,9 +4,9 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { HubProject } from '@/model';
 import { useAppDispatch } from '@/store';
-import { PROJECT_DETAIL_PATH } from '@/config/routes';
+import { PROJECT_DETAIL_PAGE_PATH } from '@/config/routes';
 import {
-  setCurrentProjectDetailThunk,
+  setCurrentProjectThunk,
 } from '@/store/thunks/projects';
 import { ProjectsHookStatusBadge } from '../../badges/hook-status';
 import { ProjectsRowActions } from '../../actions/row-actions';
@@ -36,9 +36,9 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
   };
 
   const handleRowClick = (projectId: string) => {
-    void dispatch(setCurrentProjectDetailThunk(projectId)).then((status) => {
+    void dispatch(setCurrentProjectThunk(projectId)).then((status) => {
       if (status === 200) {
-        router.push(PROJECT_DETAIL_PATH);
+        router.push(PROJECT_DETAIL_PAGE_PATH);
       }
     });
   };

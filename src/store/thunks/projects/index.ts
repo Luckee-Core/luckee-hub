@@ -7,5 +7,5 @@ export { openProjectChromeThunk } from './open-project-chrome-thunk';
 export { setActiveTerminalTabThunk } from './set-active-terminal-tab-thunk';
 export { closeTerminalSessionThunk } from './close-terminal-session-thunk';
 export { toggleTerminalDockThunk } from './toggle-terminal-dock-thunk';
-export { setCurrentProjectDetailThunk } from './set-current-project-detail-thunk';
+export { setCurrentProjectThunk } from './set-current-project-thunk';
 export { probeLocalDatabaseThunk, setupLocalDatabaseThunk } from './local-database-thunk';

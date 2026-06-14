@@ -1,6 +1,6 @@
 # `src/packages` — Feature modules
 
-**Domain-owned UI** for Luckee Hub: one folder per screen (e.g. **`projects/`**, **`project-detail/`**, **`terminal-dock/`**). Route files under **`src/app`** import the package export only.
+**Domain-owned UI** for Luckee Hub: one folder per screen (e.g. **`projects/`**, **`project-detail-page/`**, **`terminal-dock/`**). Route files under **`src/app`** import the package export only.
 
 ## Layout (typical)
 

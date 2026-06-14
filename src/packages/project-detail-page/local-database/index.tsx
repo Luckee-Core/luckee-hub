@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import type { HubProject } from '@/model';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
   probeLocalDatabaseThunk,
@@ -9,41 +8,40 @@ import {
 } from '@/store/thunks/projects';
 import { StatusChip } from './status-chip';
 
-type ProjectDetailLocalDatabaseProps = {
-  project: HubProject;
-};
-
-export const ProjectDetailLocalDatabase = ({ project }: ProjectDetailLocalDatabaseProps) => {
+export const ProjectDetailLocalDatabase = () => {
   const dispatch = useAppDispatch();
+  const currentProject = useAppSelector((s) => s.currentProject);
   const projectsBuilder = useAppSelector((s) => s.projectsBuilder);
   const localDatabaseProbes = useAppSelector((s) => s.localDatabaseProbes);
 
+  const projectId = currentProject.id;
+
   const probe = useMemo(
-    () => localDatabaseProbes[project.id],
-    [localDatabaseProbes, project.id],
+    () => localDatabaseProbes[projectId],
+    [localDatabaseProbes, projectId],
   );
   const isLoading = useMemo(
     () =>
       projectsBuilder.localDatabaseLoadStatus === 'loading' &&
-      projectsBuilder.activeLocalDatabaseProjectId === project.id,
-    [projectsBuilder, project.id],
+      projectsBuilder.activeLocalDatabaseProjectId === projectId,
+    [projectsBuilder, projectId],
   );
   const error = useMemo(
     () =>
-      projectsBuilder.activeLocalDatabaseProjectId === project.id
+      projectsBuilder.activeLocalDatabaseProjectId === projectId
         ? projectsBuilder.localDatabaseError
         : null,
-    [projectsBuilder, project.id],
+    [projectsBuilder, projectId],
   );
   const setupMessage = useMemo(
     () =>
-      projectsBuilder.activeLocalDatabaseProjectId === project.id
+      projectsBuilder.activeLocalDatabaseProjectId === projectId
         ? projectsBuilder.localDatabaseSetupMessage
         : null,
-    [projectsBuilder, project.id],
+    [projectsBuilder, projectId],
   );
 
-  if (!project.localDatabaseSupported) {
+  if (!currentProject.localDatabaseSupported) {
     return null;
   }
 
@@ -80,7 +78,7 @@ export const ProjectDetailLocalDatabase = ({ project }: ProjectDetailLocalDataba
           type="button"
           className={styles.secondary}
           disabled={isLoading}
-          onClick={() => void dispatch(probeLocalDatabaseThunk(project.id))}
+          onClick={() => void dispatch(probeLocalDatabaseThunk(projectId))}
         >
           {isLoading ? 'Probing…' : 'Probe'}
         </button>
@@ -88,7 +86,7 @@ export const ProjectDetailLocalDatabase = ({ project }: ProjectDetailLocalDataba
           type="button"
           className={styles.primary}
           disabled={isLoading}
-          onClick={() => void dispatch(setupLocalDatabaseThunk(project.id))}
+          onClick={() => void dispatch(setupLocalDatabaseThunk(projectId))}
         >
           Setup database
         </button>

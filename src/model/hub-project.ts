@@ -8,16 +8,25 @@ export type HookStatus =
   | 'web_running'
   | 'ready';
 
+export type ProjectHookCheck = {
+  id: string;
+  label: string;
+  ok: boolean;
+};
+
 export type HubProject = {
   id: string;
   name: string;
   description: string;
   hookStatus: HookStatus;
+  hookChecks: ProjectHookCheck[];
   enabled: boolean;
   apiOnly: boolean;
   webOnly: boolean;
   apiPort: number;
   webUrl?: string;
+  apiRepoUrl?: string;
+  webRepoUrl?: string;
   paths?: {
     webDir?: string;
     expressDir?: string;
