@@ -6,7 +6,7 @@ import { localDatabaseProbesReducer } from './dumps/localDatabaseProbes';
 import { runningJobsReducer } from './dumps/runningJobs';
 import { breadcrumbBuilderReducer } from './builders/breadcrumbBuilder';
 import { projectsBuilderReducer } from './builders/projectsBuilder';
-import { currentProjectDetailReducer } from './current/projectDetail';
+import { currentProjectReducer } from './current/currentProject';
 
 export const rootReducer = combineReducers({
   app: appReducer,
@@ -16,5 +16,5 @@ export const rootReducer = combineReducers({
   localDatabaseProbes: localDatabaseProbesReducer,
   runningJobs: runningJobsReducer,
   projectsBuilder: projectsBuilderReducer,
-  currentProjectDetail: currentProjectDetailReducer,
+  currentProject: currentProjectReducer,
 });

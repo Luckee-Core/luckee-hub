@@ -1,28 +1,26 @@
 'use client';
 
-import type { HubProject } from '@/model';
+import { useAppSelector } from '@/store';
 import {
   ProjectsOpenChromeAction,
   ProjectsOpenCursorAction,
   ProjectsRunAction,
 } from '@/packages/projects';
 
-type ProjectDetailActionsProps = {
-  project: HubProject;
-};
+export const ProjectDetailActions = () => {
+  const currentProject = useAppSelector((s) => s.currentProject);
 
-export const ProjectDetailActions = ({ project }: ProjectDetailActionsProps) => {
-  const isHookedUp = project.hookStatus !== 'catalog';
+  const isHookedUp = currentProject.hookStatus !== 'catalog';
 
   return (
     <section className={styles.card}>
       <h2 className={styles.title}>Dev actions</h2>
       <div className={styles.actions}>
-        <ProjectsRunAction projectId={project.id} disabled={!isHookedUp} />
-        <ProjectsOpenCursorAction projectId={project.id} disabled={!isHookedUp} />
+        <ProjectsRunAction projectId={currentProject.id} disabled={!isHookedUp} />
+        <ProjectsOpenCursorAction projectId={currentProject.id} disabled={!isHookedUp} />
         <ProjectsOpenChromeAction
-          projectId={project.id}
-          disabled={!isHookedUp || project.apiOnly}
+          projectId={currentProject.id}
+          disabled={!isHookedUp || currentProject.apiOnly}
         />
       </div>
     </section>

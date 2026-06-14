@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-The dev hub listed studios at `/` in `packages/dev-hub`. Users need `/projects` (list) and `/projects/detail` (per-project control plane) following luckee-web Redux detail routing.
+The dev hub listed studios at `/` in `packages/dev-hub`. Users need a projects list and a per-project control plane following ADR 008 detail routing (`{entity}-detail-page`).
 
 ## Decision
 
@@ -14,14 +14,14 @@ The dev hub listed studios at `/` in `packages/dev-hub`. Users need `/projects` 
 
 - `/` → redirect to `/projects`
 - `/projects` → `src/packages/projects/`
-- `/projects/detail` → `src/packages/project-detail/` (static route; `currentProjectDetail.projectId` in Redux)
+- `/project-detail-page` → `src/packages/project-detail-page/` (static route; `currentProject` in Redux)
 
 ### Packages
 
 ```text
-src/packages/projects/          # list table, header, row actions
-src/packages/project-detail/    # overview, local DB panel, dev actions
-src/packages/terminal-dock/     # shared bottom dock (extracted from dev-hub)
+src/packages/projects/              # list table, header, row actions
+src/packages/project-detail-page/   # overview, local DB panel, dev actions
+src/packages/terminal-dock/         # shared dock (extracted from dev-hub)
 ```
 
 ### Redux
@@ -31,16 +31,16 @@ src/packages/terminal-dock/     # shared bottom dock (extracted from dev-hub)
 - Dump: `localDatabaseProbes` (`Record<projectId, LocalDatabaseProbe>`)
 - Dump: `runningJobs` (`Record<projectId, jobId>`)
 - Builder: `projectsBuilder` — list/terminal/local-DB UI flags and `terminalSessionOrder` only (primitives)
-- Current: `currentProjectDetail` — `{ projectId: string | null }` only
+- Current: `currentProject` — full `HubProject`; `id === ''` means none selected
 
-**001 exception:** `currentProjectDetail` stores `projectId` only, not the full `HubProject`. Resolve the entity from the `projects` dump in components via `useMemo` (see ADR 001 zero-selector rule).
+Detail packages read **`currentProject`** (whole slice per ADR 001).
 
-- Thunks: `src/store/thunks/projects/`
+- Thunks: `src/store/thunks/projects/` — `setCurrentProjectThunk` hydrates `currentProject` from dump before navigation
 - API: `src/api/projects/`
 
 ### Navigation
 
-- Row click → `setCurrentProjectDetailThunk` → await `200` → `/projects/detail` (ADR 008)
+- Row click → `setCurrentProjectThunk` → await `200` → `/project-detail-page` (ADR 008)
 - Breadcrumbs: Projects → project name (static segment v1)
 
 ## Related
