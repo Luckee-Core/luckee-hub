@@ -8,28 +8,15 @@ export type HookStatus =
   | 'web_running'
   | 'ready';
 
-export type ProjectHookCheck = {
-  id: string;
-  label: string;
-  ok: boolean;
-};
-
 export type HubProject = {
   id: string;
   name: string;
   description: string;
   hookStatus: HookStatus;
-  hookChecks: ProjectHookCheck[];
   enabled: boolean;
-  apiOnly: boolean;
-  webOnly: boolean;
   apiPort: number;
   webUrl?: string;
-  apiRepoUrl?: string;
-  webRepoUrl?: string;
   paths?: {
-    webDir?: string;
-    expressDir?: string;
     workspaceFile?: string;
   };
   localDatabaseSupported: boolean;
@@ -57,11 +44,42 @@ export type LauncherJob = {
   updatedAt: string;
 };
 
+export type LocalDatabaseSetupStepStatus = 'done' | 'pending' | 'skipped' | 'blocked';
+
+export type LocalDatabaseSetupStep = {
+  id: string;
+  title: string;
+  detail?: string;
+  status: LocalDatabaseSetupStepStatus;
+  runnable: boolean;
+  actionLabel?: string;
+  skipped?: boolean;
+  stoppable?: boolean;
+  stopStepId?: string;
+  stopActionLabel?: string;
+};
+
+export type LocalDatabaseStepResult = {
+  success: boolean;
+  stepId: string;
+  message: string;
+};
+
+export type LocalDatabaseCleanupResult = {
+  success: boolean;
+  message: string;
+};
+
 export type LocalDatabaseProbe = {
   supported: boolean;
   kind?: 'postgres';
   databaseName?: string;
+  migrationsDir?: string;
+  migrationFiles?: string[];
+  expressEnvPath?: string;
+  setupSteps?: LocalDatabaseSetupStep[];
   postgresRunning: boolean;
+  postgresStartedByHub?: boolean;
   databaseExists: boolean;
   schemaReady: boolean;
   envConfigured: boolean;

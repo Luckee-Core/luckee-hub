@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { LocalDatabaseCleanupListener } from "@/components/local-database-cleanup-listener";
 import { ReduxProvider } from "@/components/ReduxProvider";
 import "./globals.css";
 
@@ -28,7 +29,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-gray-900`}
       >
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <LocalDatabaseCleanupListener />
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );

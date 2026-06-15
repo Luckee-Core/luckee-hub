@@ -1,6 +1,10 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import type { HubProject } from '@/model';
+import { useAppSelector } from '@/store';
+import { projectHasWebRepo } from '@/utils/projects';
 import { ProjectsOpenChromeAction } from '../open-chrome';
 import { ProjectsOpenCursorAction } from '../open-cursor';
 import { ProjectsRunAction } from '../run-project';
@@ -10,7 +14,12 @@ type ProjectsRowActionsProps = {
 };
 
 export const ProjectsRowActions = ({ project }: ProjectsRowActionsProps) => {
+  const projectRepos = useAppSelector((s) => s.projectRepos);
   const isHookedUp = project.hookStatus !== 'catalog';
+  const hasWebRepo = useMemo(
+    () => projectHasWebRepo(projectRepos, project.id),
+    [projectRepos, project.id],
+  );
 
   return (
     <div className={styles.actions} onClick={(event) => event.stopPropagation()}>
@@ -18,7 +27,7 @@ export const ProjectsRowActions = ({ project }: ProjectsRowActionsProps) => {
       <ProjectsOpenCursorAction projectId={project.id} disabled={!isHookedUp} />
       <ProjectsOpenChromeAction
         projectId={project.id}
-        disabled={!isHookedUp || project.apiOnly}
+        disabled={!isHookedUp || !hasWebRepo}
       />
     </div>
   );
