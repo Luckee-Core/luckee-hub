@@ -1,6 +1,9 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import { useAppSelector } from '@/store';
+import { projectHasWebRepo } from '@/utils/projects';
 import {
   ProjectsOpenChromeAction,
   ProjectsOpenCursorAction,
@@ -9,8 +12,13 @@ import {
 
 export const ProjectDetailActions = () => {
   const currentProject = useAppSelector((s) => s.currentProject);
+  const projectRepos = useAppSelector((s) => s.projectRepos);
 
   const isHookedUp = currentProject.hookStatus !== 'catalog';
+  const hasWebRepo = useMemo(
+    () => projectHasWebRepo(projectRepos, currentProject.id),
+    [projectRepos, currentProject.id],
+  );
 
   return (
     <section className={styles.card}>
@@ -20,7 +28,7 @@ export const ProjectDetailActions = () => {
         <ProjectsOpenCursorAction projectId={currentProject.id} disabled={!isHookedUp} />
         <ProjectsOpenChromeAction
           projectId={currentProject.id}
-          disabled={!isHookedUp || currentProject.apiOnly}
+          disabled={!isHookedUp || !hasWebRepo}
         />
       </div>
     </section>

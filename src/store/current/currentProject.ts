@@ -6,10 +6,7 @@ export const EMPTY_HUB_PROJECT: HubProject = {
   name: '',
   description: '',
   hookStatus: 'catalog',
-  hookChecks: [],
   enabled: true,
-  apiOnly: false,
-  webOnly: false,
   apiPort: 0,
   localDatabaseSupported: false,
 };

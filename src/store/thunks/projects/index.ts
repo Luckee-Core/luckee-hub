@@ -1,4 +1,4 @@
-export { loadProjectsThunk, refreshProjectsThunk } from './load-projects-thunk';
+export { initializeHubCatalogThunk, loadProjectsThunk, refreshProjectsThunk } from './load-projects-thunk';
 export { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 export { runProjectThunk } from './run-project-thunk';
 export { pollProjectJobThunk } from './poll-project-job-thunk';
@@ -9,3 +9,4 @@ export { closeTerminalSessionThunk } from './close-terminal-session-thunk';
 export { toggleTerminalDockThunk } from './toggle-terminal-dock-thunk';
 export { setCurrentProjectThunk } from './set-current-project-thunk';
 export { probeLocalDatabaseThunk, setupLocalDatabaseThunk } from './local-database-thunk';
+export { runLocalDatabaseStepThunk } from './run-local-database-step-thunk';

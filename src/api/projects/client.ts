@@ -1,11 +1,14 @@
 import type {
   HubProject,
   LauncherJob,
+  LocalDatabaseCleanupResult,
   LocalDatabaseProbe,
   LocalDatabaseSetupResult,
+  LocalDatabaseStepResult,
   RunProjectResponse,
 } from '@/model';
 import { requestApi } from '@/api/_shared';
+import type { ListProjectsResponse } from './types';
 import { projectsApiBase } from './config';
 
 type ListProjectsOptions = {
@@ -14,11 +17,11 @@ type ListProjectsOptions = {
 };
 
 /**
- * List projects with hook status from hub Express API.
+ * Probe hub.local.json setup status for catalog projects from hub Express API.
  */
 export const listProjectsApi = (options: ListProjectsOptions = {}) => {
   const query = options.live ? '?live=1' : '';
-  return requestApi<HubProject[]>(`${projectsApiBase}/api/projects${query}`);
+  return requestApi<ListProjectsResponse>(`${projectsApiBase}/api/projects${query}`);
 };
 
 /**
@@ -65,5 +68,29 @@ export const probeLocalDatabaseApi = (projectId: string) =>
 export const setupLocalDatabaseApi = (projectId: string) =>
   requestApi<LocalDatabaseSetupResult>(
     `${projectsApiBase}/api/projects/${projectId}/local-database/setup`,
+    { method: 'POST' },
+  );
+
+/**
+ * Run a single local database setup step for a project.
+ */
+export const runLocalDatabaseStepApi = (projectId: string, stepId: string) =>
+  requestApi<LocalDatabaseStepResult>(
+    `${projectsApiBase}/api/projects/${projectId}/local-database/steps/${encodeURIComponent(stepId)}/run`,
+    { method: 'POST' },
+  );
+
+/**
+ * Build cleanup URL for tab-close beacon requests.
+ */
+export const getLocalDatabaseCleanupUrl = (projectId: string): string =>
+  `${projectsApiBase}/api/projects/${projectId}/local-database/cleanup`;
+
+/**
+ * Stop hub-managed Postgres for a project (tab close or manual cleanup).
+ */
+export const cleanupLocalDatabaseApi = (projectId: string) =>
+  requestApi<LocalDatabaseCleanupResult>(
+    getLocalDatabaseCleanupUrl(projectId),
     { method: 'POST' },
   );

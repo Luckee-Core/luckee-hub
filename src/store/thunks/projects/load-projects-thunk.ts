@@ -1,7 +1,21 @@
+import {
+  buildHubCatalogProjects,
+  buildHubCatalogRepos,
+  mergeHubProjectSetup,
+  mergeHubRepoSetup,
+} from '@/config';
 import { listProjectsApi } from '@/api/projects';
 import type { AppThunk } from '@/store/store';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import { ProjectsActions } from '@/store/dumps/projects';
+import { ProjectReposActions } from '@/store/dumps/projectRepos';
+
+/**
+ * Seed static repo catalog (identity + GitHub URLs only).
+ */
+export const initializeHubCatalogThunk = (): AppThunk => (dispatch) => {
+  dispatch(ProjectReposActions.setProjectRepos(buildHubCatalogRepos()));
+};
 
 type LoadProjectsOptions = {
   /** Curl/lsof ports for Ready / API running / Web running badges. */
@@ -9,7 +23,7 @@ type LoadProjectsOptions = {
 };
 
 /**
- * Load project catalog from hub Express. Default is instant (registry + filesystem only).
+ * Probe hub.local.json setup via Express and merge onto the hardcoded catalog.
  */
 export const loadProjectsThunk =
   (options: LoadProjectsOptions = {}): AppThunk<Promise<200 | 400 | 500>> =>
@@ -18,6 +32,7 @@ export const loadProjectsThunk =
     const hasProjects = Object.keys(getState().projects).length > 0;
 
     if (!hasProjects) {
+      dispatch(initializeHubCatalogThunk());
       dispatch(ProjectsBuilderActions.setListLoadStatus('loading'));
       dispatch(ProjectsBuilderActions.setListError(null));
     }
@@ -31,7 +46,16 @@ export const loadProjectsThunk =
       return result.httpStatus === 400 ? 400 : 500;
     }
 
-    dispatch(ProjectsActions.setProjects(result.data));
+    dispatch(
+      ProjectsActions.setProjects(
+        mergeHubProjectSetup(buildHubCatalogProjects(), result.data.projects),
+      ),
+    );
+    dispatch(
+      ProjectReposActions.setProjectRepos(
+        mergeHubRepoSetup(buildHubCatalogRepos(), result.data.repos),
+      ),
+    );
     dispatch(ProjectsBuilderActions.setListLoadStatus('loaded'));
     return 200;
   };

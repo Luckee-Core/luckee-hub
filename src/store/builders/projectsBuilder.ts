@@ -2,6 +2,8 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 type LoadStatus = 'idle' | 'loading' | 'loaded' | 'error';
 
+type LocalDatabaseOperation = 'probe' | 'setup' | 'step';
+
 type ProjectsBuilderState = {
   listLoadStatus: LoadStatus;
   listError: string | null;
@@ -9,6 +11,8 @@ type ProjectsBuilderState = {
   terminalDockOpen: boolean;
   terminalSessionOrder: string[];
   localDatabaseLoadStatus: LoadStatus;
+  localDatabaseOperation: LocalDatabaseOperation | null;
+  activeLocalDatabaseStepId: string | null;
   localDatabaseError: string | null;
   localDatabaseSetupMessage: string | null;
   activeLocalDatabaseProjectId: string | null;
@@ -21,6 +25,8 @@ const initialState: ProjectsBuilderState = {
   terminalDockOpen: false,
   terminalSessionOrder: [],
   localDatabaseLoadStatus: 'idle',
+  localDatabaseOperation: null,
+  activeLocalDatabaseStepId: null,
   localDatabaseError: null,
   localDatabaseSetupMessage: null,
   activeLocalDatabaseProjectId: null,
@@ -48,6 +54,12 @@ export const projectsBuilderSlice = createSlice({
     setLocalDatabaseLoadStatus: (state, action: PayloadAction<LoadStatus>) => {
       state.localDatabaseLoadStatus = action.payload;
     },
+    setLocalDatabaseOperation: (state, action: PayloadAction<LocalDatabaseOperation | null>) => {
+      state.localDatabaseOperation = action.payload;
+    },
+    setActiveLocalDatabaseStepId: (state, action: PayloadAction<string | null>) => {
+      state.activeLocalDatabaseStepId = action.payload;
+    },
     setLocalDatabaseError: (state, action: PayloadAction<string | null>) => {
       state.localDatabaseError = action.payload;
     },
@@ -59,6 +71,8 @@ export const projectsBuilderSlice = createSlice({
     },
     resetLocalDatabaseState: (state) => {
       state.localDatabaseLoadStatus = 'idle';
+      state.localDatabaseOperation = null;
+      state.activeLocalDatabaseStepId = null;
       state.localDatabaseError = null;
       state.localDatabaseSetupMessage = null;
       state.activeLocalDatabaseProjectId = null;

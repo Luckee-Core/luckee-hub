@@ -3,8 +3,9 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { HubProject } from '@/model';
-import { useAppDispatch } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { PROJECT_DETAIL_PAGE_PATH } from '@/config/routes';
+import { projectHasWebRepo } from '@/utils/projects';
 import {
   setCurrentProjectThunk,
 } from '@/store/thunks/projects';
@@ -21,6 +22,7 @@ type SortableColumn = 'name' | 'status' | 'apiPort';
 export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const projectRepos = useAppSelector((s) => s.projectRepos);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [sortColumn, setSortColumn] = useState<SortableColumn>('name');
@@ -162,7 +164,7 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
                   </td>
                   <td className={styles.tableCellMono}>:{project.apiPort}</td>
                   <td className={styles.tableCellMono}>
-                    {project.apiOnly ? (
+                    {!projectHasWebRepo(projectRepos, project.id) ? (
                       <span className={styles.muted}>API only</span>
                     ) : project.webUrl ? (
                       project.webUrl.replace('http://', '')
