@@ -183,4 +183,42 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'instagram-studio',
+    name: 'Instagram Studio',
+    description: 'Instagram carousel content and Graph publishing',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'instagram-studio-open-source-express-server',
+        defaultApiPort: 3070,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'instagram-studio-open-source',
+        defaultWebPortStart: 3071,
+      },
+    ],
+  },
+  {
+    id: 'tiktok-studio',
+    name: 'TikTok Studio',
+    description: 'TikTok carousel content and publishing',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'tiktok-studio-express-server',
+        defaultApiPort: 3072,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'tiktok-studio',
+        defaultWebPortStart: 3073,
+      },
+    ],
+  },
 ];

@@ -11,8 +11,8 @@ export const ProjectDetailOverview = () => {
     <section className={styles.card}>
       <h1 className={styles.title}>{currentProject.name}</h1>
       <p className={styles.description}>{currentProject.description}</p>
-      <SetupCards />
       <RepoLinks />
+      <SetupCards />
     </section>
   );
 };
