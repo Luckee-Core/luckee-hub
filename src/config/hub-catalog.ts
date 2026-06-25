@@ -62,6 +62,44 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
+    id: 'my-fundraise',
+    name: 'My Fundraise',
+    description: 'Investors CRM, graphics studio (TSX preview), and pitch deck slide coach',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-fundraise-express-server',
+        defaultApiPort: 3090,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-fundraise-web',
+        defaultWebPortStart: 3091,
+      },
+    ],
+  },
+  {
+    id: 'my-nonprofit',
+    name: 'My Nonprofit',
+    description: 'PA/Philadelphia nonprofit formation wizard with AI document drafts',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-nonprofit-express-server',
+        defaultApiPort: 3080,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-nonprofit-console',
+        defaultWebPortStart: 3081,
+      },
+    ],
+  },
+  {
     id: 'personal-finances',
     name: 'Personal Finances',
     description: 'Money dashboard with CSV imports and AI prompts',
@@ -119,6 +157,25 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
+    id: 'code-control',
+    name: 'Code Control',
+    description: 'Schema, conventions, and guided codegen into customer repos',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'code-control-express-server',
+        defaultApiPort: 3074,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'code-control',
+        defaultWebPortStart: 3075,
+      },
+    ],
+  },
+  {
     id: 'code-your-resume',
     name: 'Code Your Resume',
     description: 'Job-search CRM and resume studios',
@@ -166,6 +223,25 @@ export const HUB_CATALOG: HubCatalogProject[] = [
         repoType: 'nextjs',
         repoName: 'luckee-open-source',
         defaultWebPortStart: 3031,
+      },
+    ],
+  },
+  {
+    id: 'local-scheduler',
+    name: 'Local Scheduler',
+    description: 'Local cron studio for worker Express APIs (email queue, etc.)',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'local-scheduler-express-server',
+        defaultApiPort: 4120,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'local-scheduler-web',
+        defaultWebPortStart: 4121,
       },
     ],
   },
