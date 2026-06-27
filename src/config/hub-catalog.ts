@@ -246,6 +246,20 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
+    id: 'website-site-scraper',
+    name: 'Website Site Scraper',
+    description: 'Playwright scrape and extract API',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'website-site-scraper-open-source-express-server',
+        defaultApiPort: 3043,
+        healthPath: '/api/health',
+      },
+    ],
+  },
+  {
     id: 'qr-code-generator',
     name: 'QR Code Generator',
     description: 'QR generation API utilities',
