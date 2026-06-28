@@ -81,6 +81,25 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
+    id: 'my-ai-threads',
+    name: 'My AI Threads',
+    description: 'Search, browse, and Ask over local Cursor agent transcripts',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-ai-threads-express-server',
+        defaultApiPort: 3092,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-ai-threads-console',
+        defaultWebPortStart: 3093,
+      },
+    ],
+  },
+  {
     id: 'my-nonprofit',
     name: 'My Nonprofit',
     description: 'PA/Philadelphia nonprofit formation wizard with AI document drafts',
