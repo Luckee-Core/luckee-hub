@@ -21,141 +21,9 @@ export type HubCatalogProject = {
 /**
  * Luckee Hub project catalog — source of truth in this repo.
  * Express probes hub.local.json against these ids on refresh.
+ * Preferred ports: hub 3000/3001; projects 3010+ (API even, web +1).
  */
 export const HUB_CATALOG: HubCatalogProject[] = [
-  {
-    id: 'lead-studio',
-    name: 'Lead Studio',
-    description: 'Lead CRM, research workers, email queue',
-    localDatabaseSupported: false,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'lead-studio-express-server',
-        defaultApiPort: 3032,
-        healthPath: '/api/health',
-      },
-      {
-        repoType: 'nextjs',
-        repoName: 'lead-studio-web-open-source',
-        defaultWebPortStart: 3033,
-      },
-    ],
-  },
-  {
-    id: 'my-health',
-    name: 'My Health',
-    description: 'Self-hosted health dashboard',
-    localDatabaseSupported: true,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'my-health-open-source-express-server',
-        defaultApiPort: 3009,
-        healthPath: '/api/health',
-      },
-      {
-        repoType: 'nextjs',
-        repoName: 'my-health-open-source',
-        defaultWebPortStart: 3010,
-      },
-    ],
-  },
-  {
-    id: 'my-fundraise',
-    name: 'My Fundraise',
-    description: 'Investors CRM, graphics studio (TSX preview), and pitch deck slide coach',
-    localDatabaseSupported: false,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'my-fundraise-express-server',
-        defaultApiPort: 3090,
-        healthPath: '/api/health',
-      },
-      {
-        repoType: 'nextjs',
-        repoName: 'my-fundraise-web',
-        defaultWebPortStart: 3091,
-      },
-    ],
-  },
-  {
-    id: 'my-ai-threads',
-    name: 'My AI Threads',
-    description: 'Search, browse, and Ask over local Cursor agent transcripts',
-    localDatabaseSupported: false,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'my-ai-threads-express-server',
-        defaultApiPort: 3092,
-        healthPath: '/api/health',
-      },
-      {
-        repoType: 'nextjs',
-        repoName: 'my-ai-threads-console',
-        defaultWebPortStart: 3093,
-      },
-    ],
-  },
-  {
-    id: 'my-nonprofit',
-    name: 'My Nonprofit',
-    description: 'PA/Philadelphia nonprofit formation wizard with AI document drafts',
-    localDatabaseSupported: false,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'my-nonprofit-express-server',
-        defaultApiPort: 3080,
-        healthPath: '/api/health',
-      },
-      {
-        repoType: 'nextjs',
-        repoName: 'my-nonprofit-console',
-        defaultWebPortStart: 3081,
-      },
-    ],
-  },
-  {
-    id: 'personal-finances',
-    name: 'Personal Finances',
-    description: 'Money dashboard with CSV imports and AI prompts',
-    localDatabaseSupported: false,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'personal-finances-express-server',
-        defaultApiPort: 3011,
-        healthPath: '/api/health',
-      },
-      {
-        repoType: 'nextjs',
-        repoName: 'personal-finances',
-        defaultWebPortStart: 3012,
-      },
-    ],
-  },
-  {
-    id: 'knowledge-studio',
-    name: 'Knowledge Studio',
-    description: 'YouTube and knowledge workflows',
-    localDatabaseSupported: false,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'knowledge-studio-express-server',
-        defaultApiPort: 3020,
-        healthPath: '/api/health',
-      },
-      {
-        repoType: 'nextjs',
-        repoName: 'knowledge-studio-open-source',
-        defaultWebPortStart: 3021,
-      },
-    ],
-  },
   {
     id: 'blog-studio',
     name: 'Blog Studio',
@@ -165,13 +33,13 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       {
         repoType: 'express',
         repoName: 'blog-studio-open-source-express-server',
-        defaultApiPort: 3025,
+        defaultApiPort: 3010,
         healthPath: '/api/health',
       },
       {
         repoType: 'nextjs',
         repoName: 'blog-studio-open-source-web',
-        defaultWebPortStart: 3026,
+        defaultWebPortStart: 3011,
       },
     ],
   },
@@ -184,13 +52,13 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       {
         repoType: 'express',
         repoName: 'code-control-express-server',
-        defaultApiPort: 3074,
+        defaultApiPort: 3012,
         healthPath: '/api/health',
       },
       {
         repoType: 'nextjs',
         repoName: 'code-control',
-        defaultWebPortStart: 3075,
+        defaultWebPortStart: 3013,
       },
     ],
   },
@@ -203,45 +71,70 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       {
         repoType: 'express',
         repoName: 'code-your-resume-open-source-express-server',
-        defaultApiPort: 3053,
+        defaultApiPort: 3014,
         healthPath: '/api/health',
       },
       {
         repoType: 'nextjs',
         repoName: 'code-your-resume-open-source',
-        defaultWebPortStart: 3054,
+        defaultWebPortStart: 3015,
       },
     ],
   },
   {
-    id: 'luckee-blueprints',
-    name: 'Luckee Blueprints',
-    description: 'Workforce training and certifications',
+    id: 'instagram-studio',
+    name: 'Instagram Studio',
+    description: 'Instagram carousel content and Graph publishing',
     localDatabaseSupported: false,
     repos: [
       {
         repoType: 'express',
-        repoName: 'luckee-blueprints-express-server',
-        defaultApiPort: 3040,
+        repoName: 'instagram-studio-open-source-express-server',
+        defaultApiPort: 3016,
         healthPath: '/api/health',
       },
       {
         repoType: 'nextjs',
-        repoName: 'luckee-blueprints',
-        defaultWebPortStart: 3041,
+        repoName: 'instagram-studio-open-source',
+        defaultWebPortStart: 3017,
       },
     ],
   },
   {
-    id: 'luckee-open-source',
-    name: 'Luckee Open Source',
-    description: 'Lead and ops CRM-style modular dashboard',
+    id: 'knowledge-studio',
+    name: 'Knowledge Studio',
+    description: 'YouTube and knowledge workflows',
     localDatabaseSupported: false,
     repos: [
       {
+        repoType: 'express',
+        repoName: 'knowledge-studio-express-server',
+        defaultApiPort: 3018,
+        healthPath: '/api/health',
+      },
+      {
         repoType: 'nextjs',
-        repoName: 'luckee-open-source',
-        defaultWebPortStart: 3031,
+        repoName: 'knowledge-studio-open-source',
+        defaultWebPortStart: 3019,
+      },
+    ],
+  },
+  {
+    id: 'lead-studio',
+    name: 'Lead Studio',
+    description: 'Lead CRM, research workers, email queue',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'lead-studio-express-server',
+        defaultApiPort: 3020,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'lead-studio-web-open-source',
+        defaultWebPortStart: 3021,
       },
     ],
   },
@@ -254,13 +147,198 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       {
         repoType: 'express',
         repoName: 'local-scheduler-express-server',
-        defaultApiPort: 4120,
+        defaultApiPort: 3022,
         healthPath: '/api/health',
       },
       {
         repoType: 'nextjs',
         repoName: 'local-scheduler-web',
-        defaultWebPortStart: 4121,
+        defaultWebPortStart: 3023,
+      },
+    ],
+  },
+  {
+    id: 'luckee-blueprints',
+    name: 'Luckee Blueprints',
+    description: 'Workforce training and certifications',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'luckee-blueprints-express-server',
+        defaultApiPort: 3024,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'luckee-blueprints',
+        defaultWebPortStart: 3025,
+      },
+    ],
+  },
+  {
+    id: 'luckee-open-source',
+    name: 'Luckee Open Source',
+    description: 'Leads, contacts, and outbound email pipeline',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'luckee-open-source-express-server',
+        defaultApiPort: 3026,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'luckee-open-source',
+        defaultWebPortStart: 3027,
+      },
+    ],
+  },
+  {
+    id: 'my-ai-threads',
+    name: 'My AI Threads',
+    description: 'Search, browse, and Ask over local Cursor agent transcripts',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-ai-threads-express-server',
+        defaultApiPort: 3028,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-ai-threads-console',
+        defaultWebPortStart: 3029,
+      },
+    ],
+  },
+  {
+    id: 'my-fundraise',
+    name: 'My Fundraise',
+    description: 'Investors CRM, graphics studio (TSX preview), and pitch deck slide coach',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-fundraise-express-server',
+        defaultApiPort: 3030,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-fundraise-web',
+        defaultWebPortStart: 3031,
+      },
+    ],
+  },
+  {
+    id: 'my-health',
+    name: 'My Health',
+    description: 'Self-hosted health dashboard',
+    localDatabaseSupported: true,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-health-open-source-express-server',
+        defaultApiPort: 3032,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-health-open-source',
+        defaultWebPortStart: 3033,
+      },
+    ],
+  },
+  {
+    id: 'my-nonprofit',
+    name: 'My Nonprofit',
+    description: 'PA/Philadelphia nonprofit formation wizard with AI document drafts',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-nonprofit-express-server',
+        defaultApiPort: 3034,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-nonprofit-console',
+        defaultWebPortStart: 3035,
+      },
+    ],
+  },
+  {
+    id: 'my-ops-tracker',
+    name: 'My Ops Tracker',
+    description: 'Customers, projects, tickets, and time tracking',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-ops-tracker-express-server',
+        defaultApiPort: 3036,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-ops-tracker-web',
+        defaultWebPortStart: 3037,
+      },
+    ],
+  },
+  {
+    id: 'personal-finances',
+    name: 'Personal Finances',
+    description: 'Money dashboard with CSV imports and AI prompts',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'personal-finances-express-server',
+        defaultApiPort: 3038,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'personal-finances',
+        defaultWebPortStart: 3039,
+      },
+    ],
+  },
+  {
+    id: 'qr-code-generator',
+    name: 'QR Code Generator',
+    description: 'QR generation API utilities',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'qr-code-generator-open-source-express-server',
+        defaultApiPort: 3040,
+        healthPath: '/api/health',
+      },
+    ],
+  },
+  {
+    id: 'tiktok-studio',
+    name: 'TikTok Studio',
+    description: 'TikTok carousel content and publishing',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'tiktok-studio-express-server',
+        defaultApiPort: 3041,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'tiktok-studio',
+        defaultWebPortStart: 3042,
       },
     ],
   },
@@ -279,54 +357,21 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
-    id: 'qr-code-generator',
-    name: 'QR Code Generator',
-    description: 'QR generation API utilities',
+    id: 'app-store-manager',
+    name: 'App Store Manager',
+    description: 'App Store listing copy, TSX screenshot studio, and device frame assets',
     localDatabaseSupported: false,
     repos: [
       {
         repoType: 'express',
-        repoName: 'qr-code-generator-open-source-express-server',
-        defaultApiPort: 3060,
-        healthPath: '/api/health',
-      },
-    ],
-  },
-  {
-    id: 'instagram-studio',
-    name: 'Instagram Studio',
-    description: 'Instagram carousel content and Graph publishing',
-    localDatabaseSupported: false,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'instagram-studio-open-source-express-server',
-        defaultApiPort: 3070,
+        repoName: 'app-store-manager-express-server',
+        defaultApiPort: 3044,
         healthPath: '/api/health',
       },
       {
         repoType: 'nextjs',
-        repoName: 'instagram-studio-open-source',
-        defaultWebPortStart: 3071,
-      },
-    ],
-  },
-  {
-    id: 'tiktok-studio',
-    name: 'TikTok Studio',
-    description: 'TikTok carousel content and publishing',
-    localDatabaseSupported: false,
-    repos: [
-      {
-        repoType: 'express',
-        repoName: 'tiktok-studio-express-server',
-        defaultApiPort: 3072,
-        healthPath: '/api/health',
-      },
-      {
-        repoType: 'nextjs',
-        repoName: 'tiktok-studio',
-        defaultWebPortStart: 3073,
+        repoName: 'app-store-manager-console',
+        defaultWebPortStart: 3045,
       },
     ],
   },
