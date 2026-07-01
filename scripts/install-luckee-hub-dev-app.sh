@@ -32,5 +32,5 @@ rm -f "$APPLESCRIPT"
 
 echo "Created: ${DESKTOP_APP}"
 echo ""
-echo "Double-click to start Express (:4110) and Web (:4100), then open http://localhost:4100"
+echo "Double-click to start Express (:3001) and Web (:3000), then open http://localhost:3000"
 echo "Log: /tmp/luckee-hub-launcher.log"

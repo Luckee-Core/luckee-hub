@@ -18,7 +18,7 @@ export const ProjectsTable = () => {
   if (listLoadStatus === 'error') {
     return (
       <p className={styles.error}>
-        {listError ?? 'Failed to load projects. Is luckee-hub-express-server running on :4110?'}
+        {listError ?? 'Failed to load projects. Is luckee-hub-express-server running on :3001?'}
       </p>
     );
   }

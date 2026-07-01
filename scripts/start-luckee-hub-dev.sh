@@ -1,6 +1,6 @@
 #!/bin/zsh
 #
-# Starts luckee-hub-express-server (:4110) and luckee-hub (:4100), then opens the browser.
+# Starts luckee-hub-express-server (:3001) and luckee-hub (:3000), then opens the browser.
 
 set -euo pipefail
 
@@ -36,14 +36,14 @@ end tell
 APPLESCRIPT
 }
 
-EXPRESS_CMD="$(escape_for_applescript "cd '${HUB_EXPRESS_DIR}' && export NVM_DIR=\"\$HOME/.nvm\" && [ -s '${NVM_SH}' ] && . '${NVM_SH}' && echo '>>> Luckee Hub Express (:4110)' && PORT=4110 npm run dev")"
+EXPRESS_CMD="$(escape_for_applescript "cd '${HUB_EXPRESS_DIR}' && export NVM_DIR=\"\$HOME/.nvm\" && [ -s '${NVM_SH}' ] && . '${NVM_SH}' && echo '>>> Luckee Hub Express (:3001)' && PORT=3001 npm run dev")"
 
-WEB_CMD="$(escape_for_applescript "cd '${HUB_WEB_DIR}' && export NVM_DIR=\"\$HOME/.nvm\" && [ -s '${NVM_SH}' ] && . '${NVM_SH}' && echo '>>> Luckee Hub Web (:4100)' && npm run dev")"
+WEB_CMD="$(escape_for_applescript "cd '${HUB_WEB_DIR}' && export NVM_DIR=\"\$HOME/.nvm\" && [ -s '${NVM_SH}' ] && . '${NVM_SH}' && echo '>>> Luckee Hub Web (:3000)' && npm run dev")"
 
 open_terminal_window "express" "$EXPRESS_CMD"
 sleep 1
 open_terminal_window "web" "$WEB_CMD"
 sleep 2
-open "http://localhost:4100"
+open "http://localhost:3000"
 
-echo "Luckee Dev Hub starting — Express :4110, Web :4100"
+echo "Luckee Dev Hub starting — Express :3001, Web :3000"

@@ -8,7 +8,7 @@ Accepted (historical)
 
 ## Context
 
-`luckee-hub` is the local web dashboard for starting Luckee open-source studios. UI lives in `src/packages/dev-hub/`; data and actions call `luckee-hub-express-server` on `127.0.0.1:4110`.
+`luckee-hub` is the local web dashboard for starting Luckee open-source studios. UI lives in `src/packages/dev-hub/`; data and actions call `luckee-hub-express-server` on `127.0.0.1:3001`.
 
 ## Decision
 
