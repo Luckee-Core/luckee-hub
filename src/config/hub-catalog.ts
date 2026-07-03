@@ -101,6 +101,25 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
+    id: 'innertube',
+    name: 'Innertube',
+    description: 'YouTube video library with InnerTube transcript fetch and persistence',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'innertube-retriever-express-server',
+        defaultApiPort: 3048,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'innertube-web',
+        defaultWebPortStart: 3049,
+      },
+    ],
+  },
+  {
     id: 'knowledge-studio',
     name: 'Knowledge Studio',
     description: 'YouTube and knowledge workflows',
