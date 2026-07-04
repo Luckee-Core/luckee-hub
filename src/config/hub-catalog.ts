@@ -398,7 +398,7 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'code-commit-summaries',
     name: 'Code Commit Summaries',
     description: 'GitHub commit dashboards and AI-generated daily and repo summaries',
-    localDatabaseSupported: false,
+    localDatabaseSupported: true,
     repos: [
       {
         repoType: 'express',

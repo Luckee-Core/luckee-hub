@@ -20,6 +20,13 @@ export type HubProject = {
     workspaceFile?: string;
   };
   localDatabaseSupported: boolean;
+  postgresActiveConsumer?: boolean;
+};
+
+export type CloseProjectResponse = {
+  killedSessionIds: string[];
+  postgresStopped: boolean;
+  message: string;
 };
 
 export type TerminalSession = {

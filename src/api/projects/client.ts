@@ -5,6 +5,7 @@ import type {
   LocalDatabaseProbe,
   LocalDatabaseSetupResult,
   LocalDatabaseStepResult,
+  CloseProjectResponse,
   RunProjectResponse,
 } from '@/model';
 import { requestApi } from '@/api/_shared';
@@ -29,6 +30,14 @@ export const listProjectsApi = (options: ListProjectsOptions = {}) => {
  */
 export const runProjectApi = (projectId: string) =>
   requestApi<RunProjectResponse>(`${projectsApiBase}/api/launcher/projects/${projectId}/run`, {
+    method: 'POST',
+  });
+
+/**
+ * Close project dev servers and stop hub-managed Postgres when idle.
+ */
+export const closeProjectApi = (projectId: string) =>
+  requestApi<CloseProjectResponse>(`${projectsApiBase}/api/launcher/projects/${projectId}/close`, {
     method: 'POST',
   });
 

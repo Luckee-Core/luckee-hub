@@ -21,6 +21,7 @@ export const mergeHubProjectSetup = (
         enabled: status.enabled,
         webUrl: status.webUrl,
         paths: status.paths,
+        postgresActiveConsumer: status.postgresActiveConsumer,
       },
     ];
   });
