@@ -413,4 +413,23 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'my-substack-manager',
+    name: 'My Substack Manager',
+    description: 'Substack Notes scraper and engagement performance dashboard',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-substack-manager-express-server',
+        defaultApiPort: 3050,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-substack-manager-web',
+        defaultWebPortStart: 3051,
+      },
+    ],
+  },
 ];

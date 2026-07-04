@@ -19,7 +19,7 @@ export const ProjectsRefreshButton = () => {
 
 const styles = {
   button: `
-    px-4 py-2 text-sm font-medium text-white bg-orange-500 rounded
+    px-2.5 py-1 text-xs font-medium text-white bg-orange-500 rounded
     hover:bg-orange-600 transition-colors
   `,
 };

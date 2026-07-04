@@ -5,19 +5,19 @@ import { BreadcrumbBar } from './breadcrumb-bar';
 import type { AppLayoutBreadcrumb } from './app-layout-breadcrumb';
 
 type AppLayoutHeaderProps = {
-  isSidebarVisible: boolean;
+  isSidebarExpanded: boolean;
   onToggleSidebar: () => void;
   breadcrumbItems: AppLayoutBreadcrumb[];
 };
 
 export const AppLayoutHeader = (props: AppLayoutHeaderProps) => {
-  const { isSidebarVisible, onToggleSidebar, breadcrumbItems } = props;
+  const { isSidebarExpanded, onToggleSidebar, breadcrumbItems } = props;
 
   const hasBreadcrumbItems = breadcrumbItems.length > 0;
 
   const toggleButtonLabel = useMemo(
-    () => (isSidebarVisible ? 'Hide sidebar' : 'Show sidebar'),
-    [isSidebarVisible],
+    () => (isSidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'),
+    [isSidebarExpanded],
   );
 
   return (
@@ -29,7 +29,7 @@ export const AppLayoutHeader = (props: AppLayoutHeaderProps) => {
               type="button"
               onClick={onToggleSidebar}
               className={styles.toggleButton}
-              aria-pressed={isSidebarVisible}
+              aria-pressed={isSidebarExpanded}
               aria-label={toggleButtonLabel}
             >
               <span className={styles.toggleIcon} aria-hidden="true">
@@ -44,7 +44,7 @@ export const AppLayoutHeader = (props: AppLayoutHeaderProps) => {
               </span>
             ) : null}
           </li>
-          <BreadcrumbBar dismissMenusSignal={isSidebarVisible} items={breadcrumbItems} />
+          <BreadcrumbBar dismissMenusSignal={isSidebarExpanded} items={breadcrumbItems} />
         </ol>
       </nav>
     </header>

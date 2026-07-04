@@ -33,6 +33,5 @@ const styles = {
   button: `text-xs font-medium text-gray-500 hover:text-gray-800`,
   buttonCollapsed: `
     text-xs font-medium text-gray-500 hover:text-gray-800
-    [writing-mode:vertical-rl] rotate-180 py-2
   `,
 };

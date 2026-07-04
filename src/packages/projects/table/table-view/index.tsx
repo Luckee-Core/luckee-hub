@@ -11,6 +11,7 @@ import {
 } from '@/store/thunks/projects';
 import { ProjectsHookStatusBadge } from '../../badges/hook-status';
 import { ProjectsRowActions } from '../../actions/row-actions';
+import { ProjectsRefreshButton } from '../../header/buttons';
 
 type ProjectsTableViewProps = {
   projects: HubProject[];
@@ -110,9 +111,9 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
           <option value="disabled">Disabled</option>
           <option value="catalog">Available</option>
         </select>
-        <span className={styles.resultCount}>
-          {filteredProjects.length} {filteredProjects.length === 1 ? 'result' : 'results'}
-        </span>
+        <div className={styles.toolbarEnd}>
+          <ProjectsRefreshButton />
+        </div>
       </div>
 
       {filteredProjects.length === 0 ? (
@@ -131,6 +132,7 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
                     {sortColumn === 'name' ? (sortDirection === 'asc' ? ' ↑' : ' ↓') : ' ↕'}
                   </span>
                 </th>
+                <th className={styles.tableHeaderWide}>Description</th>
                 <th className={styles.sortableHeader} onClick={() => handleSort('status')}>
                   <span>Status</span>
                   <span className={styles.sortIcon}>
@@ -143,8 +145,8 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
                     {sortColumn === 'apiPort' ? (sortDirection === 'asc' ? ' ↑' : ' ↓') : ' ↕'}
                   </span>
                 </th>
-                <th className={styles.tableHeader}>Web</th>
-                <th className={styles.tableHeader}>Actions</th>
+                <th className={styles.tableHeaderNarrow}>Web</th>
+                <th className={styles.tableHeaderActions}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -157,10 +159,12 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
                   <td className={styles.rowNumberCell}>{index + 1}</td>
                   <td className={styles.tableCell}>
                     <div className={styles.projectName}>{project.name}</div>
-                    <div className={styles.projectDescription}>{project.description}</div>
+                  </td>
+                  <td className={styles.descriptionCell}>
+                    <span className={styles.projectDescription}>{project.description}</span>
                   </td>
                   <td className={styles.tableCell}>
-                    <ProjectsHookStatusBadge hookStatus={project.hookStatus} />
+                    <ProjectsHookStatusBadge hookStatus={project.hookStatus} compact />
                   </td>
                   <td className={styles.tableCellMono}>:{project.apiPort}</td>
                   <td className={styles.tableCellMono}>
@@ -172,8 +176,8 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
                       <span className={styles.muted}>—</span>
                     )}
                   </td>
-                  <td className={styles.tableCell}>
-                    <ProjectsRowActions project={project} />
+                  <td className={styles.actionsCell}>
+                    <ProjectsRowActions project={project} iconOnly />
                   </td>
                 </tr>
               ))}
@@ -188,47 +192,61 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
 const styles = {
   wrapper: `space-y-0`,
   toolbar: `
-    flex flex-wrap items-center gap-3 px-3 py-3 bg-white border border-gray-300 border-b-0 rounded-t
+    flex flex-wrap items-center gap-3 px-3 py-2 bg-white border border-gray-300 border-b-0 rounded-t
   `,
   searchInput: `
-    flex-1 min-w-[12rem] max-w-xs px-3 py-1.5 text-sm border border-gray-300 rounded
+    flex-1 min-w-[12rem] max-w-xs px-2.5 py-1 text-xs border border-gray-300 rounded
     focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500
     placeholder:text-gray-400
   `,
   filterSelect: `
-    px-3 py-1.5 text-sm border border-gray-300 rounded bg-white
+    px-2.5 py-1 text-xs border border-gray-300 rounded bg-white
     focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500
   `,
-  resultCount: `ml-auto text-xs text-gray-500`,
+  toolbarEnd: `ml-auto shrink-0`,
   tableContainer: `
     bg-white rounded-b border border-gray-300 overflow-x-auto overflow-y-visible
   `,
-  table: `w-full border-collapse text-sm relative`,
+  table: `w-full border-collapse text-xs relative`,
   rowNumberHeader: `
-    px-2 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide
-    bg-gray-100 border-b border-gray-300 w-8
+    px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 w-7
   `,
   sortableHeader: `
-    px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide
+    px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
     bg-gray-100 border-b border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors select-none
   `,
   sortableHeaderNarrow: `
-    px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide
-    bg-gray-100 border-b border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors select-none w-24
+    px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors select-none w-16
   `,
   tableHeader: `
-    px-3 py-2 text-left text-xs font-semibold text-gray-600 uppercase tracking-wide
+    px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
     bg-gray-100 border-b border-gray-300
+  `,
+  tableHeaderWide: `
+    px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 min-w-[12rem]
+  `,
+  tableHeaderNarrow: `
+    px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 w-28
+  `,
+  tableHeaderActions: `
+    px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 w-24
   `,
   sortIcon: `ml-1 text-gray-400 text-[10px]`,
   tableRow: `
     hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 cursor-pointer
   `,
-  rowNumberCell: `px-2 py-3 text-sm text-gray-400 font-mono`,
-  tableCell: `px-3 py-3 text-sm text-gray-700 align-top`,
-  tableCellMono: `px-3 py-3 text-xs text-gray-600 font-mono align-top`,
-  projectName: `font-medium text-gray-900`,
-  projectDescription: `text-xs text-gray-500 mt-0.5 line-clamp-2`,
+  rowNumberCell: `px-2 py-1 text-xs text-gray-400 font-mono align-middle`,
+  tableCell: `px-2 py-1 text-xs text-gray-700 align-middle`,
+  descriptionCell: `px-2 py-1 text-xs text-gray-500 align-middle max-w-xs`,
+  actionsCell: `px-2 py-1 align-middle whitespace-nowrap`,
+  tableCellMono: `px-2 py-1 text-[11px] text-gray-600 font-mono align-middle`,
+  projectName: `font-medium text-gray-900 truncate`,
+  projectDescription: `line-clamp-1`,
   muted: `text-gray-400 font-sans`,
   emptyState: `bg-white rounded border border-gray-300 p-8 text-center`,
   emptyTitle: `text-lg font-semibold text-gray-900`,
