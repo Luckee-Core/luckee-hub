@@ -1,31 +1,52 @@
-import { listTerminalSessionsApi } from '@/api/projects';
-import type { TerminalSession } from '@/model';
+import { closeProjectApi } from '@/api/projects';
 import type { AppThunk } from '@/store/store';
-import { closeTerminalSessionThunk } from './close-terminal-session-thunk';
+import { ProjectsActions } from '@/store/dumps/projects';
+import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
+import { RunningJobsActions } from '@/store/dumps/runningJobs';
+import { TerminalSessionsActions } from '@/store/dumps/terminalSessions';
 
 /**
- * Kill all hub terminal sessions (express + web) for a project.
+ * Close project dev servers, hub Postgres consumer, and stop Postgres when idle.
  */
 export const closeProjectTerminalsThunk =
   (projectId: string): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
-    const listResult = await listTerminalSessionsApi();
+    const result = await closeProjectApi(projectId);
+    if (!result.success || !result.data) {
+      return result.httpStatus === 400 ? 400 : 500;
+    }
 
-    let sessions: TerminalSession[] = [];
-    if (listResult.success && listResult.data) {
-      sessions = listResult.data.filter((session) => session.projectId === projectId);
-    } else {
-      sessions = Object.values(getState().terminalSessions).filter(
-        (session) => session.projectId === projectId,
+    const { killedSessionIds } = result.data;
+    const { terminalSessionOrder, activeTerminalSessionId } = getState().projectsBuilder;
+
+    for (const sessionId of killedSessionIds) {
+      dispatch(TerminalSessionsActions.removeTerminalSession(sessionId));
+    }
+
+    const nextOrder = terminalSessionOrder.filter((id) => !killedSessionIds.includes(id));
+    dispatch(ProjectsBuilderActions.setTerminalSessionOrder(nextOrder));
+
+    if (activeTerminalSessionId && killedSessionIds.includes(activeTerminalSessionId)) {
+      const removedIndex = terminalSessionOrder.indexOf(activeTerminalSessionId);
+      const nextSessionId =
+        nextOrder[removedIndex] ?? nextOrder[removedIndex - 1] ?? nextOrder[0] ?? null;
+      dispatch(ProjectsBuilderActions.setActiveTerminalSessionId(nextSessionId));
+    }
+
+    if (nextOrder.length === 0) {
+      dispatch(ProjectsBuilderActions.setTerminalDockOpen(false));
+    }
+
+    dispatch(RunningJobsActions.setRunningJob({ projectId, jobId: null }));
+
+    const project = getState().projects[projectId];
+    if (project) {
+      dispatch(
+        ProjectsActions.upsertProject({
+          ...project,
+          postgresActiveConsumer: false,
+        }),
       );
-    }
-
-    if (sessions.length === 0) {
-      return 400;
-    }
-
-    for (const session of sessions) {
-      await dispatch(closeTerminalSessionThunk(session.sessionId));
     }
 
     return 200;

@@ -14,12 +14,15 @@ type ProjectsCloseActionProps = {
 export const ProjectsCloseAction = ({ projectId, disabled, iconOnly }: ProjectsCloseActionProps) => {
   const dispatch = useAppDispatch();
   const terminalSessions = useAppSelector((s) => s.terminalSessions);
+  const project = useAppSelector((s) => s.projects[projectId]);
   const [isClosing, setIsClosing] = useState(false);
 
   const hasSessions = useMemo(
     () => Object.values(terminalSessions).some((session) => session.projectId === projectId),
     [terminalSessions, projectId],
   );
+
+  const canClose = hasSessions || !!project?.postgresActiveConsumer;
 
   const label = isClosing ? 'Closing…' : 'Close';
 
@@ -36,7 +39,7 @@ export const ProjectsCloseAction = ({ projectId, disabled, iconOnly }: ProjectsC
     <button
       type="button"
       className={iconOnly ? styles.iconSecondary : styles.secondary}
-      disabled={disabled || !hasSessions || isClosing}
+      disabled={disabled || !canClose || isClosing}
       aria-label={iconOnly ? label : undefined}
       title={iconOnly ? label : undefined}
       onClick={() => void handleClose()}
