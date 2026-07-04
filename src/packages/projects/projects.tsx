@@ -7,7 +7,6 @@ import {
   loadProjectsThunk,
   syncTerminalSessionsThunk,
 } from '@/store/thunks/projects';
-import { ProjectsHeader } from './header';
 import { ProjectsTable } from './table';
 import { TerminalDock } from '@/packages/terminal-dock';
 
@@ -23,7 +22,6 @@ export const Projects = () => {
   return (
     <AppLayout terminalDock={<TerminalDock />}>
       <div className={styles.page}>
-        <ProjectsHeader />
         <ProjectsTable />
       </div>
     </AppLayout>
@@ -32,6 +30,6 @@ export const Projects = () => {
 
 const styles = {
   page: `
-    w-full space-y-4
+    w-full
   `,
 };

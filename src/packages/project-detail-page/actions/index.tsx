@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { useAppSelector } from '@/store';
 import { projectHasWebRepo } from '@/utils/projects';
 import {
+  ProjectsCloseAction,
   ProjectsOpenChromeAction,
   ProjectsOpenCursorAction,
   ProjectsRunAction,
@@ -30,6 +31,7 @@ export const ProjectDetailActions = () => {
           projectId={currentProject.id}
           disabled={!isHookedUp || !hasWebRepo}
         />
+        <ProjectsCloseAction projectId={currentProject.id} disabled={!isHookedUp} />
       </div>
     </section>
   );

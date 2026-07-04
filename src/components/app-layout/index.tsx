@@ -12,20 +12,20 @@ import { Sidebar } from '@/components/sidebar';
 import { BreadcrumbBuilderActions } from '@/store/builders/breadcrumbBuilder';
 import { useAppDispatch } from '@/store';
 
-const SIDEBAR_VISIBLE_KEY = 'luckee-hub-sidebar-visible';
+const SIDEBAR_EXPANDED_KEY = 'luckee-hub-sidebar-visible';
 
-const getStoredSidebarVisible = (): boolean => {
+const getStoredSidebarExpanded = (): boolean => {
   if (typeof window === 'undefined') {
-    return true;
+    return false;
   }
   try {
-    const stored = localStorage.getItem(SIDEBAR_VISIBLE_KEY);
+    const stored = localStorage.getItem(SIDEBAR_EXPANDED_KEY);
     if (stored === null) {
-      return true;
+      return false;
     }
     return stored === 'true';
   } catch {
-    return true;
+    return false;
   }
 };
 
@@ -36,7 +36,7 @@ type AppLayoutProps = {
 
 export const AppLayout = ({ children, terminalDock }: AppLayoutProps) => {
   const dispatch = useAppDispatch();
-  const [isSidebarVisible, setIsSidebarVisible] = useState(getStoredSidebarVisible);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(getStoredSidebarExpanded);
   const pathname = usePathname();
 
   useLayoutEffect(() => {
@@ -63,10 +63,10 @@ export const AppLayout = ({ children, terminalDock }: AppLayoutProps) => {
   );
 
   const handleToggleSidebar = () => {
-    setIsSidebarVisible((previous) => {
+    setIsSidebarExpanded((previous) => {
       const next = !previous;
       try {
-        localStorage.setItem(SIDEBAR_VISIBLE_KEY, String(next));
+        localStorage.setItem(SIDEBAR_EXPANDED_KEY, String(next));
       } catch {
         // ignore
       }
@@ -76,19 +76,17 @@ export const AppLayout = ({ children, terminalDock }: AppLayoutProps) => {
 
   return (
     <div className={styles.appShell}>
-      {isSidebarVisible ? <Sidebar /> : null}
+      <Sidebar collapsed={!isSidebarExpanded} />
       <div className={styles.mainColumn}>
         <AppLayoutHeader
-          isSidebarVisible={isSidebarVisible}
+          isSidebarExpanded={isSidebarExpanded}
           onToggleSidebar={handleToggleSidebar}
           breadcrumbItems={breadcrumbItems}
         />
-        <div className={styles.bodyRow}>
-          <div className={styles.content}>
-            <div className={styles.inner}>{children}</div>
-          </div>
-          {terminalDock}
+        <div className={styles.content}>
+          <div className={styles.inner}>{children}</div>
         </div>
+        {terminalDock}
       </div>
     </div>
   );
@@ -101,11 +99,8 @@ const styles = {
   mainColumn: `
     flex flex-1 flex-col min-h-0 min-w-0 overflow-hidden
   `,
-  bodyRow: `
-    flex flex-1 flex-row min-h-0 overflow-hidden
-  `,
   content: `
-    flex-1 min-w-0 overflow-y-auto p-2
+    flex flex-1 min-h-0 min-w-0 overflow-y-auto p-2
   `,
   inner: `
     w-full

@@ -2,6 +2,7 @@ import type { HookStatus } from '@/model';
 
 type ProjectsHookStatusBadgeProps = {
   hookStatus: HookStatus;
+  compact?: boolean;
 };
 
 const LABELS: Record<HookStatus, string> = {
@@ -26,9 +27,9 @@ const COLORS: Record<HookStatus, string> = {
   ready: 'bg-green-100 text-green-800',
 };
 
-export const ProjectsHookStatusBadge = ({ hookStatus }: ProjectsHookStatusBadgeProps) => {
+export const ProjectsHookStatusBadge = ({ hookStatus, compact }: ProjectsHookStatusBadgeProps) => {
   return (
-    <span className={`${styles.badge} ${COLORS[hookStatus]}`}>
+    <span className={`${compact ? styles.badgeCompact : styles.badge} ${COLORS[hookStatus]}`}>
       {LABELS[hookStatus]}
     </span>
   );
@@ -37,5 +38,8 @@ export const ProjectsHookStatusBadge = ({ hookStatus }: ProjectsHookStatusBadgeP
 const styles = {
   badge: `
     shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium
+  `,
+  badgeCompact: `
+    shrink-0 rounded-full px-2 py-0 text-[10px] font-medium leading-5
   `,
 };

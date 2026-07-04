@@ -6,10 +6,15 @@
 
 ```text
 src/packages/<feature>/
-  index.tsx           # Main exported component — `export const Projects = …`
-  index.ts            # Barrel re-exports public API (ADR 005)
-  …                   # Subfolders: header/, table/, etc.
+  index.tsx           # Package entry only — `export const FeatureName = …`
+  table/index.tsx     # Semantic subfolders (not `ui/` or `actions/`)
+  table/row/index.tsx
+  header/buttons/…/index.tsx
 ```
+
+**Package root:** one file — `index.tsx`. Do **not** add a root `index.ts` barrel alongside a separate `{feature}.tsx`. Optional `index.ts` barrels belong **inside** subfolders only (e.g. `header/buttons/index.ts`).
+
+> **Legacy:** `projects/` uses `projects.tsx` + `index.ts` — do not copy that pattern for new packages.
 
 ## Redux and API in *this* repo
 
