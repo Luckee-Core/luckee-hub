@@ -8,6 +8,11 @@ import { refreshProjectsThunk } from './load-projects-thunk';
 const POLL_MS = 2000;
 const MAX_POLLS = 90;
 
+const clearRunOperation = (projectId: string): AppThunk => (dispatch) => {
+  dispatch(RunningJobsActions.setRunningJob({ projectId, jobId: null }));
+  dispatch(ProjectsBuilderActions.setRunInFlightProjectId(null));
+};
+
 /**
  * Poll launcher job until completed or failed; refresh project list on success.
  */
@@ -29,7 +34,7 @@ export const pollProjectJobThunk =
         continue;
       }
 
-      dispatch(RunningJobsActions.setRunningJob({ projectId, jobId: null }));
+      dispatch(clearRunOperation(projectId));
       if (status === 'completed') {
         await dispatch(refreshProjectsThunk());
         return 200;
@@ -42,6 +47,6 @@ export const pollProjectJobThunk =
       return 500;
     }
 
-    dispatch(RunningJobsActions.setRunningJob({ projectId, jobId: null }));
+    dispatch(clearRunOperation(projectId));
     return 500;
   };

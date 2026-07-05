@@ -4,6 +4,7 @@ import { Loader2, Play } from 'lucide-react';
 import { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { runProjectThunk } from '@/store/thunks/projects';
+import { hasActiveRunOperation, isProjectRunActive } from '@/utils/projects';
 
 type ProjectsRunActionProps = {
   projectId: string;
@@ -14,16 +15,21 @@ type ProjectsRunActionProps = {
 export const ProjectsRunAction = ({ projectId, disabled, iconOnly }: ProjectsRunActionProps) => {
   const dispatch = useAppDispatch();
   const runningJobs = useAppSelector((s) => s.runningJobs);
+  const projectsBuilder = useAppSelector((s) => s.projectsBuilder);
 
-  const runningJobId = useMemo(() => runningJobs[projectId], [runningJobs, projectId]);
-  const isRunning = !!runningJobId;
+  const runState = useMemo(
+    () => ({ runningJobs, projectsBuilder }),
+    [runningJobs, projectsBuilder],
+  );
+  const isRunning = useMemo(() => isProjectRunActive(runState, projectId), [runState, projectId]);
+  const isRunBusy = useMemo(() => hasActiveRunOperation(runState), [runState]);
   const label = isRunning ? 'Running…' : 'Run';
 
   return (
     <button
       type="button"
       className={iconOnly ? styles.iconPrimary : styles.primary}
-      disabled={disabled || isRunning}
+      disabled={disabled || isRunBusy}
       aria-label={iconOnly ? label : undefined}
       title={iconOnly ? label : undefined}
       onClick={() => void dispatch(runProjectThunk(projectId))}
