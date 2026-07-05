@@ -39,6 +39,10 @@ export const closeProjectTerminalsThunk =
 
     dispatch(RunningJobsActions.setRunningJob({ projectId, jobId: null }));
 
+    if (getState().projectsBuilder.runInFlightProjectId === projectId) {
+      dispatch(ProjectsBuilderActions.setRunInFlightProjectId(null));
+    }
+
     const project = getState().projects[projectId];
     if (project) {
       dispatch(

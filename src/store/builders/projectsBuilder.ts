@@ -16,6 +16,7 @@ type ProjectsBuilderState = {
   localDatabaseError: string | null;
   localDatabaseSetupMessage: string | null;
   activeLocalDatabaseProjectId: string | null;
+  runInFlightProjectId: string | null;
 };
 
 const initialState: ProjectsBuilderState = {
@@ -30,6 +31,7 @@ const initialState: ProjectsBuilderState = {
   localDatabaseError: null,
   localDatabaseSetupMessage: null,
   activeLocalDatabaseProjectId: null,
+  runInFlightProjectId: null,
 };
 
 export const projectsBuilderSlice = createSlice({
@@ -68,6 +70,9 @@ export const projectsBuilderSlice = createSlice({
     },
     setActiveLocalDatabaseProjectId: (state, action: PayloadAction<string | null>) => {
       state.activeLocalDatabaseProjectId = action.payload;
+    },
+    setRunInFlightProjectId: (state, action: PayloadAction<string | null>) => {
+      state.runInFlightProjectId = action.payload;
     },
     resetLocalDatabaseState: (state) => {
       state.localDatabaseLoadStatus = 'idle';
