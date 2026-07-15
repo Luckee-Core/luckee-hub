@@ -432,4 +432,23 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'my-gmail-manager',
+    name: 'My Gmail Manager',
+    description: 'Unified unread inbox across multiple Gmail accounts',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-gmail-manager-express-server',
+        defaultApiPort: 3052,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-gmail-manager-web',
+        defaultWebPortStart: 3053,
+      },
+    ],
+  },
 ];
