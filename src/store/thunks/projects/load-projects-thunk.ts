@@ -1,3 +1,4 @@
+import type { HookStatus } from '@/model';
 import {
   buildHubCatalogProjects,
   buildHubCatalogRepos,
@@ -9,6 +10,9 @@ import type { AppThunk } from '@/store/store';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import { ProjectsActions } from '@/store/dumps/projects';
 import { ProjectReposActions } from '@/store/dumps/projectRepos';
+import { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
+
+const RUNNING_HOOK_STATUSES = new Set<HookStatus>(['api_running', 'web_running', 'ready']);
 
 /**
  * Seed static repo catalog (identity + GitHub URLs only).
@@ -57,6 +61,23 @@ export const loadProjectsThunk =
       ),
     );
     dispatch(ProjectsBuilderActions.setListLoadStatus('loaded'));
+
+    if (live) {
+      const mergedProjects = mergeHubProjectSetup(buildHubCatalogProjects(), result.data.projects);
+      const runningProjects = mergedProjects.filter((project) =>
+        RUNNING_HOOK_STATUSES.has(project.hookStatus),
+      );
+      if (runningProjects.length > 0) {
+        const terminalSessions = getState().terminalSessions;
+        const hasTerminalForRunningProject = runningProjects.some((project) =>
+          Object.values(terminalSessions).some((session) => session.projectId === project.id),
+        );
+        if (!hasTerminalForRunningProject) {
+          await dispatch(syncTerminalSessionsThunk());
+        }
+      }
+    }
+
     return 200;
   };
 

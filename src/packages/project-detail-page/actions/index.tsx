@@ -3,19 +3,21 @@
 import { useMemo } from 'react';
 
 import { useAppSelector } from '@/store';
-import { projectHasWebRepo } from '@/utils/projects';
+import { projectCanRun, projectHasWebRepo, projectNeedsSetup } from '@/utils/projects';
 import {
   ProjectsCloseAction,
   ProjectsOpenChromeAction,
   ProjectsOpenCursorAction,
   ProjectsRunAction,
+  ProjectsSetupAction,
 } from '@/packages/projects';
 
 export const ProjectDetailActions = () => {
   const currentProject = useAppSelector((s) => s.currentProject);
   const projectRepos = useAppSelector((s) => s.projectRepos);
 
-  const isHookedUp = currentProject.hookStatus !== 'catalog';
+  const canRun = projectCanRun(currentProject.hookStatus);
+  const needsSetup = projectNeedsSetup(currentProject.hookStatus);
   const hasWebRepo = useMemo(
     () => projectHasWebRepo(projectRepos, currentProject.id),
     [projectRepos, currentProject.id],
@@ -25,13 +27,14 @@ export const ProjectDetailActions = () => {
     <section className={styles.card}>
       <h2 className={styles.title}>Dev actions</h2>
       <div className={styles.actions}>
-        <ProjectsRunAction projectId={currentProject.id} disabled={!isHookedUp} />
-        <ProjectsOpenCursorAction projectId={currentProject.id} disabled={!isHookedUp} />
+        <ProjectsSetupAction projectId={currentProject.id} disabled={!needsSetup} />
+        <ProjectsRunAction projectId={currentProject.id} disabled={!canRun} />
+        <ProjectsOpenCursorAction projectId={currentProject.id} disabled={!canRun} />
         <ProjectsOpenChromeAction
           projectId={currentProject.id}
-          disabled={!isHookedUp || !hasWebRepo}
+          disabled={!canRun || !hasWebRepo}
         />
-        <ProjectsCloseAction projectId={currentProject.id} disabled={!isHookedUp} />
+        <ProjectsCloseAction projectId={currentProject.id} disabled={!canRun} />
       </div>
     </section>
   );

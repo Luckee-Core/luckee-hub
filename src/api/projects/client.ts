@@ -9,7 +9,7 @@ import type {
   RunProjectResponse,
 } from '@/model';
 import { requestApi } from '@/api/_shared';
-import type { ListProjectsResponse } from './types';
+import type { HubConfigData, ListProjectsResponse, SetupProjectResponse } from './types';
 import { projectsApiBase } from './config';
 
 type ListProjectsOptions = {
@@ -62,6 +62,38 @@ export const openChromeApi = (projectId: string) =>
  */
 export const getJobApi = (jobId: string) =>
   requestApi<LauncherJob>(`${projectsApiBase}/api/launcher/jobs/${jobId}`);
+
+/**
+ * Read hub machine config (luckeeParent, githubOrg).
+ */
+export const getHubConfigApi = () =>
+  requestApi<HubConfigData>(`${projectsApiBase}/api/projects/hub-config`);
+
+/**
+ * Save luckeeParent in hub.local.json.
+ */
+export const putHubConfigApi = (luckeeParent: string) =>
+  requestApi<{ luckeeParent: string }>(`${projectsApiBase}/api/projects/hub-config`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ luckeeParent }),
+  });
+
+/**
+ * Open macOS Finder folder picker and save luckeeParent.
+ */
+export const pickHubConfigFolderApi = () =>
+  requestApi<{ luckeeParent: string }>(`${projectsApiBase}/api/projects/hub-config/pick-folder`, {
+    method: 'POST',
+  });
+
+/**
+ * Clone repos and npm install for a catalog project (async job).
+ */
+export const setupProjectApi = (projectId: string) =>
+  requestApi<SetupProjectResponse>(`${projectsApiBase}/api/launcher/projects/${projectId}/setup`, {
+    method: 'POST',
+  });
 
 /**
  * Probe local database status for a project.

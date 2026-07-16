@@ -1,7 +1,10 @@
 export { initializeHubCatalogThunk, loadProjectsThunk, refreshProjectsThunk } from './load-projects-thunk';
 export { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 export { runProjectThunk } from './run-project-thunk';
+export { setupProjectThunk } from './setup-project-thunk';
 export { pollProjectJobThunk } from './poll-project-job-thunk';
+export { pollProjectSetupJobThunk } from './poll-project-setup-job-thunk';
+export { loadHubConfigThunk, pickHubConfigFolderThunk, openLuckeeParentModalThunk } from './hub-config-thunk';
 export { openProjectCursorThunk } from './open-project-cursor-thunk';
 export { openProjectChromeThunk } from './open-project-chrome-thunk';
 export { setActiveTerminalTabThunk } from './set-active-terminal-tab-thunk';

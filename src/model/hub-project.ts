@@ -41,6 +41,15 @@ export type RunProjectResponse = {
   sessions: TerminalSession[];
 };
 
+export type SetupJobStepStatus = 'pending' | 'running' | 'done' | 'skipped' | 'failed';
+
+export type SetupJobStep = {
+  id: string;
+  label: string;
+  status: SetupJobStepStatus;
+  message?: string;
+};
+
 export type LauncherJob = {
   jobId: string;
   projectId: string;
@@ -48,6 +57,7 @@ export type LauncherJob = {
   message?: string;
   webUrl?: string;
   sessions?: TerminalSession[];
+  steps?: SetupJobStep[];
   updatedAt: string;
 };
 
