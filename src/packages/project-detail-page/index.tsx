@@ -8,11 +8,14 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { BreadcrumbBuilderActions } from '@/store/builders/breadcrumbBuilder';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import {
+  loadHubConfigThunk,
   loadProjectsThunk,
   probeLocalDatabaseThunk,
   syncTerminalSessionsThunk,
 } from '@/store/thunks/projects';
 import { TerminalDock } from '@/packages/terminal-dock';
+import { LuckeeParentRequiredModal } from '@/packages/projects/luckee-parent-modal';
+import { ProjectSetupModal } from '@/packages/projects/project-setup-modal';
 import { ProjectDetailOverview } from './overview';
 import { ProjectDetailLocalDatabase } from './local-database';
 import { ProjectDetailActions } from './actions';
@@ -26,8 +29,11 @@ export const ProjectDetailPage = () => {
   const currentProject = useAppSelector((s) => s.currentProject);
 
   useEffect(() => {
-    void dispatch(loadProjectsThunk({ live: true }));
-    void dispatch(syncTerminalSessionsThunk());
+    const load = async (): Promise<void> => {
+      await dispatch(loadHubConfigThunk());
+      await dispatch(loadProjectsThunk({ live: true }));
+    };
+    void load();
   }, [dispatch]);
 
   useEffect(() => {
@@ -67,6 +73,8 @@ export const ProjectDetailPage = () => {
 
   return (
     <AppLayout terminalDock={<TerminalDock />}>
+      <LuckeeParentRequiredModal />
+      <ProjectSetupModal />
       <div className={styles.page}>
         <ProjectDetailOverview />
         <ProjectDetailLocalDatabase />

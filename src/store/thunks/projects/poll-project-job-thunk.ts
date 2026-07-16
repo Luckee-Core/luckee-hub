@@ -2,7 +2,7 @@ import { getJobApi } from '@/api/projects';
 import type { AppThunk } from '@/store/store';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import { RunningJobsActions } from '@/store/dumps/runningJobs';
-import { addTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
+import { addTerminalSessionsThunk, syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 import { refreshProjectsThunk } from './load-projects-thunk';
 
 const POLL_MS = 2000;
@@ -36,6 +36,7 @@ export const pollProjectJobThunk =
 
       dispatch(clearRunOperation(projectId));
       if (status === 'completed') {
+        await dispatch(syncTerminalSessionsThunk());
         await dispatch(refreshProjectsThunk());
         return 200;
       }

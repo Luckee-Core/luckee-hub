@@ -3,11 +3,14 @@
 import { useMemo } from 'react';
 
 import { useAppSelector } from '@/store';
+import { ProjectsSetupAction } from '@/packages/projects';
+import { projectNeedsSetup } from '@/utils/projects';
 import { RepoLinkRow } from './repo-link-row';
 
 export const RepoLinks = () => {
   const { id, hookStatus } = useAppSelector((s) => s.currentProject);
   const projectRepos = useAppSelector((s) => s.projectRepos);
+  const luckeeParent = useAppSelector((s) => s.projectsBuilder.luckeeParent);
 
   const repos = useMemo(
     () =>
@@ -26,15 +29,28 @@ export const RepoLinks = () => {
     return null;
   }
 
-  const showCloneHint = hookStatus === 'catalog' || hookStatus === 'missing';
+  const needsSetup = projectNeedsSetup(hookStatus);
 
   return (
     <section className={styles.section}>
       <h2 className={styles.heading}>Repositories</h2>
-      {showCloneHint ? (
-        <p className={styles.hint}>
-          Clone these repos, then add paths in <code className={styles.inlineCode}>hub.local.json</code>.
-        </p>
+      {needsSetup ? (
+        <div className={styles.setupBlock}>
+          <p className={styles.hint}>
+            {luckeeParent ? (
+              <>
+                Use Setup to clone into{' '}
+                <code className={styles.inlineCode}>{luckeeParent}/luckee/{id}/</code> and install
+                dependencies.
+              </>
+            ) : (
+              <>
+                Use Setup to choose your Luckee folder in Finder, then clone and install dependencies.
+              </>
+            )}
+          </p>
+          <ProjectsSetupAction projectId={id} disabled={!needsSetup} />
+        </div>
       ) : null}
       <div className={styles.list}>
         {repos.map((repo) => (
@@ -53,6 +69,7 @@ export const RepoLinks = () => {
 const styles = {
   section: `space-y-3`,
   heading: `text-sm font-semibold text-gray-900 uppercase tracking-wide`,
+  setupBlock: `space-y-2`,
   hint: `text-sm text-gray-600`,
   inlineCode: `font-mono text-xs bg-gray-100 px-1 py-0.5 rounded`,
   list: `flex flex-col gap-3`,

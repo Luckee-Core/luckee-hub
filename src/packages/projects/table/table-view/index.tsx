@@ -11,7 +11,7 @@ import {
 } from '@/store/thunks/projects';
 import { ProjectsHookStatusBadge } from '../../badges/hook-status';
 import { ProjectsRowActions } from '../../actions/row-actions';
-import { ProjectsRefreshButton } from '../../header/buttons';
+import { ProjectsRefreshButton, ProjectsLuckeeParentControl } from '../../header/buttons';
 
 type ProjectsTableViewProps = {
   projects: HubProject[];
@@ -89,6 +89,7 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.toolbar}>
+        <ProjectsLuckeeParentControl />
         <input
           type="text"
           value={searchTerm}
@@ -234,7 +235,7 @@ const styles = {
   `,
   tableHeaderActions: `
     px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
-    bg-gray-100 border-b border-gray-300 w-24
+    bg-gray-100 border-b border-gray-300 w-32
   `,
   sortIcon: `ml-1 text-gray-400 text-[10px]`,
   tableRow: `

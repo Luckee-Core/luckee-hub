@@ -9,6 +9,8 @@ import { ProjectsCloseAction } from '../close-project';
 import { ProjectsOpenChromeAction } from '../open-chrome';
 import { ProjectsOpenCursorAction } from '../open-cursor';
 import { ProjectsRunAction } from '../run-project';
+import { ProjectsSetupAction } from '../setup-project';
+import { projectCanRun, projectNeedsSetup } from '@/utils/projects';
 
 type ProjectsRowActionsProps = {
   project: HubProject;
@@ -17,7 +19,8 @@ type ProjectsRowActionsProps = {
 
 export const ProjectsRowActions = ({ project, iconOnly }: ProjectsRowActionsProps) => {
   const projectRepos = useAppSelector((s) => s.projectRepos);
-  const isHookedUp = project.hookStatus !== 'catalog';
+  const canRun = projectCanRun(project.hookStatus);
+  const needsSetup = projectNeedsSetup(project.hookStatus);
   const hasWebRepo = useMemo(
     () => projectHasWebRepo(projectRepos, project.id),
     [projectRepos, project.id],
@@ -25,14 +28,15 @@ export const ProjectsRowActions = ({ project, iconOnly }: ProjectsRowActionsProp
 
   return (
     <div className={iconOnly ? styles.iconActions : styles.actions} onClick={(event) => event.stopPropagation()}>
-      <ProjectsRunAction projectId={project.id} disabled={!isHookedUp} iconOnly={iconOnly} />
-      <ProjectsOpenCursorAction projectId={project.id} disabled={!isHookedUp} iconOnly={iconOnly} />
+      <ProjectsSetupAction projectId={project.id} disabled={!needsSetup} iconOnly={iconOnly} />
+      <ProjectsRunAction projectId={project.id} disabled={!canRun} iconOnly={iconOnly} />
+      <ProjectsOpenCursorAction projectId={project.id} disabled={!canRun} iconOnly={iconOnly} />
       <ProjectsOpenChromeAction
         projectId={project.id}
-        disabled={!isHookedUp || !hasWebRepo}
+        disabled={!canRun || !hasWebRepo}
         iconOnly={iconOnly}
       />
-      <ProjectsCloseAction projectId={project.id} disabled={!isHookedUp} iconOnly={iconOnly} />
+      <ProjectsCloseAction projectId={project.id} disabled={!canRun} iconOnly={iconOnly} />
     </div>
   );
 };

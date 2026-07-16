@@ -3,7 +3,7 @@ import type { AppThunk } from '@/store/store';
 import { ProjectsActions } from '@/store/dumps/projects';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import { RunningJobsActions } from '@/store/dumps/runningJobs';
-import { hasActiveRunOperation } from '@/utils/projects';
+import { hasActiveRunOperation, hasActiveSetupOperation } from '@/utils/projects';
 import { addTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 import { pollProjectJobThunk } from './poll-project-job-thunk';
 
@@ -13,7 +13,7 @@ import { pollProjectJobThunk } from './poll-project-job-thunk';
 export const runProjectThunk =
   (projectId: string): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
-    if (hasActiveRunOperation(getState())) {
+    if (hasActiveRunOperation(getState()) || hasActiveSetupOperation(getState())) {
       return 400;
     }
 

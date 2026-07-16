@@ -5,13 +5,18 @@ type RunOperationState = {
   };
 };
 
+const isSetupJobId = (jobId: string): boolean => jobId.startsWith('setup-');
+
 /**
  * True when any project launch (API call or job poll) is in progress.
  */
 export const hasActiveRunOperation = (state: RunOperationState): boolean => {
-  return (
-    state.projectsBuilder.runInFlightProjectId !== null ||
-    Object.keys(state.runningJobs).length > 0
+  if (state.projectsBuilder.runInFlightProjectId !== null) {
+    return true;
+  }
+
+  return Object.values(state.runningJobs).some(
+    (jobId) => typeof jobId === 'string' && !isSetupJobId(jobId),
   );
 };
 
@@ -19,7 +24,10 @@ export const hasActiveRunOperation = (state: RunOperationState): boolean => {
  * True when the given project is the one currently launching or polling.
  */
 export const isProjectRunActive = (state: RunOperationState, projectId: string): boolean => {
-  return (
-    state.projectsBuilder.runInFlightProjectId === projectId || projectId in state.runningJobs
-  );
+  if (state.projectsBuilder.runInFlightProjectId === projectId) {
+    return true;
+  }
+
+  const jobId = state.runningJobs[projectId];
+  return typeof jobId === 'string' && !isSetupJobId(jobId);
 };

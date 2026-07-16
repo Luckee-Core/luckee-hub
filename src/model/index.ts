@@ -2,6 +2,8 @@ export type {
   HookStatus,
   HubProject,
   LauncherJob,
+  SetupJobStep,
+  SetupJobStepStatus,
   LocalDatabaseCleanupResult,
   LocalDatabaseProbe,
   LocalDatabaseSetupResult,
