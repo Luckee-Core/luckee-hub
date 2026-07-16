@@ -451,4 +451,23 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'mac-manager',
+    name: 'Mac Manager',
+    description: 'Local Mac disk scan and safe cache / Developer / npm cleanup',
+    localDatabaseSupported: false,
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'mac-manager-express-server',
+        defaultApiPort: 3054,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'mac-manager-web',
+        defaultWebPortStart: 3055,
+      },
+    ],
+  },
 ];
