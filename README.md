@@ -1,8 +1,29 @@
-# Next.js Template
+# Luckee Dev Hub (web)
 
-Bare Next.js app with **src/app**, **src/store**, and **src/utils**. Redux and Tailwind are wired; no entity/dashboard/API code.
+Next.js UI for the local Luckee Dev Hub. Pairs with sibling repo `luckee-hub-express-server`.
 
-## Run
+## Desktop launcher (Mac + Windows)
+
+Clone both repos as siblings, then install a Desktop icon from this repo:
+
+```bash
+git clone <luckee-hub-url> luckee-hub
+git clone <luckee-hub-express-server-url> luckee-hub-express-server
+cd luckee-hub
+npm install
+npm run dev:desktop
+```
+
+| OS | What gets installed |
+|----|---------------------|
+| macOS | `~/Desktop/Luckee Dev Hub.app` |
+| Windows | `%USERPROFILE%\Desktop\Luckee Dev Hub.lnk` |
+
+Double-click the icon to start Express (`:3001`) + Web (`:3000`) and open the browser.
+
+Override paths with `LUCKEE_HUB_WEB_DIR` / `LUCKEE_HUB_EXPRESS_DIR` if the repos are not siblings.
+
+## Run (without desktop icon)
 
 ```bash
 npm install

@@ -10,6 +10,17 @@ HUB_EXPRESS_DIR="${LUCKEE_HUB_EXPRESS_DIR:-$(dirname "$HUB_WEB_DIR")/luckee-hub-
 NVM_SH="${NVM_SH:-/opt/homebrew/opt/nvm/nvm.sh}"
 LAUNCHER_LOG="/tmp/luckee-hub-launcher.log"
 
+if [[ ! -d "$HUB_EXPRESS_DIR" ]]; then
+  echo "Express repo not found at: $HUB_EXPRESS_DIR" >&2
+  echo "Clone luckee-hub-express-server as a sibling, or set LUCKEE_HUB_EXPRESS_DIR." >&2
+  exit 1
+fi
+
+if [[ ! -d "$HUB_WEB_DIR" ]]; then
+  echo "Web repo not found at: $HUB_WEB_DIR" >&2
+  exit 1
+fi
+
 export NVM_DIR="$HOME/.nvm"
 if [[ -s "$NVM_SH" ]]; then
   # shellcheck source=/dev/null

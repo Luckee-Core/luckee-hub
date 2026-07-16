@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "dev:desktop": "zsh scripts/install-luckee-hub-dev-app.sh",
+    "dev:desktop": "node scripts/install-desktop-app.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ."
