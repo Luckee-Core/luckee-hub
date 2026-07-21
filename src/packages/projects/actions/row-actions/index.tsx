@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 
 import type { HubProject } from '@/model';
 import { useAppSelector } from '@/store';
+import { isHubProjectAvailable } from '@/config';
 import { projectHasWebRepo } from '@/utils/projects';
 import { ProjectsCloseAction } from '../close-project';
 import { ProjectsOpenChromeAction } from '../open-chrome';
@@ -19,8 +20,9 @@ type ProjectsRowActionsProps = {
 
 export const ProjectsRowActions = ({ project, iconOnly }: ProjectsRowActionsProps) => {
   const projectRepos = useAppSelector((s) => s.projectRepos);
-  const canRun = projectCanRun(project.hookStatus);
-  const needsSetup = projectNeedsSetup(project.hookStatus);
+  const launcherAvailable = isHubProjectAvailable(project.id);
+  const canRun = launcherAvailable && projectCanRun(project.hookStatus);
+  const needsSetup = launcherAvailable && projectNeedsSetup(project.hookStatus);
   const hasWebRepo = useMemo(
     () => projectHasWebRepo(projectRepos, project.id),
     [projectRepos, project.id],

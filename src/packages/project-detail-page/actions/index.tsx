@@ -3,6 +3,7 @@
 import { useMemo } from 'react';
 
 import { useAppSelector } from '@/store';
+import { isHubProjectAvailable } from '@/config';
 import { projectCanRun, projectHasWebRepo, projectNeedsSetup } from '@/utils/projects';
 import {
   ProjectsCloseAction,
@@ -16,8 +17,9 @@ export const ProjectDetailActions = () => {
   const currentProject = useAppSelector((s) => s.currentProject);
   const projectRepos = useAppSelector((s) => s.projectRepos);
 
-  const canRun = projectCanRun(currentProject.hookStatus);
-  const needsSetup = projectNeedsSetup(currentProject.hookStatus);
+  const launcherAvailable = isHubProjectAvailable(currentProject.id);
+  const canRun = launcherAvailable && projectCanRun(currentProject.hookStatus);
+  const needsSetup = launcherAvailable && projectNeedsSetup(currentProject.hookStatus);
   const hasWebRepo = useMemo(
     () => projectHasWebRepo(projectRepos, currentProject.id),
     [projectRepos, currentProject.id],
