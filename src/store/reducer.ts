@@ -4,6 +4,8 @@ import { projectsReducer } from './dumps/projects';
 import { projectReposReducer } from './dumps/projectRepos';
 import { terminalSessionsReducer } from './dumps/terminalSessions';
 import { localDatabaseProbesReducer } from './dumps/localDatabaseProbes';
+import { supabaseProbesReducer } from './dumps/supabaseProbes';
+import { expressEnvProbesReducer } from './dumps/expressEnvProbes';
 import { runningJobsReducer } from './dumps/runningJobs';
 import { breadcrumbBuilderReducer } from './builders/breadcrumbBuilder';
 import { projectsBuilderReducer } from './builders/projectsBuilder';
@@ -16,6 +18,8 @@ export const rootReducer = combineReducers({
   projectRepos: projectReposReducer,
   terminalSessions: terminalSessionsReducer,
   localDatabaseProbes: localDatabaseProbesReducer,
+  supabaseProbes: supabaseProbesReducer,
+  expressEnvProbes: expressEnvProbesReducer,
   runningJobs: runningJobsReducer,
   projectsBuilder: projectsBuilderReducer,
   currentProject: currentProjectReducer,

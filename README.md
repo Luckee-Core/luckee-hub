@@ -23,6 +23,23 @@ Double-click the icon to start Express (`:3001`) + Web (`:3000`) and open the br
 
 Override paths with `LUCKEE_HUB_WEB_DIR` / `LUCKEE_HUB_EXPRESS_DIR` if the repos are not siblings.
 
+## CLI command (`luckeehub`)
+
+Same launcher as the desktop icon, from any terminal:
+
+```bash
+cd luckee-hub
+npm link
+```
+
+Then anywhere:
+
+```bash
+luckeehub
+```
+
+Uses the same path overrides (`LUCKEE_HUB_WEB_DIR` / `LUCKEE_HUB_EXPRESS_DIR`) as the desktop launcher.
+
 ## Run (without desktop icon)
 
 ```bash

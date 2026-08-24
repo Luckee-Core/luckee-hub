@@ -20,8 +20,15 @@ type ProjectsRowActionsProps = {
 
 export const ProjectsRowActions = ({ project, iconOnly }: ProjectsRowActionsProps) => {
   const projectRepos = useAppSelector((s) => s.projectRepos);
+  const supabaseProbes = useAppSelector((s) => s.supabaseProbes);
   const launcherAvailable = isHubProjectAvailable(project.id);
-  const canRun = launcherAvailable && projectCanRun(project.hookStatus);
+  const supabaseProbe = supabaseProbes[project.id];
+  const supabaseBlocking =
+    project.supabaseSupported &&
+    supabaseProbe !== undefined &&
+    !supabaseProbe.configured;
+  const canRun =
+    launcherAvailable && projectCanRun(project.hookStatus) && !supabaseBlocking;
   const needsSetup = launcherAvailable && projectNeedsSetup(project.hookStatus);
   const hasWebRepo = useMemo(
     () => projectHasWebRepo(projectRepos, project.id),
