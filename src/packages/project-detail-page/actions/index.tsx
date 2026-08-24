@@ -4,46 +4,73 @@ import { useMemo } from 'react';
 
 import { useAppSelector } from '@/store';
 import { isHubProjectAvailable } from '@/config';
-import { projectCanRun, projectHasWebRepo, projectNeedsSetup } from '@/utils/projects';
+import { projectCanRun, projectHasWebRepo } from '@/utils/projects';
 import {
   ProjectsCloseAction,
   ProjectsOpenChromeAction,
   ProjectsOpenCursorAction,
   ProjectsRunAction,
-  ProjectsSetupAction,
 } from '@/packages/projects';
 
+/**
+ * Project detail header actions — icon buttons with hover labels (no Setup).
+ */
 export const ProjectDetailActions = () => {
   const currentProject = useAppSelector((s) => s.currentProject);
   const projectRepos = useAppSelector((s) => s.projectRepos);
+  const supabaseProbes = useAppSelector((s) => s.supabaseProbes);
 
   const launcherAvailable = isHubProjectAvailable(currentProject.id);
-  const canRun = launcherAvailable && projectCanRun(currentProject.hookStatus);
-  const needsSetup = launcherAvailable && projectNeedsSetup(currentProject.hookStatus);
+  const supabaseProbe = supabaseProbes[currentProject.id];
+  const supabaseBlocking =
+    currentProject.supabaseSupported &&
+    (supabaseProbe === undefined || !supabaseProbe.configured);
+  const canRun =
+    launcherAvailable && projectCanRun(currentProject.hookStatus) && !supabaseBlocking;
   const hasWebRepo = useMemo(
     () => projectHasWebRepo(projectRepos, currentProject.id),
     [projectRepos, currentProject.id],
   );
 
   return (
-    <section className={styles.card}>
-      <h2 className={styles.title}>Dev actions</h2>
+    <div className={styles.wrap}>
       <div className={styles.actions}>
-        <ProjectsSetupAction projectId={currentProject.id} disabled={!needsSetup} />
-        <ProjectsRunAction projectId={currentProject.id} disabled={!canRun} />
-        <ProjectsOpenCursorAction projectId={currentProject.id} disabled={!canRun} />
+        <ProjectsRunAction
+          projectId={currentProject.id}
+          disabled={!canRun}
+          iconOnly
+          iconSize="md"
+        />
+        <ProjectsOpenCursorAction
+          projectId={currentProject.id}
+          disabled={!canRun}
+          iconOnly
+          iconSize="md"
+        />
         <ProjectsOpenChromeAction
           projectId={currentProject.id}
           disabled={!canRun || !hasWebRepo}
+          iconOnly
+          iconSize="md"
         />
-        <ProjectsCloseAction projectId={currentProject.id} disabled={!canRun} />
+        <ProjectsCloseAction
+          projectId={currentProject.id}
+          disabled={!canRun}
+          iconOnly
+          iconSize="md"
+        />
       </div>
-    </section>
+      {supabaseBlocking ? (
+        <p className={styles.warn} title="Configure Supabase before Run">
+          Supabase required
+        </p>
+      ) : null}
+    </div>
   );
 };
 
 const styles = {
-  card: `bg-white border border-gray-300 rounded p-6 space-y-3`,
-  title: `text-lg font-semibold text-gray-900`,
-  actions: `flex flex-wrap gap-2`,
+  wrap: `flex flex-col items-end gap-1 shrink-0`,
+  actions: `flex items-center gap-1`,
+  warn: `text-xs text-amber-800`,
 };

@@ -19,8 +19,9 @@ export const Projects = () => {
   useEffect(() => {
     const load = async (): Promise<void> => {
       await dispatch(loadHubConfigThunk());
+      // Filesystem catalog only — skip auto `live: true` (blocks Express ~10s).
       await dispatch(loadProjectsThunk());
-      await dispatch(loadProjectsThunk({ live: true }));
+      void dispatch(syncTerminalSessionsThunk());
     };
     void load();
   }, [dispatch]);

@@ -1,20 +1,23 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import { Copy, Check, Github } from 'lucide-react';
 
 import type { HubProjectRepoType } from '@/model';
 import { buildGitCloneCommand } from '@/utils/projects/build-git-clone-command';
 
 type RepoLinkRowProps = {
   repoType: HubProjectRepoType;
-  repoName: string;
   repoUrl: string;
 };
 
 const repoTypeLabel = (repoType: HubProjectRepoType): string =>
-  repoType === 'nextjs' ? 'Web (Next.js)' : 'API (Express)';
+  repoType === 'nextjs' ? 'Web' : 'Express';
 
-export const RepoLinkRow = ({ repoType, repoName, repoUrl }: RepoLinkRowProps) => {
+/**
+ * Inline repo controls: label + clone (copy) icon + GitHub icon.
+ */
+export const RepoLinkRow = ({ repoType, repoUrl }: RepoLinkRowProps) => {
   const [copied, setCopied] = useState(false);
   const cloneCommand = buildGitCloneCommand(repoUrl);
 
@@ -29,50 +32,41 @@ export const RepoLinkRow = ({ repoType, repoName, repoUrl }: RepoLinkRowProps) =
   }, [cloneCommand]);
 
   return (
-    <div className={styles.row}>
-      <span className={styles.badge}>{repoTypeLabel(repoType)}</span>
-      <code className={styles.repoName}>{repoName}</code>
-      <div className={styles.actions}>
-        <a
-          href={repoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.linkButton}
-        >
-          GitHub
-        </a>
-        <button type="button" onClick={() => void handleCopy()} className={styles.copyButton}>
-          {copied ? 'Copied' : 'Copy clone'}
-        </button>
-      </div>
-      <code className={styles.cloneCommand}>{cloneCommand}</code>
-    </div>
+    <span className={styles.group}>
+      <span className={styles.label}>{repoTypeLabel(repoType)}</span>
+      <button
+        type="button"
+        onClick={() => void handleCopy()}
+        className={styles.iconButton}
+        aria-label={copied ? 'Copied clone command' : `Copy ${repoTypeLabel(repoType)} clone command`}
+        title={copied ? 'Copied' : 'Copy git clone'}
+      >
+        {copied ? (
+          <Check className={styles.icon} aria-hidden />
+        ) : (
+          <Copy className={styles.icon} aria-hidden />
+        )}
+      </button>
+      <a
+        href={repoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={styles.iconButton}
+        aria-label={`Open ${repoTypeLabel(repoType)} on GitHub`}
+        title="Open GitHub"
+      >
+        <Github className={styles.icon} aria-hidden />
+      </a>
+    </span>
   );
 };
 
 const styles = {
-  row: `
-    flex flex-col gap-2 rounded border border-gray-200 bg-gray-50 p-3
+  group: `inline-flex items-center gap-1`,
+  label: `text-xs font-medium text-gray-700`,
+  iconButton: `
+    inline-flex items-center justify-center rounded p-1 text-gray-600
+    hover:bg-gray-100 hover:text-gray-900 cursor-pointer border-none bg-transparent
   `,
-  badge: `
-    inline-flex w-fit rounded px-2 py-0.5 text-xs font-medium uppercase tracking-wide
-    text-gray-700 bg-white border border-gray-300
-  `,
-  repoName: `
-    text-sm font-mono text-gray-900 break-all
-  `,
-  actions: `
-    flex flex-wrap gap-2
-  `,
-  linkButton: `
-    rounded px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300
-    hover:bg-gray-100
-  `,
-  copyButton: `
-    rounded px-3 py-1.5 text-sm font-medium text-gray-700 bg-white border border-gray-300
-    hover:bg-gray-100 cursor-pointer
-  `,
-  cloneCommand: `
-    text-xs font-mono text-gray-500 break-all
-  `,
+  icon: `h-3.5 w-3.5`,
 };

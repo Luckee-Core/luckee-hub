@@ -20,7 +20,25 @@ export type HubProject = {
     workspaceFile?: string;
   };
   localDatabaseSupported: boolean;
+  supabaseSupported: boolean;
+  expressEnvGroupIds: string[];
   postgresActiveConsumer?: boolean;
+};
+
+export type ExpressEnvGroupProbe = {
+  supported: boolean;
+  groupId: string;
+  label?: string;
+  expressEnvPath?: string;
+  keysPresent: Record<string, boolean>;
+  configured: boolean;
+  message?: string;
+};
+
+export type ExpressEnvGroupSaveResult = {
+  success: boolean;
+  message: string;
+  expressEnvPath: string;
 };
 
 export type CloseProjectResponse = {
@@ -109,5 +127,33 @@ export type LocalDatabaseSetupResult = {
   databaseName: string;
   databaseUrl: string;
   migrationsApplied: string[];
+  message: string;
+};
+
+export type SupabaseProbe = {
+  supported: boolean;
+  expressEnvPath?: string;
+  bootstrapSql?: string;
+  expectedTables?: string[];
+  hasSupabaseUrl: boolean;
+  hasServiceKey: boolean;
+  hasDatabaseUrl: boolean;
+  configured: boolean;
+  /** True when expectedTables exist on DATABASE_URL (remote check). */
+  schemaReady: boolean;
+  message?: string;
+};
+
+export type SupabaseConfigSaveResult = {
+  success: boolean;
+  message: string;
+  expressEnvPath: string;
+};
+
+export type SupabaseSchemaSeedResult = {
+  success: boolean;
+  schemaReady: boolean;
+  bootstrapSql: string;
+  expectedTables: string[];
   message: string;
 };
