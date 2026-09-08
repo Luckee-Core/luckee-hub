@@ -14,6 +14,8 @@ export type HubCatalogProject = {
   id: string;
   name: string;
   description: string;
+  /** Path Chrome opens after Run. Origin `/` when omitted. */
+  webOpenPath?: string;
   localDatabaseSupported: boolean;
   supabaseSupported: boolean;
   expressEnvGroupIds: string[];
@@ -282,6 +284,7 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'my-health',
     name: 'My Health',
     description: 'Self-hosted health dashboard',
+    webOpenPath: '/dashboard',
     localDatabaseSupported: true,
     supabaseSupported: false,
     expressEnvGroupIds: [],
