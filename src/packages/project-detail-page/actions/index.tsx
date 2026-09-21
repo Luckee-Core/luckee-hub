@@ -3,7 +3,6 @@
 import { useMemo } from 'react';
 
 import { useAppSelector } from '@/store';
-import { isHubProjectAvailable } from '@/config';
 import { projectCanRun, projectHasWebRepo } from '@/utils/projects';
 import {
   ProjectsCloseAction,
@@ -20,13 +19,11 @@ export const ProjectDetailActions = () => {
   const projectRepos = useAppSelector((s) => s.projectRepos);
   const supabaseProbes = useAppSelector((s) => s.supabaseProbes);
 
-  const launcherAvailable = isHubProjectAvailable(currentProject.id);
   const supabaseProbe = supabaseProbes[currentProject.id];
   const supabaseBlocking =
     currentProject.supabaseSupported &&
     (supabaseProbe === undefined || !supabaseProbe.configured);
-  const canRun =
-    launcherAvailable && projectCanRun(currentProject.hookStatus) && !supabaseBlocking;
+  const canRun = projectCanRun(currentProject.hookStatus) && !supabaseBlocking;
   const hasWebRepo = useMemo(
     () => projectHasWebRepo(projectRepos, currentProject.id),
     [projectRepos, currentProject.id],
