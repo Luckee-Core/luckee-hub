@@ -157,10 +157,10 @@ export const HUB_CATALOG: HubCatalogProject[] = [
   {
     id: 'lead-studio',
     name: 'Lead Studio',
-    description: 'Lead CRM, research workers, email queue',
+    description: 'Lead CRM and research workers',
     localDatabaseSupported: false,
     supabaseSupported: true,
-    expressEnvGroupIds: ['ai', 'google-maps', 'email'],
+    expressEnvGroupIds: ['ai', 'google-maps'],
     repos: [
       {
         repoType: 'express',

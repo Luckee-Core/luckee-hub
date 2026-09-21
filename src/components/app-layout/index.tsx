@@ -16,15 +16,8 @@ import { useAppDispatch, useAppSelector } from '@/store';
 const SIDEBAR_EXPANDED_KEY = 'luckee-hub-sidebar-visible';
 
 const getStoredSidebarExpanded = (): boolean => {
-  if (typeof window === 'undefined') {
-    return false;
-  }
   try {
-    const stored = localStorage.getItem(SIDEBAR_EXPANDED_KEY);
-    if (stored === null) {
-      return false;
-    }
-    return stored === 'true';
+    return localStorage.getItem(SIDEBAR_EXPANDED_KEY) === 'true';
   } catch {
     return false;
   }
@@ -38,8 +31,12 @@ type AppLayoutProps = {
 export const AppLayout = ({ children, terminalDock }: AppLayoutProps) => {
   const dispatch = useAppDispatch();
   const currentProject = useAppSelector((s) => s.currentProject);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(getStoredSidebarExpanded);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const pathname = usePathname();
+
+  useLayoutEffect(() => {
+    setIsSidebarExpanded(getStoredSidebarExpanded());
+  }, []);
 
   useLayoutEffect(() => {
     // Pathname changes reset stale trails — but detail opens set the trail in

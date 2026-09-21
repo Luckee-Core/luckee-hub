@@ -1,12 +1,14 @@
 /**
- * Hub catalog projects exposed in the launcher UI (Setup / Run enabled).
+ * Hub catalog projects shown in the Available section.
  * All other registry projects appear under Coming soon.
+ * Coming soon projects can still use Setup / Run.
  */
 export const HUB_AVAILABLE_PROJECT_IDS = [
   'app-store-manager',
   'code-commit-summaries',
   'code-control',
   'code-your-resume',
+  'design-prompter',
   'innertube',
   'lead-studio',
   'local-scheduler',
