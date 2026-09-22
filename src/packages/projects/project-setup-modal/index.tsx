@@ -38,6 +38,7 @@ export const ProjectSetupModal = () => {
     setupModalStatus,
     setupModalMessage,
     setupModalSteps,
+    setupModalLog,
     setupModalStartedAt,
   } = useAppSelector((s) => s.projectsBuilder);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -120,6 +121,8 @@ export const ProjectSetupModal = () => {
 
         <p className={styles.message}>{setupModalMessage ?? 'Working...'}</p>
 
+        {setupModalLog ? <pre className={styles.log}>{setupModalLog}</pre> : null}
+
         {isRunning ? (
           <p className={styles.note}>
             First-time <code className={styles.code}>npm install</code> usually finishes within a
@@ -153,7 +156,7 @@ const styles = {
     fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4
   `,
   card: `
-    w-full max-w-md rounded-lg border border-gray-300 bg-white p-6 shadow-xl space-y-4
+    w-full max-w-xl rounded-lg border border-gray-300 bg-white p-6 shadow-xl space-y-4
   `,
   title: `text-lg font-semibold text-gray-900`,
   statusRow: `flex items-center gap-2`,
@@ -167,6 +170,10 @@ const styles = {
   stepMessage: `block text-xs text-gray-500 mt-0.5`,
   stepIcon: `h-4 w-4 shrink-0 mt-0.5`,
   message: `text-sm text-gray-700 bg-white border border-gray-200 rounded px-3 py-2`,
+  log: `
+    max-h-48 overflow-auto whitespace-pre-wrap break-all rounded border border-gray-800
+    bg-gray-900 p-3 font-mono text-xs leading-relaxed text-gray-100
+  `,
   note: `text-sm text-gray-500 leading-relaxed`,
   code: `font-mono text-xs bg-gray-100 px-1 py-0.5 rounded`,
   actions: `flex flex-col gap-2`,

@@ -24,11 +24,14 @@ export const pollProjectSetupJobThunk =
         continue;
       }
 
-      const { status, message, steps = [] } = result.data;
+      const { status, message, steps = [], logTail } = result.data;
       const statusMessage = message ?? 'Working...';
       dispatch(ProjectsBuilderActions.setSetupModalMessage(statusMessage));
       if (steps.length > 0) {
         dispatch(ProjectsBuilderActions.setSetupModalSteps(steps));
+      }
+      if (logTail) {
+        dispatch(ProjectsBuilderActions.setSetupModalLog(logTail));
       }
 
       if (status === 'running') {
