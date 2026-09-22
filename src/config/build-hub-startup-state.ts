@@ -3,7 +3,12 @@ import { HUB_CATALOG, HUB_GITHUB_ORG, type HubCatalogProject } from './hub-catal
 
 export type HubCatalogProjectRow = Pick<
   HubCatalogProject,
-  'id' | 'name' | 'description' | 'localDatabaseSupported'
+  | 'id'
+  | 'name'
+  | 'description'
+  | 'localDatabaseSupported'
+  | 'supabaseSupported'
+  | 'expressEnvGroupIds'
 > & {
   apiPort: number;
 };
@@ -24,6 +29,8 @@ export const buildHubCatalogProjects = (): HubCatalogProjectRow[] =>
     description: entry.description,
     apiPort: getExpressApiPort(entry),
     localDatabaseSupported: entry.localDatabaseSupported,
+    supabaseSupported: entry.supabaseSupported,
+    expressEnvGroupIds: entry.expressEnvGroupIds,
   }));
 
 /**

@@ -14,3 +14,10 @@ export { toggleTerminalDockThunk } from './toggle-terminal-dock-thunk';
 export { setCurrentProjectThunk } from './set-current-project-thunk';
 export { probeLocalDatabaseThunk, setupLocalDatabaseThunk } from './local-database-thunk';
 export { runLocalDatabaseStepThunk } from './run-local-database-step-thunk';
+export { probeSupabaseConfigThunk, saveSupabaseConfigThunk, seedSupabaseSchemaThunk } from './supabase-config-thunk';
+export {
+  probeExpressEnvGroupThunk,
+  saveAiEnvThunk,
+  saveGoogleMapsEnvThunk,
+  saveEmailEnvThunk,
+} from './express-env-thunk';

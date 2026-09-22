@@ -22,6 +22,7 @@ export const mergeHubProjectSetup = (
         webUrl: status.webUrl,
         paths: status.paths,
         postgresActiveConsumer: status.postgresActiveConsumer,
+        expressEnvGroupIds: status.expressEnvGroupIds ?? project.expressEnvGroupIds,
       },
     ];
   });

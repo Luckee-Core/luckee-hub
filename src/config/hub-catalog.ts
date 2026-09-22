@@ -14,7 +14,11 @@ export type HubCatalogProject = {
   id: string;
   name: string;
   description: string;
+  /** Path Chrome opens after Run. Origin `/` when omitted. */
+  webOpenPath?: string;
   localDatabaseSupported: boolean;
+  supabaseSupported: boolean;
+  expressEnvGroupIds: string[];
   repos: HubCatalogRepo[];
 };
 
@@ -29,6 +33,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Blog Studio',
     description: 'Blog authoring and distribution',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -48,6 +54,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Code Control',
     description: 'Schema, conventions, and guided codegen into customer repos',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -67,6 +75,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Code Your Resume',
     description: 'Job-search CRM and resume studios',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -86,6 +96,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Instagram Studio',
     description: 'Instagram carousel content and Graph publishing',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -105,6 +117,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Innertube',
     description: 'YouTube video library with InnerTube transcript fetch and persistence',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -124,6 +138,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Knowledge Studio',
     description: 'YouTube and knowledge workflows',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -141,8 +157,10 @@ export const HUB_CATALOG: HubCatalogProject[] = [
   {
     id: 'lead-studio',
     name: 'Lead Studio',
-    description: 'Lead CRM, research workers, email queue',
+    description: 'Lead CRM and research workers',
     localDatabaseSupported: false,
+    supabaseSupported: true,
+    expressEnvGroupIds: ['ai', 'google-maps'],
     repos: [
       {
         repoType: 'express',
@@ -162,6 +180,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Local Scheduler',
     description: 'Local cron studio for worker Express APIs (email queue, etc.)',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -181,6 +201,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Luckee Blueprints',
     description: 'Workforce training and certifications',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -200,6 +222,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Luckee Open Source',
     description: 'Leads, contacts, and outbound email pipeline',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -219,6 +243,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'My AI Threads',
     description: 'Search, browse, and Ask over local Cursor agent transcripts',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -238,6 +264,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'My Fundraise',
     description: 'Investors CRM, graphics studio (TSX preview), and pitch deck slide coach',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -256,7 +284,10 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'my-health',
     name: 'My Health',
     description: 'Self-hosted health dashboard',
+    webOpenPath: '/dashboard',
     localDatabaseSupported: true,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -276,6 +307,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'My Nonprofit',
     description: 'PA/Philadelphia nonprofit formation wizard with AI document drafts',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -295,6 +328,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'My Ops Tracker',
     description: 'Customers, projects, tickets, and time tracking',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -314,6 +349,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Personal Finances',
     description: 'Money dashboard with CSV imports and AI prompts',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -333,6 +370,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'QR Code Generator',
     description: 'QR generation API utilities',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -347,6 +386,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'TikTok Studio',
     description: 'TikTok carousel content and publishing',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -366,6 +407,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Website Site Scraper',
     description: 'Playwright scrape and extract API',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -380,6 +423,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'App Store Manager',
     description: 'App Store listing copy, TSX screenshot studio, and device frame assets',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -399,6 +444,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Code Commit Summaries',
     description: 'GitHub commit dashboards and AI-generated daily and repo summaries',
     localDatabaseSupported: true,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -418,6 +465,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'My Substack Manager',
     description: 'Substack Notes scraper and engagement performance dashboard',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -437,6 +486,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'My Gmail Manager',
     description: 'Unified unread inbox across multiple Gmail accounts',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -456,6 +507,8 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     name: 'Mac Manager',
     description: 'Local Mac disk scan and safe cache / Developer / npm cleanup',
     localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
@@ -467,6 +520,27 @@ export const HUB_CATALOG: HubCatalogProject[] = [
         repoType: 'nextjs',
         repoName: 'mac-manager-web',
         defaultWebPortStart: 3055,
+      },
+    ],
+  },
+  {
+    id: 'design-prompter',
+    name: 'Design Prompter',
+    description: 'Customer research, Facebook scraping, and Lovable prompt generation',
+    localDatabaseSupported: true,
+    supabaseSupported: false,
+    expressEnvGroupIds: ['ai'],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'design-prompter-express-server',
+        defaultApiPort: 3056,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'design-prompter-web',
+        defaultWebPortStart: 3057,
       },
     ],
   },

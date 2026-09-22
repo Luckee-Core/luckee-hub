@@ -10,9 +10,16 @@ type ProjectsRunActionProps = {
   projectId: string;
   disabled?: boolean;
   iconOnly?: boolean;
+  /** `sm` for projects table (default); `md` for detail header */
+  iconSize?: 'sm' | 'md';
 };
 
-export const ProjectsRunAction = ({ projectId, disabled, iconOnly }: ProjectsRunActionProps) => {
+export const ProjectsRunAction = ({
+  projectId,
+  disabled,
+  iconOnly,
+  iconSize = 'sm',
+}: ProjectsRunActionProps) => {
   const dispatch = useAppDispatch();
   const runningJobs = useAppSelector((s) => s.runningJobs);
   const projectsBuilder = useAppSelector((s) => s.projectsBuilder);
@@ -24,11 +31,17 @@ export const ProjectsRunAction = ({ projectId, disabled, iconOnly }: ProjectsRun
   const isRunning = useMemo(() => isProjectRunActive(runState, projectId), [runState, projectId]);
   const isRunBusy = useMemo(() => hasActiveRunOperation(runState), [runState]);
   const label = isRunning ? 'Running…' : 'Run';
+  const iconClass = iconSize === 'md' ? styles.iconMd : styles.iconSm;
+  const buttonClass = iconOnly
+    ? iconSize === 'md'
+      ? styles.iconPrimaryMd
+      : styles.iconPrimarySm
+    : styles.primary;
 
   return (
     <button
       type="button"
-      className={iconOnly ? styles.iconPrimary : styles.primary}
+      className={buttonClass}
       disabled={disabled || isRunBusy}
       aria-label={iconOnly ? label : undefined}
       title={iconOnly ? label : undefined}
@@ -36,9 +49,9 @@ export const ProjectsRunAction = ({ projectId, disabled, iconOnly }: ProjectsRun
     >
       {iconOnly ? (
         isRunning ? (
-          <Loader2 className={`${styles.icon} animate-spin`} aria-hidden />
+          <Loader2 className={`${iconClass} animate-spin`} aria-hidden />
         ) : (
-          <Play className={styles.icon} aria-hidden />
+          <Play className={iconClass} aria-hidden />
         )
       ) : (
         label
@@ -52,9 +65,14 @@ const styles = {
     rounded px-2.5 py-1 text-xs font-medium text-white bg-orange-500
     hover:bg-orange-600 disabled:opacity-50
   `,
-  iconPrimary: `
+  iconPrimarySm: `
     inline-flex items-center justify-center rounded p-1 text-white bg-orange-500
     hover:bg-orange-600 disabled:opacity-50
   `,
-  icon: `h-3.5 w-3.5`,
+  iconPrimaryMd: `
+    inline-flex items-center justify-center rounded p-1.5 text-white bg-orange-500
+    hover:bg-orange-600 disabled:opacity-50
+  `,
+  iconSm: `h-3.5 w-3.5`,
+  iconMd: `h-5 w-5`,
 };
