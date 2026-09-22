@@ -29,6 +29,7 @@ type ProjectsBuilderState = {
   setupModalStatus: 'running' | 'completed' | 'failed' | null;
   setupModalMessage: string | null;
   setupModalSteps: SetupJobStep[];
+  setupModalLog: string | null;
   setupModalStartedAt: string | null;
 };
 
@@ -55,6 +56,7 @@ const initialState: ProjectsBuilderState = {
   setupModalStatus: null,
   setupModalMessage: null,
   setupModalSteps: [],
+  setupModalLog: null,
   setupModalStartedAt: null,
 };
 
@@ -122,6 +124,7 @@ export const projectsBuilderSlice = createSlice({
       state.setupModalStatus = 'running';
       state.setupModalMessage = action.payload.message ?? 'Starting setup...';
       state.setupModalSteps = [];
+      state.setupModalLog = null;
       state.setupModalStartedAt = new Date().toISOString();
     },
     setSetupModalMessage: (state, action: PayloadAction<string>) => {
@@ -129,6 +132,9 @@ export const projectsBuilderSlice = createSlice({
     },
     setSetupModalSteps: (state, action: PayloadAction<SetupJobStep[]>) => {
       state.setupModalSteps = action.payload;
+    },
+    setSetupModalLog: (state, action: PayloadAction<string>) => {
+      state.setupModalLog = action.payload;
     },
     setSetupModalStatus: (
       state,
@@ -148,6 +154,7 @@ export const projectsBuilderSlice = createSlice({
       state.setupModalStatus = null;
       state.setupModalMessage = null;
       state.setupModalSteps = [];
+      state.setupModalLog = null;
       state.setupModalStartedAt = null;
     },
     resetLocalDatabaseState: (state) => {
