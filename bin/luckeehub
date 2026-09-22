@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+#
+# Global CLI entry for Luckee Dev Hub — same behavior as the Desktop app.
+# Runs scripts/start-luckee-hub-dev.sh (Express :3001, Web :3000, open browser).
+
+set -euo pipefail
+
+# ${0:A} = absolute path with symlinks resolved (npm link → this file).
+SCRIPT_PATH="${0:A}"
+REPO_ROOT="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+LAUNCHER_SH="${REPO_ROOT}/scripts/start-luckee-hub-dev.sh"
+
+if [[ ! -f "$LAUNCHER_SH" ]]; then
+  echo "Launcher not found at: $LAUNCHER_SH" >&2
+  echo "Re-run npm link from the luckee-hub repo." >&2
+  exit 1
+fi
+
+exec zsh "$LAUNCHER_SH" "$@"

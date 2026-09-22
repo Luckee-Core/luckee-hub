@@ -7,6 +7,11 @@ import type {
   LocalDatabaseStepResult,
   CloseProjectResponse,
   RunProjectResponse,
+  SupabaseConfigSaveResult,
+  SupabaseProbe,
+  SupabaseSchemaSeedResult,
+  ExpressEnvGroupProbe,
+  ExpressEnvGroupSaveResult,
 } from '@/model';
 import { requestApi } from '@/api/_shared';
 import type { HubConfigData, ListProjectsResponse, SetupProjectResponse } from './types';
@@ -134,4 +139,60 @@ export const cleanupLocalDatabaseApi = (projectId: string) =>
   requestApi<LocalDatabaseCleanupResult>(
     getLocalDatabaseCleanupUrl(projectId),
     { method: 'POST' },
+  );
+
+/**
+ * Probe Supabase env presence in express .env (booleans only).
+ */
+export const probeSupabaseConfigApi = (projectId: string) =>
+  requestApi<SupabaseProbe>(`${projectsApiBase}/api/projects/${projectId}/supabase`);
+
+/**
+ * Upsert Supabase keys into the project's express .env.
+ */
+export const saveSupabaseConfigApi = (
+  projectId: string,
+  body: { supabaseUrl: string; serviceKey: string; databasePassword: string },
+) =>
+  requestApi<SupabaseConfigSaveResult>(
+    `${projectsApiBase}/api/projects/${projectId}/supabase/config`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    },
+  );
+
+/**
+ * Apply registry bootstrap SQL to Supabase via express DATABASE_URL + psql.
+ */
+export const seedSupabaseSchemaApi = (projectId: string) =>
+  requestApi<SupabaseSchemaSeedResult>(
+    `${projectsApiBase}/api/projects/${projectId}/supabase/seed-schema`,
+    { method: 'POST' },
+  );
+
+/**
+ * Probe express env group key presence in express .env (booleans only).
+ */
+export const probeExpressEnvGroupApi = (projectId: string, groupId: string) =>
+  requestApi<ExpressEnvGroupProbe>(
+    `${projectsApiBase}/api/projects/${projectId}/express-env/${encodeURIComponent(groupId)}`,
+  );
+
+/**
+ * Upsert express env group keys into the project's express .env.
+ */
+export const saveExpressEnvGroupApi = (
+  projectId: string,
+  groupId: string,
+  values: Record<string, string>,
+) =>
+  requestApi<ExpressEnvGroupSaveResult>(
+    `${projectsApiBase}/api/projects/${projectId}/express-env/${encodeURIComponent(groupId)}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+    },
   );

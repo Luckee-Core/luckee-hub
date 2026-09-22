@@ -20,7 +20,7 @@ The dev hub listed studios at `/` in `packages/dev-hub`. Users need a projects l
 
 ```text
 src/packages/projects/              # list table, header, row actions
-src/packages/project-detail-page/   # overview, local DB panel, dev actions
+src/packages/project-detail-page/   # overview, local DB / Supabase panels, dev actions
 src/packages/terminal-dock/         # shared dock (extracted from dev-hub)
 ```
 
@@ -29,11 +29,12 @@ src/packages/terminal-dock/         # shared dock (extracted from dev-hub)
 - Dump: `projects` (`Record<projectId, HubProject>`)
 - Dump: `terminalSessions` (`Record<sessionId, TerminalSession>`)
 - Dump: `localDatabaseProbes` (`Record<projectId, LocalDatabaseProbe>`)
+- Dump: `supabaseProbes` (`Record<projectId, SupabaseProbe>`) — booleans only, no secrets
 - Dump: `runningJobs` (`Record<projectId, jobId>`)
-- Builder: `projectsBuilder` — list/terminal/local-DB UI flags and `terminalSessionOrder` only (primitives)
+- Builder: `projectsBuilder` — list/terminal/local-DB/Supabase UI flags and `terminalSessionOrder` only (primitives)
 - Current: `currentProject` — full `HubProject`; `id === ''` means none selected
 
-Detail packages read **`currentProject`** (whole slice per ADR 001).
+Detail packages read **`currentProject`** (whole slice per ADR 001). Lead Studio shows **Supabase** panel when `supabaseSupported` (keys upserted to express `.env` via Hub Express). When configured, **Seed table schema** calls hub-express `POST …/supabase/seed-schema` (`psql` + registry `bootstrapSql`).
 
 - Thunks: `src/store/thunks/projects/` — `setCurrentProjectThunk` hydrates `currentProject` from dump before navigation
 - API: `src/api/projects/`
@@ -41,7 +42,8 @@ Detail packages read **`currentProject`** (whole slice per ADR 001).
 ### Navigation
 
 - Row click → `setCurrentProjectThunk` → await `200` → `/project-detail-page` (ADR 008)
-- Breadcrumbs: Projects → project name (static segment v1)
+- `setCurrentProjectThunk` sets `currentProject`, breadcrumbs (Projects → name), resets local-DB / Supabase builder state, and probes supported panels (not from detail-page `useEffect`)
+- Detail page is presentational: reads `currentProject` only; no remount loads of hub config / project list
 
 ## Related
 

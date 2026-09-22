@@ -2,6 +2,9 @@
   "name": "luckee-hub",
   "version": "0.1.0",
   "private": true,
+  "bin": {
+    "luckeehub": "./bin/luckeehub"
+  },
   "scripts": {
     "dev": "next dev -p 3000",
     "dev:desktop": "node scripts/install-desktop-app.js",

@@ -9,21 +9,15 @@ import {
 } from '@/components/app-layout-header';
 import { resolveDefaultNavBreadcrumbForPathname } from '@/components/navigation/resolve-default-nav-breadcrumb-for-pathname';
 import { Sidebar } from '@/components/sidebar';
+import { PROJECT_DETAIL_PAGE_PATH, PROJECTS_PATH } from '@/config';
 import { BreadcrumbBuilderActions } from '@/store/builders/breadcrumbBuilder';
-import { useAppDispatch } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 
 const SIDEBAR_EXPANDED_KEY = 'luckee-hub-sidebar-visible';
 
 const getStoredSidebarExpanded = (): boolean => {
-  if (typeof window === 'undefined') {
-    return false;
-  }
   try {
-    const stored = localStorage.getItem(SIDEBAR_EXPANDED_KEY);
-    if (stored === null) {
-      return false;
-    }
-    return stored === 'true';
+    return localStorage.getItem(SIDEBAR_EXPANDED_KEY) === 'true';
   } catch {
     return false;
   }
@@ -36,12 +30,28 @@ type AppLayoutProps = {
 
 export const AppLayout = ({ children, terminalDock }: AppLayoutProps) => {
   const dispatch = useAppDispatch();
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(getStoredSidebarExpanded);
+  const currentProject = useAppSelector((s) => s.currentProject);
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
   const pathname = usePathname();
 
   useLayoutEffect(() => {
+    setIsSidebarExpanded(getStoredSidebarExpanded());
+  }, []);
+
+  useLayoutEffect(() => {
+    // Pathname changes reset stale trails — but detail opens set the trail in
+    // setCurrentProjectThunk *before* navigate, so re-apply after reset.
+    if (pathname === PROJECT_DETAIL_PAGE_PATH && currentProject.id) {
+      dispatch(
+        BreadcrumbBuilderActions.setTrail({
+          base: { label: 'Projects', href: PROJECTS_PATH },
+          segments: [{ kind: 'plainText', label: currentProject.name }],
+        }),
+      );
+      return;
+    }
     dispatch(BreadcrumbBuilderActions.reset());
-  }, [dispatch, pathname]);
+  }, [dispatch, pathname, currentProject.id, currentProject.name]);
 
   const defaultNavCrumb = useMemo(
     () => resolveDefaultNavBreadcrumbForPathname(pathname),
