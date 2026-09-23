@@ -9,10 +9,11 @@ import {
   ProjectsOpenChromeAction,
   ProjectsOpenCursorAction,
   ProjectsRunAction,
+  ProjectsSetupAction,
 } from '@/packages/projects';
 
 /**
- * Project detail header actions — icon buttons with hover labels (no Setup).
+ * Project detail header actions — icon buttons with hover labels.
  */
 export const ProjectDetailActions = () => {
   const currentProject = useAppSelector((s) => s.currentProject);
@@ -32,6 +33,7 @@ export const ProjectDetailActions = () => {
   return (
     <div className={styles.wrap}>
       <div className={styles.actions}>
+        <ProjectsSetupAction projectId={currentProject.id} iconOnly iconSize="md" />
         <ProjectsRunAction
           projectId={currentProject.id}
           disabled={!canRun}
