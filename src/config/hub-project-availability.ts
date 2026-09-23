@@ -21,6 +21,7 @@ export const HUB_AVAILABLE_PROJECT_IDS = [
   'my-ops-tracker',
   'personal-finances',
   'qr-code-generator',
+  'speech-therapy-tracker',
   'website-site-scraper',
 ] as const;
 

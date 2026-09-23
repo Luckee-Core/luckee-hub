@@ -544,4 +544,26 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'speech-therapy-tracker',
+    name: 'Speech Therapy Tracker',
+    description:
+      'Peg-tube feeds, speech-therapy exercises, photo import, and ice-cube consumption — shares the My Health Postgres database',
+    localDatabaseSupported: true,
+    supabaseSupported: false,
+    expressEnvGroupIds: ['ai'],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'speech-therapy-tracker-express-server',
+        defaultApiPort: 3058,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'speech-therapy-tracker-web',
+        defaultWebPortStart: 3059,
+      },
+    ],
+  },
 ];
