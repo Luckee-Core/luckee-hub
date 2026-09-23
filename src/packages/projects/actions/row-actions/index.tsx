@@ -10,7 +10,7 @@ import { ProjectsOpenChromeAction } from '../open-chrome';
 import { ProjectsOpenCursorAction } from '../open-cursor';
 import { ProjectsRunAction } from '../run-project';
 import { ProjectsSetupAction } from '../setup-project';
-import { projectCanRun, projectNeedsSetup } from '@/utils/projects';
+import { projectCanRun } from '@/utils/projects';
 
 type ProjectsRowActionsProps = {
   project: HubProject;
@@ -26,7 +26,6 @@ export const ProjectsRowActions = ({ project, iconOnly }: ProjectsRowActionsProp
     supabaseProbe !== undefined &&
     !supabaseProbe.configured;
   const canRun = projectCanRun(project.hookStatus) && !supabaseBlocking;
-  const needsSetup = projectNeedsSetup(project.hookStatus);
   const hasWebRepo = useMemo(
     () => projectHasWebRepo(projectRepos, project.id),
     [projectRepos, project.id],
@@ -34,7 +33,7 @@ export const ProjectsRowActions = ({ project, iconOnly }: ProjectsRowActionsProp
 
   return (
     <div className={iconOnly ? styles.iconActions : styles.actions} onClick={(event) => event.stopPropagation()}>
-      <ProjectsSetupAction projectId={project.id} disabled={!needsSetup} iconOnly={iconOnly} />
+      <ProjectsSetupAction projectId={project.id} iconOnly={iconOnly} />
       <ProjectsRunAction projectId={project.id} disabled={!canRun} iconOnly={iconOnly} />
       <ProjectsOpenCursorAction projectId={project.id} disabled={!canRun} iconOnly={iconOnly} />
       <ProjectsOpenChromeAction
