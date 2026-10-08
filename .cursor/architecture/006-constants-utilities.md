@@ -27,7 +27,7 @@ Folders are named by **capability** (`date/`, `string/`, `number/`), **not** by 
 | ❌ Forbidden in `src/utils/` | Put it here instead |
 |-----------------------------|-------------------|
 | `format-job-status.ts`, `format-order-row.ts` | `src/packages/{feature}/` (colocated helper) or inline in the component |
-| `build-job-table-columns.ts` | `src/packages/jobs/ui/` |
+| `build-job-table-columns.ts` | `src/packages/jobs/table/` |
 | `normalize-user-dto.ts` (single API entity) | `src/api/users/` or `src/packages/users/` |
 | Redux access, hooks, `fetch` | thunks / `src/api/` |
 
@@ -67,9 +67,9 @@ export const formatDate = (iso: string): string =>
 ```
 
 ```tsx
-// src/packages/orders/ui/order-list-row.tsx
+// src/packages/orders/table/row/index.tsx
 import { formatDate } from '@/utils/date';
-import type { Order } from '../types';
+import type { Order } from '@/model/order';
 
 type OrderListRowProps = { order: Order };
 

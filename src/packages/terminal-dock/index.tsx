@@ -97,29 +97,30 @@ export const TerminalDock = () => {
     return null;
   }
 
-  if (!terminalDockOpen) {
-    return (
-      <aside className={styles.dockCollapsed}>
-        <TerminalDockToggle />
-      </aside>
-    );
-  }
-
   return (
-    <aside className={styles.dockOpen} style={{ height: dockHeight }}>
-      <div
-        className={styles.resizeHandle}
-        role="separator"
-        aria-orientation="horizontal"
-        aria-label="Resize terminal"
-        onPointerDown={handleResizePointerDown}
-      />
-      <div className={styles.toolbar}>
-        <span className={styles.title}>Terminal</span>
+    <aside
+      className={terminalDockOpen ? styles.dockOpen : styles.dockCollapsed}
+      style={terminalDockOpen ? { height: dockHeight } : undefined}
+    >
+      {terminalDockOpen ? (
+        <>
+          <div
+            className={styles.resizeHandle}
+            role="separator"
+            aria-orientation="horizontal"
+            aria-label="Resize terminal"
+            onPointerDown={handleResizePointerDown}
+          />
+          <div className={styles.toolbar}>
+            <span className={styles.title}>Terminal</span>
+            <TerminalDockToggle />
+          </div>
+          <TerminalDockTabs />
+        </>
+      ) : (
         <TerminalDockToggle />
-      </div>
-      <TerminalDockTabs />
-      <div className={styles.panelWrap}>
+      )}
+      <div className={terminalDockOpen ? styles.panelWrap : styles.panelWrapHidden}>
         <TerminalDockPanel />
       </div>
     </aside>
@@ -145,5 +146,8 @@ const styles = {
   `,
   panelWrap: `
     flex flex-1 flex-col min-h-0 overflow-hidden
+  `,
+  panelWrapHidden: `
+    hidden
   `,
 };

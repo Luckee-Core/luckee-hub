@@ -24,6 +24,14 @@ src/packages/project-detail-page/   # overview, local DB / Supabase panels, dev 
 src/packages/terminal-dock/         # shared dock (extracted from dev-hub)
 ```
 
+Layout exception (this pass): existing `packages/projects/actions/`, `packages/project-detail-page/actions/`, and `packages/projects/index.ts` + `projects.tsx` stay. New packages follow ADRs 002 / 005 / 017.
+
+### Catalog load
+
+[`AppShell`](../../src/components/app-shell/index.tsx) owns the first catalog load (`loadHubConfigThunk`, non-live `loadProjectsThunk`, `syncTerminalSessionsThunk`). Visiting `/projects` does not reload the catalog. Reloading `/project-detail-page` still restores terminal tabs.
+
+Live Refresh (`refreshProjectsThunk({ reconnectTerminals: true })`) probes ports, syncs terminals, bumps `terminalConnectionEpoch`, and copies `hookStatus`, `webUrl`, `apiPort`, `enabled`, and `postgresActiveConsumer` onto `currentProject` when they differ.
+
 ### Redux
 
 - Dump: `projects` (`Record<projectId, HubProject>`)
@@ -43,7 +51,7 @@ Detail packages read **`currentProject`** (whole slice per ADR 001). Lead Studio
 
 - Row click → `setCurrentProjectThunk` → await `200` → `/project-detail-page` (ADR 008)
 - `setCurrentProjectThunk` sets `currentProject`, breadcrumbs (Projects → name), resets local-DB / Supabase builder state, and probes supported panels (not from detail-page `useEffect`)
-- Detail page is presentational: reads `currentProject` only; no remount loads of hub config / project list
+- Detail page is presentational: reads `currentProject` only; no remount loads of hub config / project list (shell already loaded them)
 
 ## Related
 

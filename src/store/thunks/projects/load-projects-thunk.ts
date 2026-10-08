@@ -1,4 +1,3 @@
-import type { HookStatus } from '@/model';
 import {
   buildHubCatalogProjects,
   buildHubCatalogRepos,
@@ -13,8 +12,6 @@ import { ProjectsActions } from '@/store/dumps/projects';
 import { ProjectReposActions } from '@/store/dumps/projectRepos';
 import { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 
-const RUNNING_HOOK_STATUSES = new Set<HookStatus>(['api_running', 'web_running', 'ready']);
-
 /**
  * Seed static repo catalog (identity + GitHub URLs only).
  */
@@ -25,6 +22,8 @@ export const initializeHubCatalogThunk = (): AppThunk => (dispatch) => {
 type LoadProjectsOptions = {
   /** Curl/lsof ports for Ready / API running / Web running badges. */
   live?: boolean;
+  /** After a live list, reopen WebSockets for existing session ids. */
+  reconnectTerminals?: boolean;
 };
 
 /**
@@ -34,6 +33,7 @@ export const loadProjectsThunk =
   (options: LoadProjectsOptions = {}): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
     const live = options.live ?? false;
+    const reconnectTerminals = options.reconnectTerminals ?? false;
     const hasProjects = Object.keys(getState().projects).length > 0;
 
     if (!hasProjects) {
@@ -46,6 +46,9 @@ export const loadProjectsThunk =
     if (!result.success || !result.data) {
       if (!hasProjects) {
         dispatch(ProjectsBuilderActions.setListLoadStatus('error'));
+        dispatch(ProjectsBuilderActions.setListError(result.error ?? 'Failed to load projects'));
+      } else {
+        dispatch(ProjectsBuilderActions.setListLoadStatus('loaded'));
         dispatch(ProjectsBuilderActions.setListError(result.error ?? 'Failed to load projects'));
       }
       return result.httpStatus === 400 ? 400 : 500;
@@ -65,42 +68,52 @@ export const loadProjectsThunk =
 
     const currentProject = getState().currentProject;
     const refreshedCurrent = getState().projects[currentProject.id];
-    if (refreshedCurrent && refreshedCurrent.apiPort !== currentProject.apiPort) {
+    if (
+      refreshedCurrent &&
+      (refreshedCurrent.apiPort !== currentProject.apiPort ||
+        refreshedCurrent.hookStatus !== currentProject.hookStatus ||
+        refreshedCurrent.webUrl !== currentProject.webUrl ||
+        refreshedCurrent.enabled !== currentProject.enabled ||
+        refreshedCurrent.postgresActiveConsumer !== currentProject.postgresActiveConsumer)
+    ) {
       dispatch(
         CurrentProjectActions.setCurrentProject({
           ...currentProject,
           apiPort: refreshedCurrent.apiPort,
           hookStatus: refreshedCurrent.hookStatus,
           webUrl: refreshedCurrent.webUrl,
+          enabled: refreshedCurrent.enabled,
+          postgresActiveConsumer: refreshedCurrent.postgresActiveConsumer,
         }),
       );
     }
 
     if (live) {
-      const mergedProjects = mergeHubProjectSetup(buildHubCatalogProjects(), result.data.projects);
-      const runningProjects = mergedProjects.filter((project) =>
-        RUNNING_HOOK_STATUSES.has(project.hookStatus),
-      );
-      if (runningProjects.length > 0) {
-        const terminalSessions = getState().terminalSessions;
-        const hasTerminalForRunningProject = runningProjects.some((project) =>
-          Object.values(terminalSessions).some((session) => session.projectId === project.id),
-        );
-        if (!hasTerminalForRunningProject) {
-          await dispatch(syncTerminalSessionsThunk());
-        }
+      await dispatch(syncTerminalSessionsThunk());
+      if (reconnectTerminals) {
+        dispatch(ProjectsBuilderActions.incrementTerminalConnectionEpoch());
       }
     }
 
     return 200;
   };
 
+type RefreshProjectsOptions = {
+  reconnectTerminals?: boolean;
+};
+
 /**
  * Full refresh with live port probes (Refresh button).
  */
 export const refreshProjectsThunk =
-  (): AppThunk<Promise<200 | 400 | 500>> => async (dispatch) => {
+  (options: RefreshProjectsOptions = {}): AppThunk<Promise<200 | 400 | 500>> =>
+  async (dispatch) => {
     dispatch(ProjectsBuilderActions.setListLoadStatus('loading'));
     dispatch(ProjectsBuilderActions.setListError(null));
-    return dispatch(loadProjectsThunk({ live: true }));
+    return dispatch(
+      loadProjectsThunk({
+        live: true,
+        reconnectTerminals: options.reconnectTerminals ?? false,
+      }),
+    );
   };

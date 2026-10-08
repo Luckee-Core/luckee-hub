@@ -13,30 +13,61 @@ type ConnectHandlers = {
   onError?: () => void;
 };
 
+const RETRY_DELAYS_MS = [400, 800, 1600];
+
 /**
  * Open a WebSocket to stream PTY I/O for a terminal session.
+ * Unexpected closes retry a few times; `close()` is silent.
  */
 export const connectTerminalWebSocket = (
   sessionId: string,
   handlers: ConnectHandlers,
 ): TerminalConnection => {
-  const ws = new WebSocket(getTerminalWebSocketUrl(sessionId));
+  let ws: WebSocket;
+  let intentional = false;
+  let retryCount = 0;
+  let retryTimer: ReturnType<typeof setTimeout> | null = null;
 
-  ws.onopen = () => {
-    handlers.onOpen?.();
+  const clearRetryTimer = (): void => {
+    if (retryTimer !== null) {
+      clearTimeout(retryTimer);
+      retryTimer = null;
+    }
   };
 
-  ws.onmessage = (event) => {
-    handlers.onData(typeof event.data === 'string' ? event.data : String(event.data));
+  const attach = (): void => {
+    ws = new WebSocket(getTerminalWebSocketUrl(sessionId));
+
+    ws.onopen = () => {
+      retryCount = 0;
+      handlers.onOpen?.();
+    };
+
+    ws.onmessage = (event) => {
+      handlers.onData(typeof event.data === 'string' ? event.data : String(event.data));
+    };
+
+    ws.onclose = () => {
+      if (intentional) {
+        return;
+      }
+      if (retryCount < RETRY_DELAYS_MS.length) {
+        const delay = RETRY_DELAYS_MS[retryCount] ?? 1600;
+        retryCount += 1;
+        retryTimer = setTimeout(() => {
+          attach();
+        }, delay);
+        return;
+      }
+      handlers.onClose?.();
+    };
+
+    ws.onerror = () => {
+      // Browser follows with onclose.
+    };
   };
 
-  ws.onclose = () => {
-    handlers.onClose?.();
-  };
-
-  ws.onerror = () => {
-    handlers.onError?.();
-  };
+  attach();
 
   return {
     sendInput: (data: string) => {
@@ -50,6 +81,8 @@ export const connectTerminalWebSocket = (
       }
     },
     close: () => {
+      intentional = true;
+      clearRetryTimer();
       ws.close();
     },
   };
