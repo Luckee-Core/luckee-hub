@@ -15,7 +15,8 @@ export const syncTerminalSessionsThunk =
       return 500;
     }
 
-    const sessions = result.data;
+    const closed = new Set(getState().projectsBuilder.closedTerminalSessionIds);
+    const sessions = result.data.filter((session) => !closed.has(session.sessionId));
     dispatch(TerminalSessionsActions.replaceTerminalSessions(sessions));
     dispatch(
       ProjectsBuilderActions.setTerminalSessionOrder(sessions.map((s) => s.sessionId)),
@@ -39,19 +40,23 @@ export const syncTerminalSessionsThunk =
 export const addTerminalSessionsThunk =
   (sessions: TerminalSession[]): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
-    if (sessions.length === 0) {
+    const closed = new Set(getState().projectsBuilder.closedTerminalSessionIds);
+    const openSessions = sessions.filter((session) => !closed.has(session.sessionId));
+    if (openSessions.length === 0) {
       return 200;
     }
 
-    dispatch(TerminalSessionsActions.upsertTerminalSessions(sessions));
+    dispatch(TerminalSessionsActions.upsertTerminalSessions(openSessions));
 
     const { terminalSessionOrder, activeTerminalSessionId } = getState().projectsBuilder;
     const existing = new Set(terminalSessionOrder);
-    const newIds = sessions.map((s) => s.sessionId).filter((id) => !existing.has(id));
+    const newIds = openSessions.map((s) => s.sessionId).filter((id) => !existing.has(id));
     dispatch(ProjectsBuilderActions.setTerminalSessionOrder([...terminalSessionOrder, ...newIds]));
 
     if (!activeTerminalSessionId) {
-      dispatch(ProjectsBuilderActions.setActiveTerminalSessionId(sessions[0]?.sessionId ?? null));
+      dispatch(
+        ProjectsBuilderActions.setActiveTerminalSessionId(openSessions[0]?.sessionId ?? null),
+      );
     }
 
     dispatch(ProjectsBuilderActions.setTerminalDockOpen(true));

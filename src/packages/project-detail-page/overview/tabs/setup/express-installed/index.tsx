@@ -16,14 +16,25 @@ export const ExpressInstalled = () => {
 
   const pathOk = expressRepo?.dirExists === true;
   const ok = expressRepo?.depsInstalled === true;
-  const detail = !pathOk ? 'Clone first' : ok ? 'node_modules present' : 'Missing node_modules';
+  const python = expressRepo?.apiRuntime === 'python';
+  const detail = !pathOk
+    ? 'Clone first'
+    : ok
+      ? python
+        ? '.venv present'
+        : 'node_modules present'
+      : python
+        ? 'Missing .venv'
+        : 'Missing node_modules';
 
   return (
     <div className={styles.row}>
       <span className={ok ? styles.iconOk : styles.iconPending} aria-hidden>
         {ok ? '✓' : '○'}
       </span>
-      <span className={ok ? styles.titleOk : styles.titlePending}>Express deps</span>
+      <span className={ok ? styles.titleOk : styles.titlePending}>
+        {python ? 'Python deps' : 'Express deps'}
+      </span>
       <span className={styles.detail}>{detail}</span>
     </div>
   );

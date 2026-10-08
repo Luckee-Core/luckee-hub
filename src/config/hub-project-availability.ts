@@ -9,6 +9,7 @@ export const HUB_AVAILABLE_PROJECT_IDS = [
   'code-control',
   'code-your-resume',
   'design-prompter',
+  'extract-text',
   'innertube',
   'lead-studio',
   'local-scheduler',
@@ -21,7 +22,9 @@ export const HUB_AVAILABLE_PROJECT_IDS = [
   'my-ops-tracker',
   'personal-finances',
   'qr-code-generator',
+  'reddit-scraper',
   'speech-therapy-tracker',
+  'upwork-manager',
   'website-site-scraper',
 ] as const;
 

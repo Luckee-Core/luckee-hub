@@ -34,7 +34,11 @@ export const RepoLinks = () => {
       {repos.map((repo, index) => (
         <span key={`${repo.projectId}-${repo.repoType}-${repo.repoName}`} className={styles.item}>
           {index > 0 ? <span className={styles.sep} aria-hidden>·</span> : null}
-          <RepoLinkRow repoType={repo.repoType} repoUrl={repo.repoUrl!} />
+          <RepoLinkRow
+            repoType={repo.repoType}
+            repoUrl={repo.repoUrl!}
+            apiRuntime={repo.apiRuntime}
+          />
         </span>
       ))}
     </div>

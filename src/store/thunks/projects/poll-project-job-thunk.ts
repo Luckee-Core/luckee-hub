@@ -36,6 +36,7 @@ export const pollProjectJobThunk =
 
       dispatch(clearRunOperation(projectId));
       if (status === 'completed') {
+        dispatch(ProjectsBuilderActions.setListError(null));
         await dispatch(syncTerminalSessionsThunk());
         await dispatch(refreshProjectsThunk());
         return 200;

@@ -9,6 +9,7 @@ import { TerminalSessionsActions } from '@/store/dumps/terminalSessions';
 export const closeTerminalSessionThunk =
   (sessionId: string): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
+    dispatch(ProjectsBuilderActions.addClosedTerminalSessionId(sessionId));
     await killTerminalSessionApi(sessionId);
 
     const { terminalSessionOrder, activeTerminalSessionId } = getState().projectsBuilder;

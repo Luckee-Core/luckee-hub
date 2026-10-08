@@ -12,6 +12,8 @@ type ProjectsBuilderState = {
   activeTerminalSessionId: string | null;
   terminalDockOpen: boolean;
   terminalSessionOrder: string[];
+  /** Session ids the user closed. Later polls must not put those tabs back. */
+  closedTerminalSessionIds: string[];
   localDatabaseLoadStatus: LoadStatus;
   localDatabaseOperation: LocalDatabaseOperation | null;
   activeLocalDatabaseStepId: string | null;
@@ -59,6 +61,7 @@ const initialState: ProjectsBuilderState = {
   activeTerminalSessionId: null,
   terminalDockOpen: false,
   terminalSessionOrder: [],
+  closedTerminalSessionIds: [],
   localDatabaseLoadStatus: 'idle',
   localDatabaseOperation: null,
   activeLocalDatabaseStepId: null,
@@ -118,6 +121,11 @@ export const projectsBuilderSlice = createSlice({
     },
     setTerminalSessionOrder: (state, action: PayloadAction<string[]>) => {
       state.terminalSessionOrder = action.payload;
+    },
+    addClosedTerminalSessionId: (state, action: PayloadAction<string>) => {
+      if (!state.closedTerminalSessionIds.includes(action.payload)) {
+        state.closedTerminalSessionIds.push(action.payload);
+      }
     },
     setLocalDatabaseLoadStatus: (state, action: PayloadAction<LoadStatus>) => {
       state.localDatabaseLoadStatus = action.payload;

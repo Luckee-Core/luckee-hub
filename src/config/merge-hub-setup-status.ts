@@ -19,6 +19,7 @@ export const mergeHubProjectSetup = (
         ...project,
         hookStatus: status.hookStatus,
         enabled: status.enabled,
+        apiPort: status.apiPort > 0 ? status.apiPort : project.apiPort,
         webUrl: status.webUrl,
         paths: status.paths,
         postgresActiveConsumer: status.postgresActiveConsumer,
@@ -47,5 +48,6 @@ export const mergeHubRepoSetup = (
       localDir: status.localDir,
       dirExists: status.dirExists,
       depsInstalled: status.depsInstalled,
+      apiRuntime: status.apiRuntime,
     };
   });

@@ -9,16 +9,22 @@ import { buildGitCloneCommand } from '@/utils/projects/build-git-clone-command';
 type RepoLinkRowProps = {
   repoType: HubProjectRepoType;
   repoUrl: string;
+  apiRuntime?: 'node' | 'python';
 };
 
-const repoTypeLabel = (repoType: HubProjectRepoType): string =>
-  repoType === 'nextjs' ? 'Web' : 'Express';
+const repoTypeLabel = (repoType: HubProjectRepoType, apiRuntime?: 'node' | 'python'): string => {
+  if (repoType === 'nextjs') {
+    return 'Web';
+  }
+  return apiRuntime === 'python' ? 'Python' : 'Express';
+};
 
 /**
  * Inline repo controls: label + clone (copy) icon + GitHub icon.
  */
-export const RepoLinkRow = ({ repoType, repoUrl }: RepoLinkRowProps) => {
+export const RepoLinkRow = ({ repoType, repoUrl, apiRuntime }: RepoLinkRowProps) => {
   const [copied, setCopied] = useState(false);
+  const label = repoTypeLabel(repoType, apiRuntime);
   const cloneCommand = buildGitCloneCommand(repoUrl);
 
   const handleCopy = useCallback(async () => {
@@ -33,12 +39,12 @@ export const RepoLinkRow = ({ repoType, repoUrl }: RepoLinkRowProps) => {
 
   return (
     <span className={styles.group}>
-      <span className={styles.label}>{repoTypeLabel(repoType)}</span>
+      <span className={styles.label}>{label}</span>
       <button
         type="button"
         onClick={() => void handleCopy()}
         className={styles.iconButton}
-        aria-label={copied ? 'Copied clone command' : `Copy ${repoTypeLabel(repoType)} clone command`}
+        aria-label={copied ? 'Copied clone command' : `Copy ${label} clone command`}
         title={copied ? 'Copied' : 'Copy git clone'}
       >
         {copied ? (
@@ -52,7 +58,7 @@ export const RepoLinkRow = ({ repoType, repoUrl }: RepoLinkRowProps) => {
         target="_blank"
         rel="noopener noreferrer"
         className={styles.iconButton}
-        aria-label={`Open ${repoTypeLabel(repoType)} on GitHub`}
+        aria-label={`Open ${label} on GitHub`}
         title="Open GitHub"
       >
         <Github className={styles.icon} aria-hidden />
