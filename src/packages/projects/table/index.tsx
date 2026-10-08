@@ -27,14 +27,26 @@ export const ProjectsTable = () => {
     return <p className={styles.message}>No projects in registry.</p>;
   }
 
-  return <ProjectsTableView projects={projectsList} />;
+  return (
+    <div className={styles.root}>
+      {listError ? (
+        <p className={styles.error} role="alert">
+          {listError}
+        </p>
+      ) : null}
+      <ProjectsTableView projects={projectsList} />
+    </div>
+  );
 };
 
 const styles = {
+  root: `
+    space-y-3
+  `,
   message: `
     text-gray-600
   `,
   error: `
-    text-red-600
+    text-sm text-red-700
   `,
 };

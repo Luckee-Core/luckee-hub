@@ -16,13 +16,16 @@ export const ExpressPath = () => {
 
   const ok = expressRepo?.dirExists === true;
   const path = expressRepo?.localDir;
+  const python = expressRepo?.apiRuntime === 'python';
 
   return (
     <div className={styles.row}>
       <span className={ok ? styles.iconOk : styles.iconPending} aria-hidden>
         {ok ? '✓' : '○'}
       </span>
-      <span className={ok ? styles.titleOk : styles.titlePending}>Express path</span>
+      <span className={ok ? styles.titleOk : styles.titlePending}>
+        {python ? 'Python path' : 'Express path'}
+      </span>
       <span className={styles.detail}>{path ?? 'Not configured — run Setup'}</span>
     </div>
   );

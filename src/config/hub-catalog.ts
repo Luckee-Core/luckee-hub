@@ -382,6 +382,27 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
+    id: 'reddit-scraper',
+    name: 'Reddit Scraper',
+    description: 'Public Reddit thread scraper with a free daily scrape and Stripe credit packs',
+    localDatabaseSupported: false,
+    supabaseSupported: true,
+    expressEnvGroupIds: ['stripe'],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'reddit-scraper-express-server-cms',
+        defaultApiPort: 3062,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'free-reddit-scraper-web',
+        defaultWebPortStart: 3063,
+      },
+    ],
+  },
+  {
     id: 'tiktok-studio',
     name: 'TikTok Studio',
     description: 'TikTok carousel content and publishing',
@@ -563,6 +584,48 @@ export const HUB_CATALOG: HubCatalogProject[] = [
         repoType: 'nextjs',
         repoName: 'speech-therapy-tracker-web',
         defaultWebPortStart: 3059,
+      },
+    ],
+  },
+  {
+    id: 'upwork-manager',
+    name: 'Upwork Manager',
+    description: 'Past Upwork applications, jobs, and Claude proposal generation',
+    localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'upwork-manager-python-server',
+        defaultApiPort: 3060,
+        healthPath: '/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'upwork-manager-web',
+        defaultWebPortStart: 3061,
+      },
+    ],
+  },
+  {
+    id: 'extract-text',
+    name: 'Extract Text',
+    description: 'Upload a PDF, extract typed fields, and review the result',
+    localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'extract-text-from-pdf-express-server',
+        defaultApiPort: 3064,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'extract-text-from-pdf-web',
+        defaultWebPortStart: 3065,
       },
     ],
   },

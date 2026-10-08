@@ -140,7 +140,7 @@ export const SupabaseTab = () => {
         <ConfiguredCheck
           title="Service role key"
           ok={probe?.hasServiceKey === true}
-          detail="SUPABASE_SERVICE_KEY is set in Express .env"
+          detail="SUPABASE_SERVICE_KEY or SUPABASE_SERVICE_ROLE_KEY is set in Express .env"
         />
         <ConfiguredCheck
           title="Database URL"

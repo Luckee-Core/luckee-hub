@@ -8,6 +8,7 @@ import {
 import { listProjectsApi } from '@/api/projects';
 import type { AppThunk } from '@/store/store';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
+import { CurrentProjectActions } from '@/store/current/currentProject';
 import { ProjectsActions } from '@/store/dumps/projects';
 import { ProjectReposActions } from '@/store/dumps/projectRepos';
 import { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
@@ -61,6 +62,19 @@ export const loadProjectsThunk =
       ),
     );
     dispatch(ProjectsBuilderActions.setListLoadStatus('loaded'));
+
+    const currentProject = getState().currentProject;
+    const refreshedCurrent = getState().projects[currentProject.id];
+    if (refreshedCurrent && refreshedCurrent.apiPort !== currentProject.apiPort) {
+      dispatch(
+        CurrentProjectActions.setCurrentProject({
+          ...currentProject,
+          apiPort: refreshedCurrent.apiPort,
+          hookStatus: refreshedCurrent.hookStatus,
+          webUrl: refreshedCurrent.webUrl,
+        }),
+      );
+    }
 
     if (live) {
       const mergedProjects = mergeHubProjectSetup(buildHubCatalogProjects(), result.data.projects);

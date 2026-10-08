@@ -17,11 +17,13 @@ export const runProjectThunk =
       return 400;
     }
 
+    dispatch(ProjectsBuilderActions.setListError(null));
     dispatch(ProjectsBuilderActions.setRunInFlightProjectId(projectId));
 
     const result = await runProjectApi(projectId);
     if (!result.success || !result.data?.jobId) {
       dispatch(ProjectsBuilderActions.setRunInFlightProjectId(null));
+      dispatch(ProjectsBuilderActions.setListError(result.error ?? 'Run failed'));
       return result.httpStatus === 400 ? 400 : 500;
     }
 
