@@ -629,4 +629,25 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'my-local-postgres',
+    name: 'My Local Postgres',
+    description: 'Inventory of local Postgres databases and their sizes',
+    localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-local-postgres-express-server',
+        defaultApiPort: 3066,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-local-postgres-web',
+        defaultWebPortStart: 3067,
+      },
+    ],
+  },
 ];

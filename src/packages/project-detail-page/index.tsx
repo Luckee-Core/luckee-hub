@@ -1,8 +1,6 @@
 'use client';
 
-import { AppLayout } from '@/components/app-layout';
 import { useAppSelector } from '@/store';
-import { TerminalDock } from '@/packages/terminal-dock';
 import { LuckeeParentRequiredModal } from '@/packages/projects/luckee-parent-modal';
 import { ProjectSetupModal } from '@/packages/projects/project-setup-modal';
 import { ProjectDetailOverview } from './overview';
@@ -16,14 +14,14 @@ export const ProjectDetailPage = () => {
   const currentProject = useAppSelector((s) => s.currentProject);
 
   return (
-    <AppLayout terminalDock={<TerminalDock />}>
+    <>
       <LuckeeParentRequiredModal />
       <ProjectSetupModal />
       <div className={styles.page}>
         <ProjectDetailOverview />
         {currentProject.localDatabaseSupported ? <ProjectDetailLocalDatabase /> : null}
       </div>
-    </AppLayout>
+    </>
   );
 };
 

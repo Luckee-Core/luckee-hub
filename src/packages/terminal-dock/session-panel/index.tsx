@@ -6,6 +6,7 @@ import { Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 
 import { connectTerminalWebSocket } from '@/api/projects';
+import { useAppSelector } from '@/store';
 
 type TerminalSessionPanelProps = {
   sessionId: string;
@@ -21,6 +22,8 @@ export const TerminalSessionPanel = ({
   isActive,
   dockOpen,
 }: TerminalSessionPanelProps) => {
+  const projectsBuilder = useAppSelector((state) => state.projectsBuilder);
+  const { terminalConnectionEpoch } = projectsBuilder;
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<Terminal | null>(null);
   const fitRef = useRef<FitAddon | null>(null);
@@ -78,7 +81,7 @@ export const TerminalSessionPanel = ({
         terminal.writeln('\r\n\r\n[session disconnected]');
       },
       onError: () => {
-        terminal.writeln('\r\n\r\n[connection error]');
+        // Unexpected close retries in the connection helper.
       },
     });
     connectionRef.current = connection;
@@ -111,7 +114,7 @@ export const TerminalSessionPanel = ({
       terminalRef.current = null;
       fitRef.current = null;
     };
-  }, [sessionId, safeFit]);
+  }, [sessionId, terminalConnectionEpoch, safeFit]);
 
   useEffect(() => {
     if (isActive && dockOpen) {

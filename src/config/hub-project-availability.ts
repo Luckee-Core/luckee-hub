@@ -18,6 +18,7 @@ export const HUB_AVAILABLE_PROJECT_IDS = [
   'my-fundraise',
   'my-gmail-manager',
   'my-health',
+  'my-local-postgres',
   'my-nonprofit',
   'my-ops-tracker',
   'personal-finances',

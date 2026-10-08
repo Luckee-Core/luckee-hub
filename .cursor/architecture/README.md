@@ -1,6 +1,6 @@
 # Architecture Documentation
 
-Architecture Decision Records (ADRs) for **nextjs-template** and Next.js apps created from it.
+Architecture Decision Records (ADRs) for **luckee-hub** (forked from nextjs-template).
 
 ## Why ADRs?
 
@@ -12,7 +12,7 @@ ADRs keep implementation consistent by documenting:
 
 ## ADR index (on-disk)
 
-### Shared conventions (001–008, 010)
+### Shared conventions (001–008, 010, 016–017)
 
 1. [001 – Redux patterns](./001-redux-patterns.md) — Flat layers, manual thunks, **zero selector functions**.
 2. [002 – Component composition](./002-component-composition.md) — Thin app routes, `src/packages/`.
@@ -23,9 +23,14 @@ ADRs keep implementation consistent by documenting:
 7. [007 – Starter template layout](./007-starter-template-layout.md) — Minimal shipped store and folder growth path.
 8. [008 – Detail page routing](./008-detail-page-routing.md) — `{entity}-detail-page`, no `[id]` routes.
 10. [010 – Public content reads from Express](./010-public-blog-express-fetch.md) — Server Component reads + Redux list hydration.
+16. [016 – Domain models (`src/model`)](./016-domain-models.md) — persisted entity types; one file per table entity.
+17. [017 – Package form inputs](./017-package-form-inputs.md) — `{form}/inputs/{field}`, zero-prop modals, `{collection}/row/`.
+
+### Product ADRs
+
 11. [011 – Dev hub feature](./011-dev-hub-feature.md) — legacy; see 013 for projects routing.
 12. [012 – Terminal dock UI](./012-terminal-dock-ui.md) — bottom panel, xterm, WebSocket sessions.
-13. [013 – Projects and project detail](./013-projects-and-project-detail.md) — `/projects`, `/projects/detail`, local DB panel.
+13. [013 – Projects and project detail](./013-projects-and-project-detail.md) — `/projects`, `/project-detail-page`, local DB panel.
 
 ## How to use
 

@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-**nextjs-template** ships as a bare App Router app: `src/app`, a minimal `src/store`, `src/utils`, and `src/components` (e.g. `ReduxProvider`). Product apps add `src/packages/`, `src/api/`, and the full Redux layers from [001 – Redux patterns](./001-redux-patterns.md). Agents need a clear growth path without violating ADRs on day one.
+**nextjs-template** ships as a bare App Router app: `src/app`, a minimal `src/store`, `src/utils`, and `src/components` (e.g. `ReduxProvider`). Product apps add `src/packages/`, `src/api/`, `src/model/`, and the full Redux layers from [001 – Redux patterns](./001-redux-patterns.md). Agents need a clear growth path without violating ADRs on day one.
 
 ## Decision
 
@@ -46,10 +46,11 @@ Keep `src/app/*/page.tsx` thin—compose packages only.
 
 Refactor `appSlice` into domain slices rather than expanding one god slice.
 
-### 4) Add `src/api/` before client HTTP
+### 4) Add `src/api/` and `src/model/`
 
 - All browser-side HTTP goes through **`src/api/{domain}/`** and **thunks** ([004 – API integration](./004-api-integration.md)).
 - Published marketing/content reads may use Server Components + `src/api/` per [010](./010-public-blog-express-fetch.md).
+- Persisted Express entities live in **`src/model/`** ([016](./016-domain-models.md)). Do not declare table row types in packages, API clients, or store slices.
 
 ### 5) Conventions from day one
 

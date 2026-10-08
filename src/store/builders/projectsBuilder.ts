@@ -14,6 +14,8 @@ type ProjectsBuilderState = {
   terminalSessionOrder: string[];
   /** Session ids the user closed. Later polls must not put those tabs back. */
   closedTerminalSessionIds: string[];
+  /** Bumped on Refresh so terminal panels reopen WebSockets for the same session ids. */
+  terminalConnectionEpoch: number;
   localDatabaseLoadStatus: LoadStatus;
   localDatabaseOperation: LocalDatabaseOperation | null;
   activeLocalDatabaseStepId: string | null;
@@ -62,6 +64,7 @@ const initialState: ProjectsBuilderState = {
   terminalDockOpen: false,
   terminalSessionOrder: [],
   closedTerminalSessionIds: [],
+  terminalConnectionEpoch: 0,
   localDatabaseLoadStatus: 'idle',
   localDatabaseOperation: null,
   activeLocalDatabaseStepId: null,
@@ -126,6 +129,9 @@ export const projectsBuilderSlice = createSlice({
       if (!state.closedTerminalSessionIds.includes(action.payload)) {
         state.closedTerminalSessionIds.push(action.payload);
       }
+    },
+    incrementTerminalConnectionEpoch: (state) => {
+      state.terminalConnectionEpoch += 1;
     },
     setLocalDatabaseLoadStatus: (state, action: PayloadAction<LoadStatus>) => {
       state.localDatabaseLoadStatus = action.payload;

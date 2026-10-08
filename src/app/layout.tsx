@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { AppShell } from "@/components/app-shell";
 import { LocalDatabaseCleanupListener } from "@/components/local-database-cleanup-listener";
 import { ReduxProvider } from "@/components/ReduxProvider";
 import "./globals.css";
@@ -31,7 +32,7 @@ export default function RootLayout({
       >
         <ReduxProvider>
           <LocalDatabaseCleanupListener />
-          {children}
+          <AppShell>{children}</AppShell>
         </ReduxProvider>
       </body>
     </html>
