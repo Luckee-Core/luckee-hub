@@ -650,4 +650,30 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'trade-stocks',
+    name: 'Trade Stocks',
+    description: 'Search a US ticker, open the stock, and read the company name and latest price',
+    localDatabaseSupported: false,
+    supabaseSupported: true,
+    expressEnvGroupIds: [],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'trade-stocks-using-ai-express-server',
+        defaultApiPort: 3068,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'trade-stocks-using-ai-web',
+        defaultWebPortStart: 3069,
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'trade-stocks-using-ai-console',
+        defaultWebPortStart: 3070,
+      },
+    ],
+  },
 ];
