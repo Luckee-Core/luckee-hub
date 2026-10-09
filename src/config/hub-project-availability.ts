@@ -25,6 +25,7 @@ export const HUB_AVAILABLE_PROJECT_IDS = [
   'qr-code-generator',
   'reddit-scraper',
   'speech-therapy-tracker',
+  'trade-stocks',
   'upwork-manager',
   'website-site-scraper',
 ] as const;
