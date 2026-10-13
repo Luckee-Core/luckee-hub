@@ -676,4 +676,25 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'make-it-sound-like-me',
+    name: 'Make It Sound Like Me',
+    description: 'About Me voice profiles, document extract, and AI rewrite in your style',
+    localDatabaseSupported: false,
+    supabaseSupported: true,
+    expressEnvGroupIds: ['ai'],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'make-it-sound-like-me-express-server',
+        defaultApiPort: 3071,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'make-it-sound-like-me-web',
+        defaultWebPortStart: 3072,
+      },
+    ],
+  },
 ];
