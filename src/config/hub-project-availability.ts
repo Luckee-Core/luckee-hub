@@ -14,6 +14,7 @@ export const HUB_AVAILABLE_PROJECT_IDS = [
   'lead-studio',
   'local-scheduler',
   'mac-manager',
+  'make-it-sound-like-me',
   'my-ai-threads',
   'my-fundraise',
   'my-gmail-manager',
