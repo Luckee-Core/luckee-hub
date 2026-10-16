@@ -4,7 +4,7 @@ import { fetchSystemMetricsThunk } from './fetch-system-metrics-thunk';
 let pollIntervalId: ReturnType<typeof setInterval> | null = null;
 let fetchInFlight = false;
 
-const DEFAULT_POLL_MS = 2000;
+const DEFAULT_POLL_MS = 5000;
 
 const clearPolling = (): void => {
   if (pollIntervalId != null) {
@@ -15,7 +15,7 @@ const clearPolling = (): void => {
 };
 
 /**
- * Start polling system metrics at a fixed interval (default 2s).
+ * Start polling system metrics at a fixed interval (default 5s).
  */
 export const startSystemMetricsPollingThunk =
   (options?: { intervalMs?: number }): AppThunk =>
@@ -40,6 +40,6 @@ export const startSystemMetricsPollingThunk =
 /**
  * Stop system metrics polling and clear in-flight guard.
  */
-export const stopSystemMetricsPollingThunk = (): AppThunk => () => {
+export const stopSystemMetricsPollingThunk = (): AppThunk => (_dispatch) => {
   clearPolling();
 };
