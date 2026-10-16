@@ -23,6 +23,9 @@ export type HubProject = {
   supabaseSupported: boolean;
   expressEnvGroupIds: string[];
   postgresActiveConsumer?: boolean;
+  storageExpressSupported: boolean;
+  storagePort: number;
+  storageRunning?: boolean;
 };
 
 export type ExpressEnvGroupProbe = {
@@ -50,7 +53,7 @@ export type CloseProjectResponse = {
 export type TerminalSession = {
   sessionId: string;
   projectId: string;
-  role: 'express' | 'web';
+  role: 'express' | 'web' | 'storage-express';
   label: string;
 };
 

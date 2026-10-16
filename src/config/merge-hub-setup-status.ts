@@ -24,6 +24,9 @@ export const mergeHubProjectSetup = (
         paths: status.paths,
         postgresActiveConsumer: status.postgresActiveConsumer,
         expressEnvGroupIds: status.expressEnvGroupIds ?? project.expressEnvGroupIds,
+        storageExpressSupported: status.storageExpressSupported,
+        storagePort: status.storagePort > 0 ? status.storagePort : project.storagePort,
+        storageRunning: status.storageRunning,
       },
     ];
   });

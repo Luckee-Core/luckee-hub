@@ -506,15 +506,21 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'my-gmail-manager',
     name: 'My Gmail Manager',
     description: 'Unified unread inbox across multiple Gmail accounts',
-    localDatabaseSupported: false,
+    localDatabaseSupported: true,
     supabaseSupported: false,
-    expressEnvGroupIds: [],
+    expressEnvGroupIds: ['storage'],
     repos: [
       {
         repoType: 'express',
         repoName: 'my-gmail-manager-express-server',
         defaultApiPort: 3052,
         healthPath: '/api/health',
+      },
+      {
+        repoType: 'storage-express',
+        repoName: 'my-gmail-manager-storage-express-server',
+        defaultApiPort: 3010,
+        healthPath: '/api/storage/health',
       },
       {
         repoType: 'nextjs',

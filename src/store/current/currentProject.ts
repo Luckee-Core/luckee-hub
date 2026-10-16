@@ -11,6 +11,8 @@ export const EMPTY_HUB_PROJECT: HubProject = {
   localDatabaseSupported: false,
   supabaseSupported: false,
   expressEnvGroupIds: [],
+  storageExpressSupported: false,
+  storagePort: 0,
 };
 
 export const currentProjectSlice = createSlice({

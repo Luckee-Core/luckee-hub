@@ -1,4 +1,4 @@
-export type HubProjectRepoType = 'express' | 'nextjs';
+export type HubProjectRepoType = 'express' | 'nextjs' | 'storage-express';
 
 export type HubProjectRepo = {
   projectId: string;

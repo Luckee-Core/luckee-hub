@@ -18,10 +18,20 @@ export const OverviewMetaLine = () => {
       projectRepos
         .filter((repo) => repo.projectId === id && repo.repoUrl)
         .sort((a, b) => {
-          if (a.repoType === b.repoType) {
-            return a.repoName.localeCompare(b.repoName);
+          const order = (repoType: typeof a.repoType): number => {
+            if (repoType === 'express') {
+              return 0;
+            }
+            if (repoType === 'storage-express') {
+              return 1;
+            }
+            return 2;
+          };
+          const diff = order(a.repoType) - order(b.repoType);
+          if (diff !== 0) {
+            return diff;
           }
-          return a.repoType === 'express' ? -1 : 1;
+          return a.repoName.localeCompare(b.repoName);
         }),
     [projectRepos, id],
   );

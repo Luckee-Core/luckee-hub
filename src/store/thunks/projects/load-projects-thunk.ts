@@ -74,7 +74,9 @@ export const loadProjectsThunk =
         refreshedCurrent.hookStatus !== currentProject.hookStatus ||
         refreshedCurrent.webUrl !== currentProject.webUrl ||
         refreshedCurrent.enabled !== currentProject.enabled ||
-        refreshedCurrent.postgresActiveConsumer !== currentProject.postgresActiveConsumer)
+        refreshedCurrent.postgresActiveConsumer !== currentProject.postgresActiveConsumer ||
+        refreshedCurrent.storageRunning !== currentProject.storageRunning ||
+        refreshedCurrent.storagePort !== currentProject.storagePort)
     ) {
       dispatch(
         CurrentProjectActions.setCurrentProject({
@@ -84,6 +86,8 @@ export const loadProjectsThunk =
           webUrl: refreshedCurrent.webUrl,
           enabled: refreshedCurrent.enabled,
           postgresActiveConsumer: refreshedCurrent.postgresActiveConsumer,
+          storageRunning: refreshedCurrent.storageRunning,
+          storagePort: refreshedCurrent.storagePort,
         }),
       );
     }

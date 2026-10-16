@@ -16,6 +16,9 @@ const repoTypeLabel = (repoType: HubProjectRepoType, apiRuntime?: 'node' | 'pyth
   if (repoType === 'nextjs') {
     return 'Web';
   }
+  if (repoType === 'storage-express') {
+    return 'Storage API';
+  }
   return apiRuntime === 'python' ? 'Python' : 'Express';
 };
 
