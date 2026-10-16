@@ -14,7 +14,7 @@ Developers use the projects list as the hub home screen. Machine CPU/GPU spikes 
 
 - Package: `src/packages/projects/system-metrics-row/`
 - Rendered at the top of [`ProjectsTableView`](../src/packages/projects/table/table-view/index.tsx), above the search toolbar
-- Polls only while that view is mounted (not on project detail)
+- Polls only while the route is `/projects` via `SystemMetricsPollingListener` in root layout (stops on project detail and other routes)
 
 ### Data
 
@@ -25,7 +25,7 @@ Developers use the projects list as the hub home screen. Machine CPU/GPU spikes 
 
 ### Polling
 
-- Default interval **2000ms**
+- Default interval **5000ms**
 - Module-level in-flight guard so slow ~800ms samples do not stack
 - Keep last snapshot on refresh errors (stale UI + status chip)
 

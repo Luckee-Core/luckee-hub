@@ -1,11 +1,7 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from '@/store';
-import {
-  startSystemMetricsPollingThunk,
-  stopSystemMetricsPollingThunk,
-} from '@/store/thunks/system-metrics';
+import { useMemo } from 'react';
+import { useAppSelector } from '@/store';
 import { UsageBar } from './usage-bar';
 
 const truncateName = (name: string, maxLength = 20): string => {
@@ -16,15 +12,7 @@ const truncateName = (name: string, maxLength = 20): string => {
 };
 
 export const SystemMetricsRow = () => {
-  const dispatch = useAppDispatch();
   const { loadStatus, error, snapshot } = useAppSelector((s) => s.systemMetricsBuilder);
-
-  useEffect(() => {
-    dispatch(startSystemMetricsPollingThunk({ intervalMs: 2000 }));
-    return () => {
-      dispatch(stopSystemMetricsPollingThunk());
-    };
-  }, [dispatch]);
 
   const topProcessLabel = useMemo(() => {
     if (!snapshot?.topProcesses.length) {
