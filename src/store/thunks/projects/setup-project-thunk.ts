@@ -11,6 +11,11 @@ import { pollProjectSetupJobThunk } from './poll-project-setup-job-thunk';
 export const setupProjectThunk =
   (projectId: string): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
+    const trimmedId = projectId.trim();
+    if (!trimmedId) {
+      return 400;
+    }
+
     const state = getState();
     if (hasActiveSetupOperation(state) || hasActiveRunOperation(state)) {
       return 400;
@@ -23,12 +28,12 @@ export const setupProjectThunk =
 
     dispatch(
       ProjectsBuilderActions.openSetupModal({
-        projectId,
+        projectId: trimmedId,
         message: 'Starting setup...',
       }),
     );
 
-    const result = await setupProjectApi(projectId);
+    const result = await setupProjectApi(trimmedId);
     if (!result.success || !result.data?.jobId) {
       const message = result.error ?? 'Setup failed to start';
       dispatch(
@@ -41,8 +46,8 @@ export const setupProjectThunk =
     }
 
     const { jobId } = result.data;
-    dispatch(RunningJobsActions.setRunningJob({ projectId, jobId }));
+    dispatch(RunningJobsActions.setRunningJob({ projectId: trimmedId, jobId }));
 
-    void dispatch(pollProjectSetupJobThunk(projectId, jobId));
+    void dispatch(pollProjectSetupJobThunk(trimmedId, jobId));
     return 200;
   };

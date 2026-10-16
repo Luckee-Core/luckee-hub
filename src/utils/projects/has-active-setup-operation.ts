@@ -14,7 +14,11 @@ const isSetupJobId = (jobId: string): boolean => jobId.startsWith('setup-');
  * True when any project setup (job poll) is in progress.
  */
 export const hasActiveSetupOperation = (state: SetupOperationState): boolean => {
-  if (state.projectsBuilder.setupModalOpen && state.projectsBuilder.setupModalStatus === 'running') {
+  if (
+    state.projectsBuilder.setupModalOpen &&
+    state.projectsBuilder.setupModalStatus === 'running' &&
+    state.projectsBuilder.setupModalProjectId
+  ) {
     return true;
   }
 
