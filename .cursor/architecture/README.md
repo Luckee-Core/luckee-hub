@@ -31,6 +31,7 @@ ADRs keep implementation consistent by documenting:
 11. [011 – Dev hub feature](./011-dev-hub-feature.md) — legacy; see 013 for projects routing.
 12. [012 – Terminal dock UI](./012-terminal-dock-ui.md) — bottom panel, xterm, WebSocket sessions.
 13. [013 – Projects and project detail](./013-projects-and-project-detail.md) — `/projects`, `/project-detail-page`, local DB panel.
+18. [018 – System metrics row](./018-system-metrics-row.md) — CPU/GPU + top processes above projects table.
 
 ## How to use
 

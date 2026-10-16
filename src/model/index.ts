@@ -20,3 +20,9 @@ export type {
   TerminalSession,
 } from './hub-project';
 export type { HubProjectRepo, HubProjectRepoType } from './hub-project-repo';
+export type {
+  SystemMetricsCpu,
+  SystemMetricsGpu,
+  SystemMetricsSnapshot,
+  SystemMetricsTopProcess,
+} from './system-metrics';

@@ -116,7 +116,7 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'innertube',
     name: 'Innertube',
     description: 'YouTube video library with InnerTube transcript fetch and persistence',
-    localDatabaseSupported: false,
+    localDatabaseSupported: true,
     supabaseSupported: false,
     expressEnvGroupIds: [],
     repos: [
