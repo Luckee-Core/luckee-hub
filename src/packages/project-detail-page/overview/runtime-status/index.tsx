@@ -1,6 +1,7 @@
 'use client';
 
 import { ApiRunningStatus } from './api-running';
+import { StorageRunningStatus } from './storage-running';
 import { WebRunningStatus } from './web-running';
 
 /**
@@ -9,6 +10,7 @@ import { WebRunningStatus } from './web-running';
 export const RuntimeStatus = () => (
   <span className={styles.row}>
     <ApiRunningStatus />
+    <StorageRunningStatus />
     <WebRunningStatus />
   </span>
 );

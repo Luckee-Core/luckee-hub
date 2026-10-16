@@ -5,6 +5,7 @@ import { LuckeeParentRequiredModal } from '@/packages/projects/luckee-parent-mod
 import { ProjectSetupModal } from '@/packages/projects/project-setup-modal';
 import { ProjectDetailOverview } from './overview';
 import { ProjectDetailLocalDatabase } from './local-database';
+import { ProjectDetailStorageExpress } from './storage-express';
 
 /**
  * Project detail workspace — reads `currentProject` (ADR 008).
@@ -19,6 +20,7 @@ export const ProjectDetailPage = () => {
       <ProjectSetupModal />
       <div className={styles.page}>
         <ProjectDetailOverview />
+        {currentProject.storageExpressSupported ? <ProjectDetailStorageExpress /> : null}
         {currentProject.localDatabaseSupported ? <ProjectDetailLocalDatabase /> : null}
       </div>
     </>

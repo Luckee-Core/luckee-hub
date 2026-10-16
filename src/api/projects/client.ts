@@ -47,6 +47,24 @@ export const closeProjectApi = (projectId: string) =>
   });
 
 /**
+ * Start Storage Express dev server (detail action).
+ */
+export const runStorageExpressApi = (projectId: string) =>
+  requestApi<RunProjectResponse>(
+    `${projectsApiBase}/api/launcher/projects/${projectId}/run-storage-express`,
+    { method: 'POST' },
+  );
+
+/**
+ * Close Storage Express terminal sessions.
+ */
+export const closeStorageExpressApi = (projectId: string) =>
+  requestApi<CloseProjectResponse>(
+    `${projectsApiBase}/api/launcher/projects/${projectId}/close-storage-express`,
+    { method: 'POST' },
+  );
+
+/**
  * Open Cursor workspace for a project.
  */
 export const openCursorApi = (projectId: string) =>

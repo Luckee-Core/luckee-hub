@@ -11,6 +11,8 @@ export type HubCatalogProjectRow = Pick<
   | 'expressEnvGroupIds'
 > & {
   apiPort: number;
+  storageExpressSupported: boolean;
+  storagePort: number;
 };
 
 const toGithubRepoUrl = (repoName: string): string =>
@@ -18,6 +20,12 @@ const toGithubRepoUrl = (repoName: string): string =>
 
 const getExpressApiPort = (entry: HubCatalogProject): number =>
   entry.repos.find((repo) => repo.repoType === 'express')?.defaultApiPort ?? 0;
+
+const getStorageApiPort = (entry: HubCatalogProject): number =>
+  entry.repos.find((repo) => repo.repoType === 'storage-express')?.defaultApiPort ?? 0;
+
+const projectHasStorageExpress = (entry: HubCatalogProject): boolean =>
+  entry.repos.some((repo) => repo.repoType === 'storage-express');
 
 /**
  * Static project rows from the hardcoded catalog (no probe/status fields).
@@ -31,6 +39,8 @@ export const buildHubCatalogProjects = (): HubCatalogProjectRow[] =>
     localDatabaseSupported: entry.localDatabaseSupported,
     supabaseSupported: entry.supabaseSupported,
     expressEnvGroupIds: entry.expressEnvGroupIds,
+    storageExpressSupported: projectHasStorageExpress(entry),
+    storagePort: getStorageApiPort(entry),
   }));
 
 /**

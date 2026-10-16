@@ -32,6 +32,8 @@ ADRs keep implementation consistent by documenting:
 12. [012 – Terminal dock UI](./012-terminal-dock-ui.md) — bottom panel, xterm, WebSocket sessions.
 13. [013 – Projects and project detail](./013-projects-and-project-detail.md) — `/projects`, `/project-detail-page`, local DB panel.
 18. [018 – System metrics row](./018-system-metrics-row.md) — CPU/GPU + top processes above projects table.
+21. [021 – Storage Express launcher](./021-storage-express-launcher.md) — third repo type, detail-only storage Run, `envRepo` for local DB.
+
 
 ## How to use
 
