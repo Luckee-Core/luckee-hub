@@ -20,7 +20,7 @@ My Gmail Manager splits the **dispatcher** Express API from the **storage** Expr
 
 | Action | Behavior |
 |--------|----------|
-| List **Run** | Dispatcher + web PTYs only (unchanged). |
+| List **Run** | Dispatcher + web PTYs only (unchanged). Missing `storageExpressDir` does not block Run on the dispatcher Mac. |
 | Detail **Start storage** | `POST /api/launcher/projects/:id/run-storage-express` → `git pull --ff-only && npm run dev` in `storageExpressDir`. |
 | Detail **Close storage** | `POST .../close-storage-express` kills `storage-express` role only. |
 | Project **Close** | Kills express, web, and storage-express sessions. |
