@@ -10,6 +10,7 @@ import { runningJobsReducer } from './dumps/runningJobs';
 import { breadcrumbBuilderReducer } from './builders/breadcrumbBuilder';
 import { projectsBuilderReducer } from './builders/projectsBuilder';
 import { currentProjectReducer } from './current/currentProject';
+import { systemMetricsBuilderReducer } from './builders/systemMetricsBuilder';
 
 export const rootReducer = combineReducers({
   app: appReducer,
@@ -23,4 +24,5 @@ export const rootReducer = combineReducers({
   runningJobs: runningJobsReducer,
   projectsBuilder: projectsBuilderReducer,
   currentProject: currentProjectReducer,
+  systemMetricsBuilder: systemMetricsBuilderReducer,
 });

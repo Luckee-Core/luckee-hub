@@ -9,6 +9,7 @@ import { setCurrentProjectThunk } from '@/store/thunks/projects';
 import { ProjectsRefreshButton, ProjectsLuckeeParentControl } from '../../header/buttons';
 import { ProjectsTableSectionHeaderRow } from '../section-header-row';
 import { ProjectsTableProjectRow } from '../project-row';
+import { SystemMetricsRow } from '../../system-metrics-row';
 
 type ProjectsTableViewProps = {
   projects: HubProject[];
@@ -109,6 +110,7 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
 
   return (
     <div className={styles.wrapper}>
+      <SystemMetricsRow />
       <div className={styles.toolbar}>
         <ProjectsLuckeeParentControl />
         <input
@@ -213,7 +215,7 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
 const styles = {
   wrapper: `space-y-0`,
   toolbar: `
-    flex flex-wrap items-center gap-3 px-3 py-2 bg-white border border-gray-300 border-b-0 rounded-t
+    flex flex-wrap items-center gap-3 px-3 py-2 bg-white border border-gray-300 border-b-0
   `,
   searchInput: `
     flex-1 min-w-[12rem] max-w-xs px-2.5 py-1 text-xs border border-gray-300 rounded
@@ -254,6 +256,6 @@ const styles = {
     bg-gray-100 border-b border-gray-300 w-32
   `,
   sortIcon: `ml-1 text-gray-400 text-[10px]`,
-  emptyState: `bg-white rounded border border-gray-300 p-8 text-center`,
+  emptyState: `bg-white rounded-b border border-gray-300 border-t-0 p-8 text-center`,
   emptyTitle: `text-lg font-semibold text-gray-900`,
 };
