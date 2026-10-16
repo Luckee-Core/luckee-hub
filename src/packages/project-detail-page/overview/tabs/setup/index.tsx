@@ -3,8 +3,10 @@
 import { HubConfigured } from './hub-configured';
 import { WebPath } from './web-path';
 import { ExpressPath } from './express-path';
+import { StoragePath } from './storage-path';
 import { WebInstalled } from './web-installed';
 import { ExpressInstalled } from './express-installed';
+import { StorageInstalled } from './storage-installed';
 
 /**
  * Setup tab — one panel listing all setup checks.
@@ -14,8 +16,10 @@ export const SetupTab = () => (
     <HubConfigured />
     <WebPath />
     <ExpressPath />
+    <StoragePath />
     <WebInstalled />
     <ExpressInstalled />
+    <StorageInstalled />
   </div>
 );
 

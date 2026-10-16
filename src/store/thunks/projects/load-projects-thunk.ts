@@ -75,6 +75,7 @@ export const loadProjectsThunk =
         refreshedCurrent.webUrl !== currentProject.webUrl ||
         refreshedCurrent.enabled !== currentProject.enabled ||
         refreshedCurrent.postgresActiveConsumer !== currentProject.postgresActiveConsumer ||
+        refreshedCurrent.storageExpressSupported !== currentProject.storageExpressSupported ||
         refreshedCurrent.storageRunning !== currentProject.storageRunning ||
         refreshedCurrent.storagePort !== currentProject.storagePort)
     ) {
@@ -86,6 +87,7 @@ export const loadProjectsThunk =
           webUrl: refreshedCurrent.webUrl,
           enabled: refreshedCurrent.enabled,
           postgresActiveConsumer: refreshedCurrent.postgresActiveConsumer,
+          storageExpressSupported: refreshedCurrent.storageExpressSupported,
           storageRunning: refreshedCurrent.storageRunning,
           storagePort: refreshedCurrent.storagePort,
         }),

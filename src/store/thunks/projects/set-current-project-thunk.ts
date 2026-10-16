@@ -2,7 +2,7 @@ import type { AppThunk } from '@/store/store';
 import { CurrentProjectActions } from '@/store/current/currentProject';
 import { BreadcrumbBuilderActions } from '@/store/builders/breadcrumbBuilder';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
-import { PROJECTS_PATH } from '@/config';
+import { DETAIL_PROJECT_SESSION_KEY, PROJECTS_PATH } from '@/config';
 import { probeLocalDatabaseThunk } from './local-database-thunk';
 import { probeSupabaseConfigThunk } from './supabase-config-thunk';
 import { probeExpressEnvGroupThunk } from './express-env-thunk';
@@ -20,6 +20,12 @@ export const setCurrentProjectThunk =
     }
 
     dispatch(CurrentProjectActions.setCurrentProject(project));
+
+    try {
+      sessionStorage.setItem(DETAIL_PROJECT_SESSION_KEY, projectId);
+    } catch {
+      // ignore private mode / quota
+    }
 
     dispatch(
       BreadcrumbBuilderActions.setTrail({
