@@ -368,16 +368,21 @@ export const HUB_CATALOG: HubCatalogProject[] = [
   {
     id: 'qr-code-generator',
     name: 'QR Code Generator',
-    description: 'QR generation API utilities',
+    description: 'QR generation product (marketing web + CMS API)',
     localDatabaseSupported: false,
     supabaseSupported: false,
     expressEnvGroupIds: [],
     repos: [
       {
         repoType: 'express',
-        repoName: 'qr-code-generator-open-source-express-server',
+        repoName: 'qr-code-generator-express-server-cms',
         defaultApiPort: 3040,
         healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'qr-code-generator-web',
+        defaultWebPortStart: 3041,
       },
     ],
   },
@@ -700,6 +705,33 @@ export const HUB_CATALOG: HubCatalogProject[] = [
         repoType: 'nextjs',
         repoName: 'make-it-sound-like-me-web',
         defaultWebPortStart: 3072,
+      },
+    ],
+  },
+  {
+    id: 'on-device-dispatcher',
+    name: 'On-device dispatcher',
+    description:
+      'Studio gateway: lazy-start upstream Express services, proxy LAN callers (e.g. remote Gmail storage)',
+    localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: ['gateway'],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'on-device-dispatcher-express-server',
+        defaultApiPort: 3073,
+        healthPath: '/api/dispatcher/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'on-device-dispatcher-web',
+        defaultWebPortStart: 3074,
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'on-device-dispatcher-console',
+        defaultWebPortStart: 3075,
       },
     ],
   },
