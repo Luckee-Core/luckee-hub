@@ -22,6 +22,7 @@ export const HUB_AVAILABLE_PROJECT_IDS = [
   'my-local-postgres',
   'my-nonprofit',
   'my-ops-tracker',
+  'my-vercel-analytics',
   'personal-finances',
   'qr-code-generator',
   'reddit-scraper',

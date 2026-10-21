@@ -703,4 +703,31 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'my-vercel-analytics',
+    name: 'My Many Domains',
+    description:
+      'Unified dashboard for Vercel Web Analytics across many domains (mymanydomains.com)',
+    localDatabaseSupported: true,
+    supabaseSupported: true,
+    expressEnvGroupIds: ['vercel'],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-vercel-analytics-express-server',
+        defaultApiPort: 3073,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-vercel-analytics-web',
+        defaultWebPortStart: 3074,
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-vercel-analytics-console',
+        defaultWebPortStart: 3075,
+      },
+    ],
+  },
 ];
