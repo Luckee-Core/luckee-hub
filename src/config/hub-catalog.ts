@@ -53,15 +53,21 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'code-control',
     name: 'Code Control',
     description: 'Schema, conventions, and guided codegen into customer repos',
-    localDatabaseSupported: false,
+    localDatabaseSupported: true,
     supabaseSupported: false,
-    expressEnvGroupIds: [],
+    expressEnvGroupIds: ['storage'],
     repos: [
       {
         repoType: 'express',
         repoName: 'code-control-express-server',
         defaultApiPort: 3012,
         healthPath: '/api/health',
+      },
+      {
+        repoType: 'storage-express',
+        repoName: 'code-generator-storage-server',
+        defaultApiPort: 3080,
+        healthPath: '/api/storage/health',
       },
       {
         repoType: 'nextjs',
@@ -709,6 +715,33 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
+    id: 'my-vercel-analytics',
+    name: 'My Many Domains',
+    description:
+      'Unified dashboard for Vercel Web Analytics across many domains (mymanydomains.com)',
+    localDatabaseSupported: true,
+    supabaseSupported: true,
+    expressEnvGroupIds: ['vercel'],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'my-vercel-analytics-express-server',
+        defaultApiPort: 3073,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-vercel-analytics-web',
+        defaultWebPortStart: 3074,
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'my-vercel-analytics-console',
+        defaultWebPortStart: 3075,
+      },
+    ],
+  },
+  {
     id: 'on-device-dispatcher',
     name: 'On-device dispatcher',
     description:
@@ -726,12 +759,12 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       {
         repoType: 'nextjs',
         repoName: 'on-device-dispatcher-web',
-        defaultWebPortStart: 3074,
+        defaultWebPortStart: 3077,
       },
       {
         repoType: 'nextjs',
         repoName: 'on-device-dispatcher-console',
-        defaultWebPortStart: 3075,
+        defaultWebPortStart: 3078,
       },
     ],
   },
