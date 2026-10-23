@@ -720,7 +720,7 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       {
         repoType: 'express',
         repoName: 'on-device-dispatcher-express-server',
-        defaultApiPort: 3073,
+        defaultApiPort: 3010,
         healthPath: '/api/dispatcher/health',
       },
       {
