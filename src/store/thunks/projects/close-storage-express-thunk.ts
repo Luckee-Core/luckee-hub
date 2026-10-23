@@ -10,13 +10,34 @@ import { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 export const closeStorageExpressThunk =
   (projectId: string): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch) => {
-    const result = await closeStorageExpressApi(projectId);
-    if (!result.success) {
-      dispatch(ProjectsBuilderActions.setListError(result.error ?? 'Failed to close storage'));
-      return result.httpStatus === 400 ? 400 : 500;
-    }
+    dispatch(
+      ProjectsBuilderActions.setStorageExpressInFlight({ projectId, action: 'close' }),
+    );
+    dispatch(
+      ProjectsBuilderActions.setStorageExpressError({ projectId, error: null }),
+    );
+    dispatch(
+      ProjectsBuilderActions.setStorageExpressMessage({ projectId, message: null }),
+    );
 
-    await dispatch(syncTerminalSessionsThunk());
-    await dispatch(loadProjectsThunk({ live: true }));
-    return 200;
+    try {
+      const result = await closeStorageExpressApi(projectId);
+      if (!result.success) {
+        const error = result.error ?? 'Failed to close storage';
+        dispatch(ProjectsBuilderActions.setStorageExpressError({ projectId, error }));
+        return result.httpStatus === 400 ? 400 : 500;
+      }
+
+      await dispatch(syncTerminalSessionsThunk());
+      await dispatch(loadProjectsThunk({ live: true }));
+      dispatch(
+        ProjectsBuilderActions.setStorageExpressMessage({
+          projectId,
+          message: 'Storage terminal closed.',
+        }),
+      );
+      return 200;
+    } finally {
+      dispatch(ProjectsBuilderActions.setStorageExpressInFlight(null));
+    }
   };
