@@ -53,15 +53,21 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'code-control',
     name: 'Code Control',
     description: 'Schema, conventions, and guided codegen into customer repos',
-    localDatabaseSupported: false,
+    localDatabaseSupported: true,
     supabaseSupported: false,
-    expressEnvGroupIds: [],
+    expressEnvGroupIds: ['storage'],
     repos: [
       {
         repoType: 'express',
         repoName: 'code-control-express-server',
         defaultApiPort: 3012,
         healthPath: '/api/health',
+      },
+      {
+        repoType: 'storage-express',
+        repoName: 'code-generator-storage-server',
+        defaultApiPort: 3080,
+        healthPath: '/api/storage/health',
       },
       {
         repoType: 'nextjs',
