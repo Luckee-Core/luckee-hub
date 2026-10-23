@@ -4,6 +4,11 @@ import type { SetupJobStep } from '@/model';
 
 type LoadStatus = 'idle' | 'loading' | 'loaded' | 'error';
 
+type StorageExpressInFlight = {
+  projectId: string;
+  action: 'start' | 'close';
+};
+
 type LocalDatabaseOperation = 'probe' | 'setup' | 'step';
 
 type ProjectsBuilderState = {
@@ -55,6 +60,10 @@ type ProjectsBuilderState = {
   setupModalSteps: SetupJobStep[];
   setupModalLog: string | null;
   setupModalStartedAt: string | null;
+  storageExpressInFlight: StorageExpressInFlight | null;
+  storageExpressFeedbackProjectId: string | null;
+  storageExpressError: string | null;
+  storageExpressMessage: string | null;
 };
 
 const initialState: ProjectsBuilderState = {
@@ -104,6 +113,10 @@ const initialState: ProjectsBuilderState = {
   setupModalSteps: [],
   setupModalLog: null,
   setupModalStartedAt: null,
+  storageExpressInFlight: null,
+  storageExpressFeedbackProjectId: null,
+  storageExpressError: null,
+  storageExpressMessage: null,
 };
 
 export const projectsBuilderSlice = createSlice({
@@ -128,6 +141,41 @@ export const projectsBuilderSlice = createSlice({
     addClosedTerminalSessionId: (state, action: PayloadAction<string>) => {
       if (!state.closedTerminalSessionIds.includes(action.payload)) {
         state.closedTerminalSessionIds.push(action.payload);
+      }
+    },
+    removeClosedTerminalSessionIds: (state, action: PayloadAction<string[]>) => {
+      const remove = new Set(action.payload);
+      if (remove.size === 0) {
+        return;
+      }
+      state.closedTerminalSessionIds = state.closedTerminalSessionIds.filter(
+        (id) => !remove.has(id),
+      );
+    },
+    setStorageExpressInFlight: (
+      state,
+      action: PayloadAction<StorageExpressInFlight | null>,
+    ) => {
+      state.storageExpressInFlight = action.payload;
+    },
+    setStorageExpressError: (
+      state,
+      action: PayloadAction<{ projectId: string; error: string | null }>,
+    ) => {
+      state.storageExpressFeedbackProjectId = action.payload.projectId;
+      state.storageExpressError = action.payload.error;
+      if (action.payload.error) {
+        state.storageExpressMessage = null;
+      }
+    },
+    setStorageExpressMessage: (
+      state,
+      action: PayloadAction<{ projectId: string; message: string | null }>,
+    ) => {
+      state.storageExpressFeedbackProjectId = action.payload.projectId;
+      state.storageExpressMessage = action.payload.message;
+      if (action.payload.message) {
+        state.storageExpressError = null;
       }
     },
     incrementTerminalConnectionEpoch: (state) => {

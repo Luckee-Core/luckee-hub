@@ -23,6 +23,7 @@ export const HUB_AVAILABLE_PROJECT_IDS = [
   'my-nonprofit',
   'my-ops-tracker',
   'my-vercel-analytics',
+  'on-device-dispatcher',
   'personal-finances',
   'qr-code-generator',
   'reddit-scraper',

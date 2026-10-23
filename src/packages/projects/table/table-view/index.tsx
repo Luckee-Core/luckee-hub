@@ -3,7 +3,8 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { HubProject } from '@/model';
-import { useAppDispatch } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { projectHasRunningTerminals } from '@/utils/projects';
 import { isHubProjectAvailable, PROJECT_DETAIL_PAGE_PATH } from '@/config';
 import { setCurrentProjectThunk } from '@/store/thunks/projects';
 import { ProjectsRefreshButton, ProjectsLuckeeParentControl } from '../../header/buttons';
@@ -40,6 +41,7 @@ const sortProjects = (
 
 export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
   const dispatch = useAppDispatch();
+  const terminalSessions = useAppSelector((s) => s.terminalSessions);
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -83,20 +85,23 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
     return sortProjects(result, sortColumn, sortDirection);
   }, [projects, searchTerm, statusFilter, sortColumn, sortDirection]);
 
-  const { availableProjects, comingSoonProjects } = useMemo(() => {
+  const { activeProjects, availableProjects, comingSoonProjects } = useMemo(() => {
+    const active: HubProject[] = [];
     const available: HubProject[] = [];
     const comingSoon: HubProject[] = [];
 
     for (const project of filteredProjects) {
-      if (isHubProjectAvailable(project.id)) {
+      if (projectHasRunningTerminals(terminalSessions, project.id)) {
+        active.push(project);
+      } else if (isHubProjectAvailable(project.id)) {
         available.push(project);
       } else {
         comingSoon.push(project);
       }
     }
 
-    return { availableProjects: available, comingSoonProjects: comingSoon };
-  }, [filteredProjects]);
+    return { activeProjects: active, availableProjects: available, comingSoonProjects: comingSoon };
+  }, [filteredProjects, terminalSessions]);
 
   if (projects.length === 0) {
     return (
@@ -106,7 +111,8 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
     );
   }
 
-  const hasVisibleProjects = availableProjects.length > 0 || comingSoonProjects.length > 0;
+  const hasVisibleProjects =
+    activeProjects.length > 0 || availableProjects.length > 0 || comingSoonProjects.length > 0;
 
   return (
     <div className={styles.wrapper}>
@@ -174,6 +180,19 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
               </tr>
             </thead>
             <tbody>
+              {activeProjects.length > 0 ? (
+                <>
+                  <ProjectsTableSectionHeaderRow title="Active" count={activeProjects.length} />
+                  {activeProjects.map((project, index) => (
+                    <ProjectsTableProjectRow
+                      key={project.id}
+                      project={project}
+                      rowNumber={index + 1}
+                      onRowClick={handleRowClick}
+                    />
+                  ))}
+                </>
+              ) : null}
               {availableProjects.length > 0 ? (
                 <>
                   <ProjectsTableSectionHeaderRow title="Available" count={availableProjects.length} />
