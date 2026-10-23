@@ -74,9 +74,12 @@ export const GatewayTab = () => {
   return (
     <div className={styles.root}>
       <p className={styles.hint}>
-        Studio gateway Express <code className={styles.code}>.env</code>. Hub default API port is
-        3073; use <code className={styles.code}>PORT=3010</code> on studio when fronting Gmail
-        storage.
+        Studio gateway Express <code className={styles.code}>.env</code>. Use{' '}
+        <code className={styles.code}>PORT=3010</code> and{' '}
+        <code className={styles.code}>DISPATCHER_BIND_HOST=0.0.0.0</code> for LAN. Restart Hub Run
+        after saving; laptop <code className={styles.code}>STORAGE_EXPRESS_URL</code> must match{' '}
+        <code className={styles.code}>DISPATCHER_PUBLIC_BASE_URL</code> (same port as the Express
+        banner).
       </p>
       {configured ? (
         <div className={styles.checks}>
