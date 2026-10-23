@@ -53,7 +53,7 @@ export type CloseProjectResponse = {
 export type TerminalSession = {
   sessionId: string;
   projectId: string;
-  role: 'express' | 'web' | 'storage-express';
+  role: 'express' | 'web' | 'storage-express' | 'scheduler-worker';
   label: string;
 };
 

@@ -9,14 +9,26 @@ import { AiTab } from './ai';
 import { GoogleMapsTab } from './google-maps';
 import { EmailTab } from './email';
 import { StorageTab } from './storage';
+import { GatewayTab } from './gateway';
 
-type ProjectDetailTabId = 'setup' | 'supabase' | 'ai' | 'google-maps' | 'email' | 'storage';
+type ProjectDetailTabId =
+  | 'setup'
+  | 'supabase'
+  | 'ai'
+  | 'google-maps'
+  | 'email'
+  | 'storage'
+  | 'gateway';
 
-const EXPRESS_ENV_TAB_LABELS: Record<'ai' | 'google-maps' | 'email' | 'storage', string> = {
+const EXPRESS_ENV_TAB_LABELS: Record<
+  'ai' | 'google-maps' | 'email' | 'storage' | 'gateway',
+  string
+> = {
   ai: 'AI',
   'google-maps': 'Google Maps Scraper',
   email: 'Emailing',
   storage: 'Storage',
+  gateway: 'Gateway',
 };
 
 /**
@@ -37,7 +49,8 @@ export const ProjectDetailTabs = () => {
         groupId === 'ai' ||
         groupId === 'google-maps' ||
         groupId === 'email' ||
-        groupId === 'storage'
+        groupId === 'storage' ||
+        groupId === 'gateway'
       ) {
         items.push({ id: groupId, label: EXPRESS_ENV_TAB_LABELS[groupId] });
       }
@@ -77,6 +90,7 @@ export const ProjectDetailTabs = () => {
         {activeId === 'google-maps' ? <GoogleMapsTab /> : null}
         {activeId === 'email' ? <EmailTab /> : null}
         {activeId === 'storage' ? <StorageTab /> : null}
+        {activeId === 'gateway' ? <GatewayTab /> : null}
       </div>
     </div>
   );

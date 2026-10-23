@@ -6,3 +6,4 @@ export {
   isProjectSetupActive,
 } from './has-active-setup-operation';
 export { projectCanRun, projectNeedsSetup } from './project-can-run';
+export { projectHasRunningTerminals } from './project-has-running-terminals';
