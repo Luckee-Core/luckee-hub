@@ -11,6 +11,8 @@ import { breadcrumbBuilderReducer } from './builders/breadcrumbBuilder';
 import { projectsBuilderReducer } from './builders/projectsBuilder';
 import { currentProjectReducer } from './current/currentProject';
 import { systemMetricsBuilderReducer } from './builders/systemMetricsBuilder';
+import { projectFavoritesReducer } from './config/projectFavorites';
+import { projectSectionOverridesReducer } from './config/projectSectionOverrides';
 
 export const rootReducer = combineReducers({
   app: appReducer,
@@ -25,4 +27,6 @@ export const rootReducer = combineReducers({
   projectsBuilder: projectsBuilderReducer,
   currentProject: currentProjectReducer,
   systemMetricsBuilder: systemMetricsBuilderReducer,
+  projectFavorites: projectFavoritesReducer,
+  projectSectionOverrides: projectSectionOverridesReducer,
 });

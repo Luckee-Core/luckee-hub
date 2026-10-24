@@ -1,12 +1,16 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { HubProject } from '@/model';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { projectHasRunningTerminals } from '@/utils/projects';
-import { isHubProjectAvailable, PROJECT_DETAIL_PAGE_PATH } from '@/config';
-import { setCurrentProjectThunk } from '@/store/thunks/projects';
+import { getProjectCatalogTier, PROJECT_DETAIL_PAGE_PATH } from '@/config';
+import {
+  hydrateProjectFavoritesThunk,
+  hydrateProjectSectionOverridesThunk,
+  setCurrentProjectThunk,
+} from '@/store/thunks/projects';
 import { ProjectsRefreshButton, ProjectsLuckeeParentControl } from '../../header/buttons';
 import { ProjectsTableSectionHeaderRow } from '../section-header-row';
 import { ProjectsTableProjectRow } from '../project-row';
@@ -42,7 +46,14 @@ const sortProjects = (
 export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
   const dispatch = useAppDispatch();
   const terminalSessions = useAppSelector((s) => s.terminalSessions);
+  const projectFavorites = useAppSelector((s) => s.projectFavorites);
+  const projectSectionOverrides = useAppSelector((s) => s.projectSectionOverrides);
   const router = useRouter();
+
+  useEffect(() => {
+    void dispatch(hydrateProjectFavoritesThunk());
+    void dispatch(hydrateProjectSectionOverridesThunk());
+  }, [dispatch]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [sortColumn, setSortColumn] = useState<SortableColumn>('name');
@@ -85,23 +96,64 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
     return sortProjects(result, sortColumn, sortDirection);
   }, [projects, searchTerm, statusFilter, sortColumn, sortDirection]);
 
-  const { activeProjects, availableProjects, comingSoonProjects } = useMemo(() => {
-    const active: HubProject[] = [];
-    const available: HubProject[] = [];
+  const favoriteIdSet = useMemo(
+    () => new Set(projectFavorites.ids),
+    [projectFavorites.ids],
+  );
+
+  const {
+    runningProjects,
+    favoriteProjects,
+    catalogActiveProjects,
+    finalStepsProjects,
+    almostReadyProjects,
+    workInProgressProjects,
+    comingSoonProjects,
+    cancelledProjects,
+  } = useMemo(() => {
+    const running: HubProject[] = [];
+    const favorites: HubProject[] = [];
+    const catalogActive: HubProject[] = [];
+    const finalSteps: HubProject[] = [];
+    const almostReady: HubProject[] = [];
+    const workInProgress: HubProject[] = [];
     const comingSoon: HubProject[] = [];
+    const cancelled: HubProject[] = [];
 
     for (const project of filteredProjects) {
       if (projectHasRunningTerminals(terminalSessions, project.id)) {
-        active.push(project);
-      } else if (isHubProjectAvailable(project.id)) {
-        available.push(project);
+        running.push(project);
+      } else if (favoriteIdSet.has(project.id)) {
+        favorites.push(project);
       } else {
-        comingSoon.push(project);
+        const tier = getProjectCatalogTier(project.id, projectSectionOverrides.byProjectId);
+        if (tier === 'active') {
+          catalogActive.push(project);
+        } else if (tier === 'finalSteps') {
+          finalSteps.push(project);
+        } else if (tier === 'almostReady') {
+          almostReady.push(project);
+        } else if (tier === 'workInProgress') {
+          workInProgress.push(project);
+        } else if (tier === 'cancelled') {
+          cancelled.push(project);
+        } else {
+          comingSoon.push(project);
+        }
       }
     }
 
-    return { activeProjects: active, availableProjects: available, comingSoonProjects: comingSoon };
-  }, [filteredProjects, terminalSessions]);
+    return {
+      runningProjects: running,
+      favoriteProjects: favorites,
+      catalogActiveProjects: catalogActive,
+      finalStepsProjects: finalSteps,
+      almostReadyProjects: almostReady,
+      workInProgressProjects: workInProgress,
+      comingSoonProjects: comingSoon,
+      cancelledProjects: cancelled,
+    };
+  }, [filteredProjects, terminalSessions, favoriteIdSet, projectSectionOverrides.byProjectId]);
 
   if (projects.length === 0) {
     return (
@@ -112,7 +164,14 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
   }
 
   const hasVisibleProjects =
-    activeProjects.length > 0 || availableProjects.length > 0 || comingSoonProjects.length > 0;
+    runningProjects.length > 0 ||
+    favoriteProjects.length > 0 ||
+    catalogActiveProjects.length > 0 ||
+    finalStepsProjects.length > 0 ||
+    almostReadyProjects.length > 0 ||
+    workInProgressProjects.length > 0 ||
+    comingSoonProjects.length > 0 ||
+    cancelledProjects.length > 0;
 
   return (
     <div className={styles.wrapper}>
@@ -163,6 +222,7 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
                   </span>
                 </th>
                 <th className={styles.tableHeaderWide}>Description</th>
+                <th className={styles.tableHeaderSection}>Section</th>
                 <th className={styles.sortableHeader} onClick={() => handleSort('status')}>
                   <span>Status</span>
                   <span className={styles.sortIcon}>
@@ -180,40 +240,14 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
               </tr>
             </thead>
             <tbody>
-              {activeProjects.length > 0 ? (
-                <>
-                  <ProjectsTableSectionHeaderRow title="Active" count={activeProjects.length} />
-                  {activeProjects.map((project, index) => (
-                    <ProjectsTableProjectRow
-                      key={project.id}
-                      project={project}
-                      rowNumber={index + 1}
-                      onRowClick={handleRowClick}
-                    />
-                  ))}
-                </>
-              ) : null}
-              {availableProjects.length > 0 ? (
-                <>
-                  <ProjectsTableSectionHeaderRow title="Available" count={availableProjects.length} />
-                  {availableProjects.map((project, index) => (
-                    <ProjectsTableProjectRow
-                      key={project.id}
-                      project={project}
-                      rowNumber={index + 1}
-                      onRowClick={handleRowClick}
-                    />
-                  ))}
-                </>
-              ) : null}
-              {comingSoonProjects.length > 0 ? (
+              {runningProjects.length > 0 ? (
                 <>
                   <ProjectsTableSectionHeaderRow
-                    title="Coming soon"
-                    count={comingSoonProjects.length}
-                    comingSoon
+                    title="Running"
+                    count={runningProjects.length}
+                    variant="running"
                   />
-                  {comingSoonProjects.map((project, index) => (
+                  {runningProjects.map((project, index) => (
                     <ProjectsTableProjectRow
                       key={project.id}
                       project={project}
@@ -223,6 +257,113 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
                   ))}
                 </>
               ) : null}
+              {favoriteProjects.length > 0 ? (
+                <>
+                  <ProjectsTableSectionHeaderRow
+                    title="Favorites"
+                    count={favoriteProjects.length}
+                    variant="favorites"
+                  />
+                  {favoriteProjects.map((project, index) => (
+                    <ProjectsTableProjectRow
+                      key={project.id}
+                      project={project}
+                      rowNumber={index + 1}
+                      onRowClick={handleRowClick}
+                    />
+                  ))}
+                </>
+              ) : null}
+              {catalogActiveProjects.length > 0 ? (
+                <>
+                  <ProjectsTableSectionHeaderRow
+                    title="Active"
+                    count={catalogActiveProjects.length}
+                    variant="catalogActive"
+                  />
+                  {catalogActiveProjects.map((project, index) => (
+                    <ProjectsTableProjectRow
+                      key={project.id}
+                      project={project}
+                      rowNumber={index + 1}
+                      onRowClick={handleRowClick}
+                    />
+                  ))}
+                </>
+              ) : null}
+              {finalStepsProjects.length > 0 ? (
+                <>
+                  <ProjectsTableSectionHeaderRow
+                    title="Final steps"
+                    count={finalStepsProjects.length}
+                    variant="finalSteps"
+                  />
+                  {finalStepsProjects.map((project, index) => (
+                    <ProjectsTableProjectRow
+                      key={project.id}
+                      project={project}
+                      rowNumber={index + 1}
+                      onRowClick={handleRowClick}
+                    />
+                  ))}
+                </>
+              ) : null}
+              {almostReadyProjects.length > 0 ? (
+                <>
+                  <ProjectsTableSectionHeaderRow
+                    title="Almost ready"
+                    count={almostReadyProjects.length}
+                    variant="almostReady"
+                  />
+                  {almostReadyProjects.map((project, index) => (
+                    <ProjectsTableProjectRow
+                      key={project.id}
+                      project={project}
+                      rowNumber={index + 1}
+                      onRowClick={handleRowClick}
+                    />
+                  ))}
+                </>
+              ) : null}
+              <ProjectsTableSectionHeaderRow
+                title="Work in progress"
+                count={workInProgressProjects.length}
+                variant="workInProgress"
+              />
+              {workInProgressProjects.map((project, index) => (
+                <ProjectsTableProjectRow
+                  key={project.id}
+                  project={project}
+                  rowNumber={index + 1}
+                  onRowClick={handleRowClick}
+                />
+              ))}
+              <ProjectsTableSectionHeaderRow
+                title="Coming soon"
+                count={comingSoonProjects.length}
+                variant="comingSoon"
+              />
+              {comingSoonProjects.map((project, index) => (
+                <ProjectsTableProjectRow
+                  key={project.id}
+                  project={project}
+                  rowNumber={index + 1}
+                  onRowClick={handleRowClick}
+                />
+              ))}
+              <ProjectsTableSectionHeaderRow
+                title="Cancelled"
+                count={cancelledProjects.length}
+                variant="cancelled"
+              />
+              {cancelledProjects.map((project, index) => (
+                <ProjectsTableProjectRow
+                  key={project.id}
+                  project={project}
+                  rowNumber={index + 1}
+                  onRowClick={handleRowClick}
+                />
+              ))}
             </tbody>
           </table>
         </div>
@@ -265,6 +406,10 @@ const styles = {
   tableHeaderWide: `
     px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
     bg-gray-100 border-b border-gray-300 min-w-[12rem]
+  `,
+  tableHeaderSection: `
+    px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide
+    bg-gray-100 border-b border-gray-300 w-[9.5rem]
   `,
   tableHeaderNarrow: `
     px-2 py-1.5 text-left text-[10px] font-semibold text-gray-600 uppercase tracking-wide

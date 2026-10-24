@@ -1,3 +1,4 @@
+export { ProjectsToggleFavoriteAction } from './toggle-favorite';
 export { ProjectsRunAction } from './run-project';
 export { ProjectsSetupAction } from './setup-project';
 export { ProjectsOpenCursorAction } from './open-cursor';

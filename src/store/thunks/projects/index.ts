@@ -1,3 +1,11 @@
+export {
+  hydrateProjectFavoritesThunk,
+  toggleProjectFavoriteThunk,
+} from './toggle-project-favorite-thunk';
+export {
+  hydrateProjectSectionOverridesThunk,
+  setProjectCatalogTierThunk,
+} from './set-project-catalog-tier-thunk';
 export { initializeHubCatalogThunk, loadProjectsThunk, refreshProjectsThunk } from './load-projects-thunk';
 export { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 export { runProjectThunk } from './run-project-thunk';
