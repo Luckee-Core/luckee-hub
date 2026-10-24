@@ -74,6 +74,17 @@ export const HUB_CATALOG: HubCatalogProject[] = [
         repoName: 'code-control',
         defaultWebPortStart: 3013,
       },
+      {
+        repoType: 'express',
+        repoName: 'code-control-express-dispatcher-server',
+        defaultApiPort: 3055,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'code-control-dispatcher-web',
+        defaultWebPortStart: 3054,
+      },
     ],
   },
   {
