@@ -6,7 +6,7 @@ type ProjectsHookStatusBadgeProps = {
 };
 
 const LABELS: Record<HookStatus, string> = {
-  catalog: 'Available',
+  catalog: 'Almost ready',
   disabled: 'Disabled',
   missing: 'Missing paths',
   cloned: 'Cloned',

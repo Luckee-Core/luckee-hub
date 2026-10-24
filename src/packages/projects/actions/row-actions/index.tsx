@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import type { HubProject } from '@/model';
 import { useAppSelector } from '@/store';
 import { projectHasWebRepo } from '@/utils/projects';
+import { ProjectsToggleFavoriteAction } from '../toggle-favorite';
 import { ProjectsCloseAction } from '../close-project';
 import { ProjectsOpenChromeAction } from '../open-chrome';
 import { ProjectsOpenCursorAction } from '../open-cursor';
@@ -33,6 +34,7 @@ export const ProjectsRowActions = ({ project, iconOnly }: ProjectsRowActionsProp
 
   return (
     <div className={iconOnly ? styles.iconActions : styles.actions} onClick={(event) => event.stopPropagation()}>
+      <ProjectsToggleFavoriteAction projectId={project.id} />
       <ProjectsSetupAction projectId={project.id} iconOnly={iconOnly} />
       <ProjectsRunAction projectId={project.id} disabled={!canRun} iconOnly={iconOnly} />
       <ProjectsOpenCursorAction projectId={project.id} disabled={!canRun} iconOnly={iconOnly} />
