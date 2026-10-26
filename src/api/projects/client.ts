@@ -6,6 +6,7 @@ import type {
   LocalDatabaseSetupResult,
   LocalDatabaseStepResult,
   CloseProjectResponse,
+  ProjectRunTarget,
   RunProjectResponse,
   SupabaseConfigSaveResult,
   SupabaseProbe,
@@ -33,9 +34,11 @@ export const listProjectsApi = (options: ListProjectsOptions = {}) => {
 /**
  * Start project dev servers (async job).
  */
-export const runProjectApi = (projectId: string) =>
+export const runProjectApi = (projectId: string, targets?: ProjectRunTarget[]) =>
   requestApi<RunProjectResponse>(`${projectsApiBase}/api/launcher/projects/${projectId}/run`, {
     method: 'POST',
+    headers: targets?.length ? { 'Content-Type': 'application/json' } : undefined,
+    body: targets?.length ? JSON.stringify({ targets }) : undefined,
   });
 
 /**

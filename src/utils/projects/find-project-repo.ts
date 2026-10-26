@@ -17,3 +17,11 @@ export const projectHasWebRepo = (
   repos: HubProjectRepo[],
   projectId: string,
 ): boolean => !!findProjectRepo(repos, projectId, 'nextjs');
+
+/**
+ * Whether the project catalog includes an Express (or API) repo.
+ */
+export const projectHasExpressRepo = (
+  repos: HubProjectRepo[],
+  projectId: string,
+): boolean => !!findProjectRepo(repos, projectId, 'express');

@@ -779,4 +779,25 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       },
     ],
   },
+  {
+    id: 'twitterx-manager',
+    name: 'Twitter/X Manager',
+    description: 'Compose and post to X via local OAuth 2 Express API',
+    localDatabaseSupported: false,
+    supabaseSupported: false,
+    expressEnvGroupIds: [],
+    repos: [
+      {
+        repoType: 'express',
+        repoName: 'twitterx-manager-express-server',
+        defaultApiPort: 3081,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'twitterx-manager-web',
+        defaultWebPortStart: 3082,
+      },
+    ],
+  },
 ];

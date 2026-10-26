@@ -36,7 +36,7 @@ export const HUB_ALMOST_READY_PROJECT_IDS = [
  * Catalog projects in the Work in progress section.
  * Empty by default — assign via the table Section dropdown (or add ids here).
  */
-export const HUB_WORK_IN_PROGRESS_PROJECT_IDS = [] as const;
+export const HUB_WORK_IN_PROGRESS_PROJECT_IDS = ['twitterx-manager'] as const;
 
 /** Catalog projects in the Active launcher section (not the Running / terminals section). */
 export const HUB_ACTIVE_PROJECT_IDS = [] as const;

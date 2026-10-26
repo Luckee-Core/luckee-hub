@@ -1,4 +1,5 @@
 import { runProjectApi } from '@/api/projects';
+import type { ProjectRunTarget } from '@/model';
 import type { AppThunk } from '@/store/store';
 import { ProjectsActions } from '@/store/dumps/projects';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
@@ -11,7 +12,7 @@ import { pollProjectJobThunk } from './poll-project-job-thunk';
  * Run project dev servers and poll job until complete.
  */
 export const runProjectThunk =
-  (projectId: string): AppThunk<Promise<200 | 400 | 500>> =>
+  (projectId: string, targets?: ProjectRunTarget[]): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
     if (hasActiveRunOperation(getState()) || hasActiveSetupOperation(getState())) {
       return 400;
@@ -20,7 +21,7 @@ export const runProjectThunk =
     dispatch(ProjectsBuilderActions.setListError(null));
     dispatch(ProjectsBuilderActions.setRunInFlightProjectId(projectId));
 
-    const result = await runProjectApi(projectId);
+    const result = await runProjectApi(projectId, targets);
     if (!result.success || !result.data?.jobId) {
       dispatch(ProjectsBuilderActions.setRunInFlightProjectId(null));
       dispatch(ProjectsBuilderActions.setListError(result.error ?? 'Run failed'));
@@ -34,7 +35,8 @@ export const runProjectThunk =
     }
 
     const project = getState().projects[projectId];
-    if (project?.localDatabaseSupported) {
+    const startsExpress = !targets?.length || targets.includes('express');
+    if (project?.localDatabaseSupported && startsExpress) {
       dispatch(
         ProjectsActions.upsertProject({
           ...project,

@@ -15,6 +15,7 @@ export type {
   SupabaseSchemaSeedResult,
   ExpressEnvGroupProbe,
   ExpressEnvGroupSaveResult,
+  ProjectRunTarget,
   RunProjectResponse,
   CloseProjectResponse,
   TerminalSession,

@@ -57,6 +57,8 @@ export type TerminalSession = {
   label: string;
 };
 
+export type ProjectRunTarget = 'express' | 'web';
+
 export type RunProjectResponse = {
   jobId: string;
   sessions: TerminalSession[];
