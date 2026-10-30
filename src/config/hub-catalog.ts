@@ -362,6 +362,35 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     ],
   },
   {
+    id: 'finances-manager',
+    name: 'Finances Manager',
+    description:
+      'Customer retainers, subscriptions, and vendor software spend (CRM names via ops-tracker proxy)',
+    webOpenPath: '/finances',
+    localDatabaseSupported: true,
+    supabaseSupported: false,
+    expressEnvGroupIds: ['storage'],
+    repos: [
+      {
+        repoType: 'storage-express',
+        repoName: 'finances-manager-storage-express-server',
+        defaultApiPort: 3091,
+        healthPath: '/api/storage/health',
+      },
+      {
+        repoType: 'express',
+        repoName: 'finances-manager-express-server',
+        defaultApiPort: 3092,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'finances-manager-web',
+        defaultWebPortStart: 3093,
+      },
+    ],
+  },
+  {
     id: 'personal-finances',
     name: 'Personal Finances',
     description: 'Money dashboard with CSV imports and AI prompts',
@@ -797,6 +826,35 @@ export const HUB_CATALOG: HubCatalogProject[] = [
         repoType: 'nextjs',
         repoName: 'twitterx-manager-web',
         defaultWebPortStart: 3082,
+      },
+    ],
+  },
+  {
+    id: 'estimate-and-proposals',
+    name: 'Estimate & Proposals',
+    description:
+      'Catalog estimates and proposal line items for ops-tracker CRM projects (Postgres storage + CRM proxy)',
+    webOpenPath: '/estimates',
+    localDatabaseSupported: true,
+    supabaseSupported: false,
+    expressEnvGroupIds: ['storage'],
+    repos: [
+      {
+        repoType: 'storage-express',
+        repoName: 'estimate-and-proposals-storage-express-server',
+        defaultApiPort: 3094,
+        healthPath: '/api/storage/health',
+      },
+      {
+        repoType: 'express',
+        repoName: 'estimate-and-proposals-express-server',
+        defaultApiPort: 3095,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'estimate-and-proposals-web',
+        defaultWebPortStart: 3096,
       },
     ],
   },
