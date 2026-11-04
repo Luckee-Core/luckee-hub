@@ -18,7 +18,9 @@ export const ProjectDetailLocalDatabase = () => {
       <h2 className={styles.title}>Local database</h2>
       <p className={styles.subtitle}>
         Hub runs each setup step from this page — install/start Postgres, create the database,
-        apply migrations, and write DATABASE_URL to the express .env.
+        apply migrations, and write <code className={styles.code}>DATABASE_URL</code> to the
+        storage-express repo <code className={styles.code}>.env</code> (migrations live in that
+        checkout).
       </p>
       <LocalDatabaseMessages />
       <LocalDatabaseSetupSteps />
@@ -32,4 +34,5 @@ const styles = {
   card: `bg-white border border-gray-300 rounded p-6 space-y-3`,
   title: `text-lg font-semibold text-gray-900`,
   subtitle: `text-sm text-gray-600`,
+  code: `text-xs bg-gray-100 px-1 rounded font-mono`,
 };

@@ -14,6 +14,8 @@ export type HubCatalogProject = {
   id: string;
   name: string;
   description: string;
+  /** Override `HUB_GITHUB_ORG` for this project's repo URLs. */
+  githubOrg?: string;
   /** Path Chrome opens after Run. Origin `/` when omitted. */
   webOpenPath?: string;
   localDatabaseSupported: boolean;
@@ -39,7 +41,7 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       {
         repoType: 'express',
         repoName: 'blog-studio-open-source-express-server',
-        defaultApiPort: 3010,
+        defaultApiPort: 3104,
         healthPath: '/api/health',
       },
       {
@@ -154,10 +156,17 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'knowledge-studio',
     name: 'Knowledge Studio',
     description: 'YouTube and knowledge workflows',
-    localDatabaseSupported: false,
+    githubOrg: 'trouthouse-tech',
+    localDatabaseSupported: true,
     supabaseSupported: false,
-    expressEnvGroupIds: [],
+    expressEnvGroupIds: ['storage'],
     repos: [
+      {
+        repoType: 'storage-express',
+        repoName: 'knowledge-studio-storage-express-server',
+        defaultApiPort: 3093,
+        healthPath: '/api/storage/health',
+      },
       {
         repoType: 'express',
         repoName: 'knowledge-studio-express-server',
@@ -280,10 +289,16 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'my-fundraise',
     name: 'My Fundraise',
     description: 'Investors CRM, graphics studio (TSX preview), and pitch deck slide coach',
-    localDatabaseSupported: false,
+    localDatabaseSupported: true,
     supabaseSupported: false,
-    expressEnvGroupIds: [],
+    expressEnvGroupIds: ['storage'],
     repos: [
+      {
+        repoType: 'storage-express',
+        repoName: 'my-fundraise-storage-express-server',
+        defaultApiPort: 3097,
+        healthPath: '/api/storage/health',
+      },
       {
         repoType: 'express',
         repoName: 'my-fundraise-express-server',
@@ -387,6 +402,62 @@ export const HUB_CATALOG: HubCatalogProject[] = [
         repoType: 'nextjs',
         repoName: 'finances-manager-web',
         defaultWebPortStart: 3093,
+      },
+    ],
+  },
+  {
+    id: 'integration-manager',
+    name: 'Integration Manager',
+    description:
+      'Catalog and wire third-party integrations across Luckee OSS products (storage + API + console)',
+    localDatabaseSupported: true,
+    supabaseSupported: false,
+    expressEnvGroupIds: ['storage'],
+    repos: [
+      {
+        repoType: 'storage-express',
+        repoName: 'integration-manager-storage-express-server',
+        defaultApiPort: 3098,
+        healthPath: '/api/storage/health',
+      },
+      {
+        repoType: 'express',
+        repoName: 'integration-manager-express-server',
+        defaultApiPort: 3099,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'integration-manager-web',
+        defaultWebPortStart: 3100,
+      },
+    ],
+  },
+  {
+    id: 'on-device-express-dispatcher',
+    name: 'On-device Express dispatcher',
+    description:
+      'Postgres-backed Express gateway: registry, spawn sessions, and LAN proxy for storage/API workers',
+    localDatabaseSupported: true,
+    supabaseSupported: false,
+    expressEnvGroupIds: ['gateway'],
+    repos: [
+      {
+        repoType: 'storage-express',
+        repoName: 'on-device-express-dispatcher-storage-express-server',
+        defaultApiPort: 3101,
+        healthPath: '/api/storage/health',
+      },
+      {
+        repoType: 'express',
+        repoName: 'on-device-express-dispatcher-express-server',
+        defaultApiPort: 3102,
+        healthPath: '/api/health',
+      },
+      {
+        repoType: 'nextjs',
+        repoName: 'on-device-express-dispatcher-web',
+        defaultWebPortStart: 3103,
       },
     ],
   },
@@ -570,7 +641,7 @@ export const HUB_CATALOG: HubCatalogProject[] = [
       {
         repoType: 'storage-express',
         repoName: 'my-gmail-manager-storage-express-server',
-        defaultApiPort: 3010,
+        defaultApiPort: 3084,
         healthPath: '/api/storage/health',
       },
       {
@@ -737,15 +808,21 @@ export const HUB_CATALOG: HubCatalogProject[] = [
     id: 'make-it-sound-like-me',
     name: 'Make It Sound Like Me',
     description: 'About Me voice profiles, document extract, and AI rewrite in your style',
-    localDatabaseSupported: false,
+    localDatabaseSupported: true,
     supabaseSupported: true,
-    expressEnvGroupIds: ['ai'],
+    expressEnvGroupIds: ['ai', 'gateway'],
     repos: [
       {
         repoType: 'express',
         repoName: 'make-it-sound-like-me-express-server',
         defaultApiPort: 3071,
         healthPath: '/api/health',
+      },
+      {
+        repoType: 'storage-express',
+        repoName: 'make-it-sound-like-me-storage-express-server',
+        defaultApiPort: 3083,
+        healthPath: '/api/storage/health',
       },
       {
         repoType: 'nextjs',

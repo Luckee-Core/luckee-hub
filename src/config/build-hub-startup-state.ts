@@ -15,8 +15,8 @@ export type HubCatalogProjectRow = Pick<
   storagePort: number;
 };
 
-const toGithubRepoUrl = (repoName: string): string =>
-  `https://github.com/${HUB_GITHUB_ORG}/${repoName}`;
+const toGithubRepoUrl = (githubOrg: string, repoName: string): string =>
+  `https://github.com/${githubOrg}/${repoName}`;
 
 const getExpressApiPort = (entry: HubCatalogProject): number =>
   entry.repos.find((repo) => repo.repoType === 'express')?.defaultApiPort ?? 0;
@@ -47,14 +47,16 @@ export const buildHubCatalogProjects = (): HubCatalogProjectRow[] =>
  * Static repo rows from the hardcoded catalog (no probe/status fields).
  */
 export const buildHubCatalogRepos = (): HubProjectRepo[] =>
-  HUB_CATALOG.flatMap((entry) =>
-    entry.repos.map((repo) => ({
+  HUB_CATALOG.flatMap((entry) => {
+    const githubOrg = entry.githubOrg ?? HUB_GITHUB_ORG;
+
+    return entry.repos.map((repo) => ({
       projectId: entry.id,
       repoType: repo.repoType,
       repoName: repo.repoName,
-      repoUrl: toGithubRepoUrl(repo.repoName),
+      repoUrl: toGithubRepoUrl(githubOrg, repo.repoName),
       defaultApiPort: repo.defaultApiPort,
       defaultWebPortStart: repo.defaultWebPortStart,
       healthPath: repo.healthPath,
-    })),
-  );
+    }));
+  });

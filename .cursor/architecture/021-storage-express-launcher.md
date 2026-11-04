@@ -33,7 +33,7 @@ Registry `expressEnv.groups.storage` upserts `STORAGE_MODE`, `STORAGE_EXPRESS_UR
 
 ### Ports
 
-Storage defaults to `3010` (matches storage server). Blog Studio also catalogs `3010`; avoid running both APIs on the same Mac or override `PORT` in storage `.env`.
+Hub **Start storage** sets `PORT` to the catalog storage port (e.g. Knowledge Studio **3093**). Product express env uses the **Storage** tab with registry keys (`KNOWLEDGE_STUDIO_STORAGE_URL`, `KNOWLEDGE_STUDIO_STORAGE_SECRET`, `CANONICAL_DATA_ACCESS_MODE=direct`, …) — not only Gmail `STORAGE_EXPRESS_*`.
 
 ## Related
 

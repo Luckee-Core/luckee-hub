@@ -46,7 +46,8 @@ export const ProjectDetailStorageExpress = () => {
       <h2 id="storage-express-heading" className={styles.title}>Storage Express</h2>
       <p className={styles.description}>
         Postgres data plane for {name}. Runs <code className={styles.code}>git pull --ff-only</code>{' '}
-        then <code className={styles.code}>npm run dev</code> on port {storagePort}. List Run does not
+        on port {storagePort}. Set matching storage URL/secret on the product Express{' '}
+        <code className={styles.code}>.env</code> via the <strong>Storage</strong> tab. List Run does not
         start this server.
       </p>
       <div className={styles.actions}>

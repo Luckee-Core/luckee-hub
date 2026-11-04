@@ -48,6 +48,7 @@ export const mergeHubRepoSetup = (
 
     return {
       ...repo,
+      repoUrl: status.repoUrl ?? repo.repoUrl,
       localDir: status.localDir,
       dirExists: status.dirExists,
       depsInstalled: status.depsInstalled,
