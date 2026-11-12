@@ -1,80 +1,69 @@
 'use client';
 
-import { useMemo } from 'react';
+import { PanelLeft, PanelLeftClose } from 'lucide-react';
+import { useMemo, type ReactNode } from 'react';
 import { BreadcrumbBar } from './breadcrumb-bar';
 import type { AppLayoutBreadcrumb } from './app-layout-breadcrumb';
 
 type AppLayoutHeaderProps = {
-  isSidebarExpanded: boolean;
+  isSidebarVisible: boolean;
   onToggleSidebar: () => void;
   breadcrumbItems: AppLayoutBreadcrumb[];
+  /** Right-aligned header content (e.g. system metrics on /projects). */
+  endContent?: ReactNode;
 };
 
 export const AppLayoutHeader = (props: AppLayoutHeaderProps) => {
-  const { isSidebarExpanded, onToggleSidebar, breadcrumbItems } = props;
-
-  const hasBreadcrumbItems = breadcrumbItems.length > 0;
+  const { isSidebarVisible, onToggleSidebar, breadcrumbItems, endContent } = props;
 
   const toggleButtonLabel = useMemo(
-    () => (isSidebarExpanded ? 'Collapse sidebar' : 'Expand sidebar'),
-    [isSidebarExpanded],
+    () => (isSidebarVisible ? 'Hide sidebar' : 'Show sidebar'),
+    [isSidebarVisible],
   );
 
   return (
     <header className={styles.header}>
+      <button
+        type="button"
+        onClick={onToggleSidebar}
+        className={styles.sidebarToggle}
+        aria-pressed={isSidebarVisible}
+        aria-label={toggleButtonLabel}
+      >
+        {isSidebarVisible ? (
+          <PanelLeftClose className={styles.sidebarToggleIcon} aria-hidden />
+        ) : (
+          <PanelLeft className={styles.sidebarToggleIcon} aria-hidden />
+        )}
+      </button>
       <nav className={styles.breadcrumbNav} aria-label="Breadcrumb">
         <ol className={styles.breadcrumbList}>
-          <li className={styles.breadcrumbToggleItem}>
-            <button
-              type="button"
-              onClick={onToggleSidebar}
-              className={styles.toggleButton}
-              aria-pressed={isSidebarExpanded}
-              aria-label={toggleButtonLabel}
-            >
-              <span className={styles.toggleIcon} aria-hidden="true">
-                <span className={styles.toggleIconBar}></span>
-                <span className={styles.toggleIconBar}></span>
-                <span className={styles.toggleIconBar}></span>
-              </span>
-            </button>
-            {hasBreadcrumbItems ? (
-              <span className={styles.breadcrumbSeparator} aria-hidden="true">
-                /
-              </span>
-            ) : null}
-          </li>
-          <BreadcrumbBar dismissMenusSignal={isSidebarExpanded} items={breadcrumbItems} />
+          <BreadcrumbBar dismissMenusSignal={isSidebarVisible} items={breadcrumbItems} />
         </ol>
       </nav>
+      {endContent}
     </header>
   );
 };
 
 const styles = {
   header: `
-    flex items-center justify-between gap-3 border-b border-gray-200/60 bg-transparent px-4 py-2.5 shrink-0
+    flex items-center gap-3 shrink-0
+    border-b border-gray-300 bg-white px-4 py-2.5
+  `,
+  sidebarToggle: `
+    flex h-8 w-8 shrink-0 items-center justify-center rounded-md
+    text-gray-600 bg-transparent
+    transition-colors hover:bg-gray-100 hover:text-gray-900
+    focus:outline-none cursor-pointer
+  `,
+  sidebarToggleIcon: `
+    h-[18px] w-[18px]
   `,
   breadcrumbNav: `
-    flex flex-1 items-center overflow-visible
+    flex flex-1 items-center overflow-visible min-w-0
   `,
   breadcrumbList: `
-    flex min-w-0 items-center gap-2
-  `,
-  breadcrumbToggleItem: `
-    flex items-center gap-2 text-xs text-gray-500
-  `,
-  toggleButton: `
-    flex h-6 w-6 items-center justify-center rounded-md bg-transparent text-gray-700
-    transition-colors hover:bg-gray-100 focus:outline-none cursor-pointer
-  `,
-  toggleIcon: `
-    flex h-3 w-4 flex-col items-center justify-between
-  `,
-  toggleIconBar: `
-    h-0.5 w-full rounded-full bg-gray-700 transition-colors
-  `,
-  breadcrumbSeparator: `
-    text-xs font-normal text-gray-400
+    flex flex-wrap items-center gap-x-1 gap-y-1
   `,
 };

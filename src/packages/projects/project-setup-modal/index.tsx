@@ -18,7 +18,7 @@ const formatElapsed = (seconds: number): string => {
 
 const StepIcon = ({ status }: { status: SetupJobStepStatus }) => {
   if (status === 'running') {
-    return <Loader2 className={`${styles.stepIcon} animate-spin text-orange-500`} aria-hidden />;
+    return <Loader2 className={`${styles.stepIcon} animate-spin text-blue-600`} aria-hidden />;
   }
   if (status === 'done' || status === 'skipped') {
     return <CheckCircle2 className={`${styles.stepIcon} text-green-600`} aria-hidden />;
@@ -88,7 +88,7 @@ export const ProjectSetupModal = () => {
 
         <div className={styles.statusRow}>
           {isRunning ? (
-            <Loader2 className={`${styles.statusIcon} animate-spin text-orange-500`} aria-hidden />
+            <Loader2 className={`${styles.statusIcon} animate-spin text-blue-600`} aria-hidden />
           ) : null}
           {isCompleted ? (
             <CheckCircle2 className={`${styles.statusIcon} text-green-600`} aria-hidden />
@@ -179,7 +179,7 @@ const styles = {
   actions: `flex flex-col gap-2`,
   primaryButton: `
     inline-flex w-full items-center justify-center rounded-md px-4 py-2.5
-    text-sm font-medium text-white bg-orange-500 hover:bg-orange-600
+    text-sm font-medium text-white bg-blue-600 hover:bg-blue-700
   `,
   secondaryButton: `
     inline-flex w-full items-center justify-center rounded-md px-4 py-2.5

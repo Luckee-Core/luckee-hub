@@ -20,7 +20,7 @@ The dev hub listed studios at `/` in `packages/dev-hub`. Users need a projects l
 
 ```text
 src/packages/projects/              # list table, header, row actions
-src/packages/project-detail-page/   # overview, local DB / Supabase panels, dev actions
+src/packages/project-detail-page/   # summary + Overview / Environment / Local database tabs (ADR 024)
 src/packages/terminal-dock/         # shared dock (extracted from dev-hub)
 ```
 
@@ -42,7 +42,7 @@ Live Refresh (`refreshProjectsThunk({ reconnectTerminals: true })`) probes ports
 - Builder: `projectsBuilder` — list/terminal/local-DB/Supabase UI flags and `terminalSessionOrder` only (primitives)
 - Current: `currentProject` — full `HubProject`; `id === ''` means none selected
 
-Detail packages read **`currentProject`** (whole slice per ADR 001). Lead Studio shows **Supabase** panel when `supabaseSupported` (keys upserted to express `.env` via Hub Express). When configured, **Seed table schema** calls hub-express `POST …/supabase/seed-schema` (`psql` + registry `bootstrapSql`).
+Detail packages read **`currentProject`** (whole slice per ADR 001). Lead Studio shows **Supabase** panel when `supabaseSupported` (keys upserted to express `.env` via Hub Express). Hub asks only for the project URL and service role key (never the DB password, never writes `DATABASE_URL`); once configured it checks the registry's `expectedTables` through the Supabase REST API with the service key. See [docs/tabs/supabase.md](../../docs/tabs/supabase.md).
 
 - Thunks: `src/store/thunks/projects/` — `setCurrentProjectThunk` hydrates `currentProject` from dump before navigation
 - API: `src/api/projects/`

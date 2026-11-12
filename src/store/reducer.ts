@@ -5,10 +5,13 @@ import { projectReposReducer } from './dumps/projectRepos';
 import { terminalSessionsReducer } from './dumps/terminalSessions';
 import { localDatabaseProbesReducer } from './dumps/localDatabaseProbes';
 import { supabaseProbesReducer } from './dumps/supabaseProbes';
-import { expressEnvProbesReducer } from './dumps/expressEnvProbes';
+import { envProbesReducer } from './dumps/envProbes';
+import { dataPlaneProbesReducer } from './dumps/dataPlaneProbes';
+import { projectOverviewsReducer } from './dumps/projectOverviews';
 import { runningJobsReducer } from './dumps/runningJobs';
 import { breadcrumbBuilderReducer } from './builders/breadcrumbBuilder';
 import { projectsBuilderReducer } from './builders/projectsBuilder';
+import { projectDetailBuilderReducer } from './builders/projectDetailBuilder';
 import { currentProjectReducer } from './current/currentProject';
 import { systemMetricsBuilderReducer } from './builders/systemMetricsBuilder';
 import { projectFavoritesReducer } from './config/projectFavorites';
@@ -22,9 +25,12 @@ export const rootReducer = combineReducers({
   terminalSessions: terminalSessionsReducer,
   localDatabaseProbes: localDatabaseProbesReducer,
   supabaseProbes: supabaseProbesReducer,
-  expressEnvProbes: expressEnvProbesReducer,
+  envProbes: envProbesReducer,
+  dataPlaneProbes: dataPlaneProbesReducer,
+  projectOverviews: projectOverviewsReducer,
   runningJobs: runningJobsReducer,
   projectsBuilder: projectsBuilderReducer,
+  projectDetailBuilder: projectDetailBuilderReducer,
   currentProject: currentProjectReducer,
   systemMetricsBuilder: systemMetricsBuilderReducer,
   projectFavorites: projectFavoritesReducer,

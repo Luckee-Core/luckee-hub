@@ -126,8 +126,8 @@ const styles = {
   detail: `text-xs text-gray-600 break-all`,
   actions: `flex shrink-0 flex-wrap gap-2`,
   runButton: `
-    rounded px-2.5 py-1 text-xs font-medium text-white bg-orange-500
-    hover:bg-orange-600 disabled:opacity-50
+    rounded px-2.5 py-1 text-xs font-medium text-white bg-blue-600
+    hover:bg-blue-700 disabled:opacity-50
   `,
   stopButton: `
     rounded px-2.5 py-1 text-xs font-medium text-gray-700 bg-white border border-gray-300

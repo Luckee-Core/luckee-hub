@@ -2,6 +2,8 @@
 
 import { useMemo } from 'react';
 import { useAppSelector } from '@/store';
+import { listTableStyles } from '@/components/list-table-styles';
+import { ProjectsTableLoadingState } from './loading-state';
 import { ProjectsTableView } from './table-view';
 
 export const ProjectsTable = () => {
@@ -11,8 +13,8 @@ export const ProjectsTable = () => {
   const projectsList = useMemo(() => Object.values(projects), [projects]);
   const { listLoadStatus, listError } = projectsBuilder;
 
-  if (listLoadStatus === 'loading' && projectsList.length === 0) {
-    return <p className={styles.message}>Loading projects…</p>;
+  if ((listLoadStatus === 'idle' || listLoadStatus === 'loading') && projectsList.length === 0) {
+    return <ProjectsTableLoadingState />;
   }
 
   if (listLoadStatus === 'error') {
@@ -24,7 +26,13 @@ export const ProjectsTable = () => {
   }
 
   if (projectsList.length === 0) {
-    return <p className={styles.message}>No projects in registry.</p>;
+    return (
+      <div className={listTableStyles.tableWrapper}>
+        <div className={listTableStyles.emptyState}>
+          <p className={listTableStyles.emptyText}>No projects in registry.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -42,9 +50,6 @@ export const ProjectsTable = () => {
 const styles = {
   root: `
     space-y-3
-  `,
-  message: `
-    text-gray-600
   `,
   error: `
     text-sm text-red-700

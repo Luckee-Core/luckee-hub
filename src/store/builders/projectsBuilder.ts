@@ -30,23 +30,10 @@ type ProjectsBuilderState = {
   supabaseLoadStatus: LoadStatus;
   supabaseError: string | null;
   supabaseSaveMessage: string | null;
-  supabaseOperation: 'save' | 'seed' | null;
+  supabaseOperation: 'save' | null;
   supabaseUrl: string;
   supabaseServiceKey: string;
-  supabaseDatabasePassword: string;
   supabaseEditing: boolean;
-  expressEnvLoadStatus: LoadStatus;
-  expressEnvError: string | null;
-  expressEnvSaveMessage: string | null;
-  aiEnvEditing: boolean;
-  googleMapsEnvEditing: boolean;
-  emailEnvEditing: boolean;
-  anthropicApiKey: string;
-  googleMapsApiKey: string;
-  gmailServiceAccountJsonPath: string;
-  gmailSendAsEmail: string;
-  gmailFromName: string;
-  emailOpenTrackingBaseUrl: string;
   runInFlightProjectId: string | null;
   luckeeParent: string | null;
   hubConfigLoadStatus: LoadStatus;
@@ -86,20 +73,7 @@ const initialState: ProjectsBuilderState = {
   supabaseOperation: null,
   supabaseUrl: '',
   supabaseServiceKey: '',
-  supabaseDatabasePassword: '',
   supabaseEditing: false,
-  expressEnvLoadStatus: 'idle',
-  expressEnvError: null,
-  expressEnvSaveMessage: null,
-  aiEnvEditing: false,
-  googleMapsEnvEditing: false,
-  emailEnvEditing: false,
-  anthropicApiKey: '',
-  googleMapsApiKey: '',
-  gmailServiceAccountJsonPath: '',
-  gmailSendAsEmail: '',
-  gmailFromName: '',
-  emailOpenTrackingBaseUrl: '',
   runInFlightProjectId: null,
   luckeeParent: null,
   hubConfigLoadStatus: 'idle',
@@ -208,7 +182,7 @@ export const projectsBuilderSlice = createSlice({
     setSupabaseSaveMessage: (state, action: PayloadAction<string | null>) => {
       state.supabaseSaveMessage = action.payload;
     },
-    setSupabaseOperation: (state, action: PayloadAction<'save' | 'seed' | null>) => {
+    setSupabaseOperation: (state, action: PayloadAction<'save' | null>) => {
       state.supabaseOperation = action.payload;
     },
     setSupabaseUrl: (state, action: PayloadAction<string>) => {
@@ -217,47 +191,8 @@ export const projectsBuilderSlice = createSlice({
     setSupabaseServiceKey: (state, action: PayloadAction<string>) => {
       state.supabaseServiceKey = action.payload;
     },
-    setSupabaseDatabasePassword: (state, action: PayloadAction<string>) => {
-      state.supabaseDatabasePassword = action.payload;
-    },
     setSupabaseEditing: (state, action: PayloadAction<boolean>) => {
       state.supabaseEditing = action.payload;
-    },
-    setExpressEnvLoadStatus: (state, action: PayloadAction<LoadStatus>) => {
-      state.expressEnvLoadStatus = action.payload;
-    },
-    setExpressEnvError: (state, action: PayloadAction<string | null>) => {
-      state.expressEnvError = action.payload;
-    },
-    setExpressEnvSaveMessage: (state, action: PayloadAction<string | null>) => {
-      state.expressEnvSaveMessage = action.payload;
-    },
-    setAiEnvEditing: (state, action: PayloadAction<boolean>) => {
-      state.aiEnvEditing = action.payload;
-    },
-    setGoogleMapsEnvEditing: (state, action: PayloadAction<boolean>) => {
-      state.googleMapsEnvEditing = action.payload;
-    },
-    setEmailEnvEditing: (state, action: PayloadAction<boolean>) => {
-      state.emailEnvEditing = action.payload;
-    },
-    setAnthropicApiKey: (state, action: PayloadAction<string>) => {
-      state.anthropicApiKey = action.payload;
-    },
-    setGoogleMapsApiKey: (state, action: PayloadAction<string>) => {
-      state.googleMapsApiKey = action.payload;
-    },
-    setGmailServiceAccountJsonPath: (state, action: PayloadAction<string>) => {
-      state.gmailServiceAccountJsonPath = action.payload;
-    },
-    setGmailSendAsEmail: (state, action: PayloadAction<string>) => {
-      state.gmailSendAsEmail = action.payload;
-    },
-    setGmailFromName: (state, action: PayloadAction<string>) => {
-      state.gmailFromName = action.payload;
-    },
-    setEmailOpenTrackingBaseUrl: (state, action: PayloadAction<string>) => {
-      state.emailOpenTrackingBaseUrl = action.payload;
     },
     setRunInFlightProjectId: (state, action: PayloadAction<string | null>) => {
       state.runInFlightProjectId = action.payload;
@@ -334,22 +269,7 @@ export const projectsBuilderSlice = createSlice({
       state.supabaseOperation = null;
       state.supabaseUrl = '';
       state.supabaseServiceKey = '';
-      state.supabaseDatabasePassword = '';
       state.supabaseEditing = false;
-    },
-    resetExpressEnvForm: (state) => {
-      state.expressEnvLoadStatus = 'idle';
-      state.expressEnvError = null;
-      state.expressEnvSaveMessage = null;
-      state.aiEnvEditing = false;
-      state.googleMapsEnvEditing = false;
-      state.emailEnvEditing = false;
-      state.anthropicApiKey = '';
-      state.googleMapsApiKey = '';
-      state.gmailServiceAccountJsonPath = '';
-      state.gmailSendAsEmail = '';
-      state.gmailFromName = '';
-      state.emailOpenTrackingBaseUrl = '';
     },
   },
 });

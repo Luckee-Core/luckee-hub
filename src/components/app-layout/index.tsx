@@ -13,29 +13,30 @@ import { PROJECT_DETAIL_PAGE_PATH, PROJECTS_PATH } from '@/config';
 import { BreadcrumbBuilderActions } from '@/store/builders/breadcrumbBuilder';
 import { useAppDispatch, useAppSelector } from '@/store';
 
-const SIDEBAR_EXPANDED_KEY = 'luckee-hub-sidebar-visible';
+const SIDEBAR_VISIBLE_KEY = 'luckee-hub-sidebar-visible';
 
-const getStoredSidebarExpanded = (): boolean => {
+const getStoredSidebarVisible = (): boolean => {
   try {
-    return localStorage.getItem(SIDEBAR_EXPANDED_KEY) === 'true';
+    return localStorage.getItem(SIDEBAR_VISIBLE_KEY) !== 'false';
   } catch {
-    return false;
+    return true;
   }
 };
 
 type AppLayoutProps = {
   children: ReactNode;
   terminalDock?: ReactNode;
+  headerEndContent?: ReactNode;
 };
 
-export const AppLayout = ({ children, terminalDock }: AppLayoutProps) => {
+export const AppLayout = ({ children, terminalDock, headerEndContent }: AppLayoutProps) => {
   const dispatch = useAppDispatch();
   const currentProject = useAppSelector((s) => s.currentProject);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const pathname = usePathname();
 
   useLayoutEffect(() => {
-    setIsSidebarExpanded(getStoredSidebarExpanded());
+    setIsSidebarVisible(getStoredSidebarVisible());
   }, []);
 
   useLayoutEffect(() => {
@@ -73,10 +74,10 @@ export const AppLayout = ({ children, terminalDock }: AppLayoutProps) => {
   );
 
   const handleToggleSidebar = () => {
-    setIsSidebarExpanded((previous) => {
+    setIsSidebarVisible((previous) => {
       const next = !previous;
       try {
-        localStorage.setItem(SIDEBAR_EXPANDED_KEY, String(next));
+        localStorage.setItem(SIDEBAR_VISIBLE_KEY, String(next));
       } catch {
         // ignore
       }
@@ -86,12 +87,13 @@ export const AppLayout = ({ children, terminalDock }: AppLayoutProps) => {
 
   return (
     <div className={styles.appShell}>
-      <Sidebar collapsed={!isSidebarExpanded} />
+      {isSidebarVisible ? <Sidebar /> : null}
       <div className={styles.mainColumn}>
         <AppLayoutHeader
-          isSidebarExpanded={isSidebarExpanded}
+          isSidebarVisible={isSidebarVisible}
           onToggleSidebar={handleToggleSidebar}
           breadcrumbItems={breadcrumbItems}
+          endContent={headerEndContent}
         />
         <div className={styles.content}>
           <div className={styles.inner}>{children}</div>
@@ -110,7 +112,7 @@ const styles = {
     flex flex-1 flex-col min-h-0 min-w-0 overflow-hidden
   `,
   content: `
-    flex flex-1 min-h-0 min-w-0 overflow-y-auto p-2
+    flex flex-1 min-h-0 min-w-0 overflow-y-auto p-3
   `,
   inner: `
     w-full

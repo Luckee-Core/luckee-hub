@@ -43,6 +43,7 @@ export const BreadcrumbBar = (props: BreadcrumbBarProps) => {
     <>
       {items.map((item, index) => {
         const separator = index > 0;
+        const isRoot = index === 0;
 
         return (
           <li
@@ -58,11 +59,16 @@ export const BreadcrumbBar = (props: BreadcrumbBarProps) => {
               </span>
             ) : null}
             {item.href ? (
-              <Link href={item.href} className={styles.breadcrumbLink}>
+              <Link
+                href={item.href}
+                className={`${styles.breadcrumbLink} ${isRoot ? styles.breadcrumbRoot : ''}`}
+              >
                 {item.label}
               </Link>
             ) : (
-              <span className={styles.breadcrumbCurrent}>{item.label}</span>
+              <span className={styles.breadcrumbCurrent} aria-current="page">
+                {item.label}
+              </span>
             )}
           </li>
         );
@@ -73,15 +79,18 @@ export const BreadcrumbBar = (props: BreadcrumbBarProps) => {
 
 const styles = {
   breadcrumbSeparator: `
-    text-xs font-normal text-gray-400
+    shrink-0 px-1 text-sm text-gray-300 select-none
   `,
   breadcrumbItem: `
-    relative flex min-w-0 items-center gap-2 text-xs font-medium text-gray-600
+    relative flex min-w-0 items-center
   `,
   breadcrumbLink: `
-    truncate text-xs font-medium text-gray-600 transition-colors hover:text-gray-900 focus:outline-none
+    truncate text-sm font-medium text-gray-600 transition-colors hover:text-gray-900 focus:outline-none
+  `,
+  breadcrumbRoot: `
+    text-gray-500 font-normal hover:text-gray-800
   `,
   breadcrumbCurrent: `
-    truncate text-xs font-medium text-gray-900
+    truncate text-sm font-semibold text-gray-900
   `,
 };

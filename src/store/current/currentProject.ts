@@ -10,7 +10,6 @@ export const EMPTY_HUB_PROJECT: HubProject = {
   apiPort: 0,
   localDatabaseSupported: false,
   supabaseSupported: false,
-  expressEnvGroupIds: [],
   storageExpressSupported: false,
   storagePort: 0,
 };

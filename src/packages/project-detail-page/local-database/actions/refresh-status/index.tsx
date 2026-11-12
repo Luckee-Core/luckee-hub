@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 
+import { detailPageStyles } from '@/components/detail-page-styles';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { probeLocalDatabaseThunk } from '@/store/thunks/projects';
 
@@ -26,18 +27,11 @@ export const RefreshStatus = () => {
   return (
     <button
       type="button"
-      className={styles.secondary}
+      className={detailPageStyles.secondaryButton}
       disabled={isBusy}
       onClick={() => void dispatch(probeLocalDatabaseThunk(id))}
     >
       {isProbing ? 'Refreshing…' : 'Refresh status'}
     </button>
   );
-};
-
-const styles = {
-  secondary: `
-    rounded px-2.5 py-1 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-300
-    hover:bg-gray-200 disabled:opacity-50
-  `,
 };

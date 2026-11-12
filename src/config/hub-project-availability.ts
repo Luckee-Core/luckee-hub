@@ -1,6 +1,6 @@
 /**
  * Hub catalog projects shown in the Almost ready section.
- * Work in progress and Coming soon tiers are listed below.
+ * Work in progress tier is listed below. Other catalog entries default to Almost ready.
  */
 export const HUB_ALMOST_READY_PROJECT_IDS = [
   'app-store-manager',
@@ -30,7 +30,6 @@ export const HUB_ALMOST_READY_PROJECT_IDS = [
   'reddit-scraper',
   'speech-therapy-tracker',
   'trade-stocks',
-  'upwork-manager',
   'website-site-scraper',
 ] as const;
 
@@ -46,9 +45,6 @@ export const HUB_ACTIVE_PROJECT_IDS = [] as const;
 /** Catalog projects in Final steps before Active. */
 export const HUB_FINAL_STEPS_PROJECT_IDS = [] as const;
 
-/** Catalog projects that are cancelled / shelved in the hub. */
-export const HUB_CANCELLED_PROJECT_IDS = [] as const;
-
 /** @deprecated Use `HUB_ALMOST_READY_PROJECT_IDS`. */
 export const HUB_AVAILABLE_PROJECT_IDS = HUB_ALMOST_READY_PROJECT_IDS;
 
@@ -56,7 +52,6 @@ const HUB_ALMOST_READY_PROJECT_ID_SET = new Set<string>(HUB_ALMOST_READY_PROJECT
 const HUB_WORK_IN_PROGRESS_PROJECT_ID_SET = new Set<string>(HUB_WORK_IN_PROGRESS_PROJECT_IDS);
 const HUB_ACTIVE_PROJECT_ID_SET = new Set<string>(HUB_ACTIVE_PROJECT_IDS);
 const HUB_FINAL_STEPS_PROJECT_ID_SET = new Set<string>(HUB_FINAL_STEPS_PROJECT_IDS);
-const HUB_CANCELLED_PROJECT_ID_SET = new Set<string>(HUB_CANCELLED_PROJECT_IDS);
 
 export const isHubProjectAlmostReady = (projectId: string): boolean =>
   HUB_ALMOST_READY_PROJECT_ID_SET.has(projectId);
@@ -69,9 +64,6 @@ export const isHubProjectActive = (projectId: string): boolean =>
 
 export const isHubProjectFinalSteps = (projectId: string): boolean =>
   HUB_FINAL_STEPS_PROJECT_ID_SET.has(projectId);
-
-export const isHubProjectCancelled = (projectId: string): boolean =>
-  HUB_CANCELLED_PROJECT_ID_SET.has(projectId);
 
 /** @deprecated Use `isHubProjectAlmostReady`. */
 export const isHubProjectAvailable = isHubProjectAlmostReady;

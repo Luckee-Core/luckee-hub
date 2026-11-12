@@ -1,4 +1,4 @@
-import { PROJECTS_PATH } from '@/config/routes';
+import { PROJECTS_PATH, SETTINGS_PATH } from '@/config/routes';
 
 export type NavigationRoute = {
   name: string;
@@ -10,4 +10,5 @@ export type NavigationRoute = {
  */
 export const getNavigationLinks = (): NavigationRoute[] => [
   { name: 'Projects', href: PROJECTS_PATH },
+  { name: 'Settings', href: SETTINGS_PATH },
 ];

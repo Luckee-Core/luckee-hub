@@ -1,23 +1,14 @@
-import {
-  buildHubCatalogProjects,
-  buildHubCatalogRepos,
-  mergeHubProjectSetup,
-  mergeHubRepoSetup,
-} from '@/config';
 import { listProjectsApi } from '@/api/projects';
 import type { AppThunk } from '@/store/store';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import { CurrentProjectActions } from '@/store/current/currentProject';
 import { ProjectsActions } from '@/store/dumps/projects';
 import { ProjectReposActions } from '@/store/dumps/projectRepos';
+import { wait } from '@/utils/async';
 import { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 
-/**
- * Seed static repo catalog (identity + GitHub URLs only).
- */
-export const initializeHubCatalogThunk = (): AppThunk => (dispatch) => {
-  dispatch(ProjectReposActions.setProjectRepos(buildHubCatalogRepos()));
-};
+/** First load keeps the loading state up at least this long so it doesn't flash. */
+const MIN_INITIAL_LOAD_MS = 2000;
 
 type LoadProjectsOptions = {
   /** Curl/lsof ports for Ready / API running / Web running badges. */
@@ -27,7 +18,7 @@ type LoadProjectsOptions = {
 };
 
 /**
- * Probe hub.local.json setup via Express and merge onto the hardcoded catalog.
+ * Load the project catalog and hub.local.json setup status from hub Express.
  */
 export const loadProjectsThunk =
   (options: LoadProjectsOptions = {}): AppThunk<Promise<200 | 400 | 500>> =>
@@ -37,12 +28,14 @@ export const loadProjectsThunk =
     const hasProjects = Object.keys(getState().projects).length > 0;
 
     if (!hasProjects) {
-      dispatch(initializeHubCatalogThunk());
       dispatch(ProjectsBuilderActions.setListLoadStatus('loading'));
       dispatch(ProjectsBuilderActions.setListError(null));
     }
 
-    const result = await listProjectsApi({ live });
+    const [result] = await Promise.all([
+      listProjectsApi({ live }),
+      hasProjects ? Promise.resolve() : wait(MIN_INITIAL_LOAD_MS),
+    ]);
     if (!result.success || !result.data) {
       if (!hasProjects) {
         dispatch(ProjectsBuilderActions.setListLoadStatus('error'));
@@ -54,16 +47,8 @@ export const loadProjectsThunk =
       return result.httpStatus === 400 ? 400 : 500;
     }
 
-    dispatch(
-      ProjectsActions.setProjects(
-        mergeHubProjectSetup(buildHubCatalogProjects(), result.data.projects),
-      ),
-    );
-    dispatch(
-      ProjectReposActions.setProjectRepos(
-        mergeHubRepoSetup(buildHubCatalogRepos(), result.data.repos),
-      ),
-    );
+    dispatch(ProjectsActions.setProjects(result.data.projects));
+    dispatch(ProjectReposActions.setProjectRepos(result.data.repos));
     dispatch(ProjectsBuilderActions.setListLoadStatus('loaded'));
 
     const currentProject = getState().currentProject;

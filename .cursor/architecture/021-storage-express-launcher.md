@@ -21,8 +21,8 @@ My Gmail Manager splits the **dispatcher** Express API from the **storage** Expr
 | Action | Behavior |
 |--------|----------|
 | List **Run** | Dispatcher + web PTYs only (unchanged). Missing `storageExpressDir` does not block Run on the dispatcher Mac. |
-| Detail **Start storage** | `POST /api/launcher/projects/:id/run-storage-express` → `git pull --ff-only && npm run dev` in `storageExpressDir`. |
-| Detail **Close storage** | `POST .../close-storage-express` kills `storage-express` role only. |
+| Detail **Start** (Storage API row on Overview) | `POST /api/launcher/projects/:id/run-storage-express` → `git pull --ff-only && npm run dev` in `storageExpressDir`. |
+| Detail **Stop** (Storage API row) | `POST .../close-storage-express` kills `storage-express` role only. |
 | Project **Close** | Kills express, web, and storage-express sessions. |
 
 Terminal role: `storage-express`. Orphan status tabs attach when health passes (same as API/web).
@@ -33,7 +33,7 @@ Registry `expressEnv.groups.storage` upserts `STORAGE_MODE`, `STORAGE_EXPRESS_UR
 
 ### Ports
 
-Hub **Start storage** sets `PORT` to the catalog storage port (e.g. Knowledge Studio **3093**). Product express env uses the **Storage** tab with registry keys (`KNOWLEDGE_STUDIO_STORAGE_URL`, `KNOWLEDGE_STUDIO_STORAGE_SECRET`, `CANONICAL_DATA_ACCESS_MODE=direct`, …) — not only Gmail `STORAGE_EXPRESS_*`.
+Hub **Start storage** sets `PORT` to the catalog storage port (e.g. Knowledge Studio **3093**). Product express env uses the **Storage** group on the Environment tab (ADR 024) with registry keys (`KNOWLEDGE_STUDIO_STORAGE_URL`, `KNOWLEDGE_STUDIO_STORAGE_SECRET`, `CANONICAL_DATA_ACCESS_MODE=direct`, …) — not only Gmail `STORAGE_EXPRESS_*`.
 
 ## Related
 

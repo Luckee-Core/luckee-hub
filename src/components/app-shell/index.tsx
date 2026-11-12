@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from 'react';
 import { AppLayout } from '@/components/app-layout';
+import { SystemMetricsHeaderItem } from '@/packages/projects/system-metrics-header-item';
 import { TerminalDock } from '@/packages/terminal-dock';
 import { useAppDispatch } from '@/store';
 import {
@@ -29,5 +30,9 @@ export const AppShell = ({ children }: AppShellProps) => {
     void load();
   }, [dispatch]);
 
-  return <AppLayout terminalDock={<TerminalDock />}>{children}</AppLayout>;
+  return (
+    <AppLayout terminalDock={<TerminalDock />} headerEndContent={<SystemMetricsHeaderItem />}>
+      {children}
+    </AppLayout>
+  );
 };

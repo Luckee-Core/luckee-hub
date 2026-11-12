@@ -3,22 +3,25 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
-import { Rows3 } from 'lucide-react';
-import { PROJECTS_PATH } from '@/config/routes';
-import { getHubSidebarSections } from './get-hub-sidebar-sections';
+import { BrandLogo } from '@/components/brand-logo';
+import { getNavigationLinks } from '@/components/navigation/get-navigation-links';
+import { PROJECT_DETAIL_PAGE_PATH, PROJECTS_PATH } from '@/config/routes';
 
-type SidebarProps = {
-  collapsed: boolean;
-};
-
-export const Sidebar = ({ collapsed }: SidebarProps) => {
+/**
+ * Primary hub navigation (layout matches my-ops-tracker-web).
+ */
+export const Sidebar = () => {
   const pathname = usePathname();
-  const sections = useMemo(() => getHubSidebarSections(), []);
+  const navigationLinks = useMemo(() => getNavigationLinks(), []);
 
-  const isActiveHref = useCallback(
-    (href: string) => {
+  const isLinkActive = useCallback(
+    (href: string): boolean => {
       if (href === PROJECTS_PATH) {
-        return pathname === PROJECTS_PATH || pathname.startsWith(`${PROJECTS_PATH}/`);
+        return (
+          pathname === PROJECTS_PATH ||
+          pathname.startsWith(`${PROJECTS_PATH}/`) ||
+          pathname.startsWith(PROJECT_DETAIL_PAGE_PATH)
+        );
       }
       return pathname === href || pathname.startsWith(`${href}/`);
     },
@@ -26,60 +29,85 @@ export const Sidebar = ({ collapsed }: SidebarProps) => {
   );
 
   return (
-    <aside className={styles.sidebar(collapsed)}>
-      <div className={styles.logoArea}>
-        <Link href={PROJECTS_PATH} className={styles.logoLink(collapsed)} title="Luckee Dev Hub">
-          <span className={styles.logoMark}>LH</span>
-          {!collapsed ? <span className={styles.logoText}>Luckee Dev Hub</span> : null}
-        </Link>
-      </div>
-
-      <nav className={styles.nav}>
-        {sections.map((section) => (
-          <div key={section.title || 'nav'} className={styles.navGroup}>
-            {!collapsed && section.title.trim() ? (
-              <p className={styles.navGroupTitle}>{section.title}</p>
-            ) : null}
-            <div className={styles.navGroupItems}>
-              {section.links.map((link) => {
-                const leafActive = isActiveHref(link.href);
-                return (
-                  <div key={link.href} className={styles.parentRow(leafActive)}>
-                    <Link
-                      href={link.href}
-                      className={styles.parentLink(collapsed)}
-                      title={link.name}
-                    >
-                      <Rows3 className={styles.icon(leafActive)} />
-                      {!collapsed ? <span className={styles.linkLabel}>{link.name}</span> : null}
-                    </Link>
-                  </div>
-                );
-              })}
-            </div>
+    <aside className={styles.sidebar}>
+      <div className={styles.inner}>
+        <Link href={PROJECTS_PATH} className={styles.brandPanel}>
+          <BrandLogo className={styles.logoMark} />
+          <div className={styles.brandTextGroup}>
+            <span className={styles.logoText}>Luckee Dev Hub</span>
+            <span className={styles.logoHint}>A LUCKEE APP</span>
           </div>
-        ))}
-      </nav>
+        </Link>
+
+        <nav className={styles.navigation} aria-label="Primary">
+          <p className={styles.navLabel}>Navigation</p>
+          <ul className={styles.menuList}>
+            {navigationLinks.map((link) => {
+              const isActive = isLinkActive(link.href);
+              return (
+                <li key={link.href} className={styles.menuItem}>
+                  <Link
+                    href={link.href}
+                    className={`${styles.menuButton} ${
+                      isActive ? styles.menuButtonActive : styles.menuButtonInactive
+                    }`}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    <span>{link.name}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
     </aside>
   );
 };
 
 const styles = {
-  sidebar: (collapsed: boolean) =>
-    `${collapsed ? 'w-16' : 'w-56'} flex flex-col border-r border-zinc-800 bg-zinc-900 text-zinc-100 transition-all duration-200 min-h-0 shrink-0 self-stretch`,
-  logoArea: `px-3 py-4 border-b border-zinc-800 shrink-0`,
-  logoLink: (collapsed: boolean) =>
-    `flex items-center min-w-0 ${collapsed ? 'justify-center' : 'gap-2.5'}`,
-  logoMark: `flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-500 text-sm font-bold text-white`,
-  logoText: `truncate text-sm font-semibold text-zinc-100`,
-  nav: `flex-1 overflow-y-auto px-2 py-3`,
-  navGroup: `mb-4`,
-  navGroupTitle: `px-2 mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500`,
-  navGroupItems: `space-y-0.5`,
-  parentRow: (active: boolean) =>
-    `rounded-md ${active ? 'bg-zinc-800/80' : 'hover:bg-zinc-800/50'}`,
-  parentLink: (collapsed: boolean) =>
-    `flex items-center gap-2.5 px-2.5 py-2 text-sm text-zinc-300 hover:text-white ${collapsed ? 'justify-center' : ''}`,
-  icon: (active: boolean) => `h-4 w-4 shrink-0 ${active ? 'text-orange-400' : 'text-zinc-500'}`,
-  linkLabel: `truncate`,
+  sidebar: `
+    relative flex h-screen w-[15.5rem] shrink-0 flex-col
+    border-r border-gray-300 bg-white overflow-y-auto
+  `,
+  inner: `
+    flex h-full flex-1 flex-col gap-4 p-3
+  `,
+  brandPanel: `
+    flex items-center gap-2.5 rounded border border-gray-300 bg-gray-50 px-3 py-2.5
+  `,
+  logoMark: `h-8 w-auto shrink-0`,
+  brandTextGroup: `
+    flex min-w-0 flex-col
+  `,
+  logoText: `
+    text-sm font-semibold text-gray-900 tracking-tight truncate
+  `,
+  logoHint: `
+    text-[10px] font-semibold uppercase tracking-wide text-gray-500
+  `,
+  navigation: `
+    flex-1 overflow-y-auto
+  `,
+  navLabel: `
+    mb-2 px-2 text-[10px] font-semibold uppercase tracking-wide text-gray-500
+  `,
+  menuList: `
+    flex flex-col gap-0.5
+  `,
+  menuItem: `
+    group relative
+  `,
+  menuButton: `
+    flex flex-1 items-center gap-2 rounded px-2.5 py-2 text-xs font-medium
+    text-gray-700 transition-colors cursor-pointer
+    hover:bg-gray-50 hover:text-gray-900
+  `,
+  menuButtonActive: `
+    bg-gray-100 text-gray-900 font-semibold
+    ring-1 ring-inset ring-gray-300
+  `,
+  menuButtonInactive: `
+    bg-transparent
+  `,
 };

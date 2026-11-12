@@ -2,25 +2,26 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+
+import { detailPageStyles } from '@/components/detail-page-styles';
 import { DETAIL_PROJECT_SESSION_KEY, PROJECTS_PATH } from '@/config';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { setCurrentProjectThunk } from '@/store/thunks/projects';
 import { LuckeeParentRequiredModal } from '@/packages/projects/luckee-parent-modal';
 import { ProjectSetupModal } from '@/packages/projects/project-setup-modal';
 import { ProjectDetailOverview } from './overview';
-import { ProjectDetailLocalDatabase } from './local-database';
-import { ProjectDetailStorageExpress } from './storage-express';
+import { ProjectDetailRepos } from './repos';
+import { RepoWorkstation } from './repo-workstation';
+import { ProjectDetailSummary } from './summary';
+import { ProjectDetailTabs } from './tabs';
 
-/**
- * Project detail workspace — reads `currentProject` (ADR 008).
- * Open via `setCurrentProjectThunk` + navigate from the projects list.
- */
 export const ProjectDetailPage = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const currentProject = useAppSelector((s) => s.currentProject);
   const projects = useAppSelector((s) => s.projects);
   const listLoadStatus = useAppSelector((s) => s.projectsBuilder.listLoadStatus);
+  const { activeTab, activeRepo } = useAppSelector((s) => s.projectDetailBuilder);
 
   useEffect(() => {
     if (currentProject.id || listLoadStatus !== 'loaded') {
@@ -42,19 +43,33 @@ export const ProjectDetailPage = () => {
     router.replace(PROJECTS_PATH);
   }, [currentProject.id, dispatch, listLoadStatus, projects, router]);
 
+  if (!currentProject.id) {
+    return null;
+  }
+
   return (
     <>
       <LuckeeParentRequiredModal />
       <ProjectSetupModal />
-      <div className={styles.page}>
-        <ProjectDetailOverview />
-        {currentProject.storageExpressSupported ? <ProjectDetailStorageExpress /> : null}
-        {currentProject.localDatabaseSupported ? <ProjectDetailLocalDatabase /> : null}
+      <div className={detailPageStyles.page}>
+        <ProjectDetailSummary />
+        {activeRepo ? (
+          // A selected repo replaces the tabs: "Back to repos" sits directly under the project header.
+          <RepoWorkstation />
+        ) : (
+          <div className={styles.tabs}>
+            <ProjectDetailTabs />
+            <div role="tabpanel" className={styles.tabPanel}>
+              {activeTab === 'repos' ? <ProjectDetailRepos /> : <ProjectDetailOverview />}
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
 };
 
 const styles = {
-  page: `w-full space-y-6`,
+  tabs: `flex flex-col gap-4`,
+  tabPanel: `pt-4`,
 };

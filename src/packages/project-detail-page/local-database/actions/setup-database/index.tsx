@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 
+import { detailPageStyles } from '@/components/detail-page-styles';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { setupLocalDatabaseThunk } from '@/store/thunks/projects';
 
@@ -28,15 +29,8 @@ export const SetupDatabase = () => {
   };
 
   return (
-    <button type="button" className={styles.primary} disabled={isBusy} onClick={handleRunAll}>
+    <button type="button" className={detailPageStyles.primaryButton} disabled={isBusy} onClick={handleRunAll}>
       {isSettingUp ? 'Running setup…' : 'Run all remaining'}
     </button>
   );
-};
-
-const styles = {
-  primary: `
-    rounded px-2.5 py-1 text-xs font-medium text-white bg-orange-500
-    hover:bg-orange-600 disabled:opacity-50
-  `,
 };

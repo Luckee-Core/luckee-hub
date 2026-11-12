@@ -10,9 +10,10 @@ import type {
   RunProjectResponse,
   SupabaseConfigSaveResult,
   SupabaseProbe,
-  SupabaseSchemaSeedResult,
-  ExpressEnvGroupProbe,
-  ExpressEnvGroupSaveResult,
+  DataPlaneProbe,
+  ProjectEnvProbe,
+  HubProjectRepoRole,
+  ProjectOverview,
 } from '@/model';
 import { requestApi } from '@/api/_shared';
 import type { HubConfigData, ListProjectsResponse, SetupProjectResponse } from './types';
@@ -81,6 +82,16 @@ export const openCursorApi = (projectId: string) =>
 export const openChromeApi = (projectId: string) =>
   requestApi<void>(`${projectsApiBase}/api/launcher/projects/${projectId}/open-chrome`, {
     method: 'POST',
+  });
+
+/**
+ * Reveal one repo checkout in Finder (path resolved by hub Express).
+ */
+export const openRepoFolderApi = (projectId: string, role: HubProjectRepoRole, repoName: string) =>
+  requestApi<void>(`${projectsApiBase}/api/launcher/projects/${projectId}/open-folder`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ role, repoName }),
   });
 
 /**
@@ -173,7 +184,7 @@ export const probeSupabaseConfigApi = (projectId: string) =>
  */
 export const saveSupabaseConfigApi = (
   projectId: string,
-  body: { supabaseUrl: string; serviceKey: string; databasePassword: string },
+  body: { supabaseUrl: string; serviceKey: string },
 ) =>
   requestApi<SupabaseConfigSaveResult>(
     `${projectsApiBase}/api/projects/${projectId}/supabase/config`,
@@ -185,35 +196,50 @@ export const saveSupabaseConfigApi = (
   );
 
 /**
- * Apply registry bootstrap SQL to Supabase via express DATABASE_URL + psql.
+ * Probe one repo's env outline (secret values omitted).
  */
-export const seedSupabaseSchemaApi = (projectId: string) =>
-  requestApi<SupabaseSchemaSeedResult>(
-    `${projectsApiBase}/api/projects/${projectId}/supabase/seed-schema`,
-    { method: 'POST' },
-  );
-
-/**
- * Probe express env group key presence in express .env (booleans only).
- */
-export const probeExpressEnvGroupApi = (projectId: string, groupId: string) =>
-  requestApi<ExpressEnvGroupProbe>(
-    `${projectsApiBase}/api/projects/${projectId}/express-env/${encodeURIComponent(groupId)}`,
-  );
-
-/**
- * Upsert express env group keys into the project's express .env.
- */
-export const saveExpressEnvGroupApi = (
+export const getProjectEnvApi = (
   projectId: string,
-  groupId: string,
+  role: HubProjectRepoRole,
+  repoName: string,
+) =>
+  requestApi<ProjectEnvProbe>(
+    `${projectsApiBase}/api/projects/${projectId}/env?role=${encodeURIComponent(role)}&repoName=${encodeURIComponent(repoName)}`,
+  );
+
+/**
+ * Save env keys for one repo.
+ */
+export const saveProjectEnvApi = (
+  projectId: string,
+  role: HubProjectRepoRole,
+  repoName: string,
   values: Record<string, string>,
 ) =>
-  requestApi<ExpressEnvGroupSaveResult>(
-    `${projectsApiBase}/api/projects/${projectId}/express-env/${encodeURIComponent(groupId)}`,
+  requestApi<{ success: boolean; message: string; probe: ProjectEnvProbe }>(
+    `${projectsApiBase}/api/projects/${projectId}/env`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
+      body: JSON.stringify({ role, repoName, values }),
+    },
+  );
+
+/**
+ * Hand-written project overview (null when none exists).
+ */
+export const getProjectOverviewApi = (projectId: string) =>
+  requestApi<ProjectOverview | null>(`${projectsApiBase}/api/projects/${projectId}/overview`);
+
+export const getDataPlaneApi = (projectId: string) =>
+  requestApi<DataPlaneProbe>(`${projectsApiBase}/api/projects/${projectId}/data-plane`);
+
+export const setDataPlaneApi = (projectId: string, optionId: string) =>
+  requestApi<{ success: boolean; message: string; probe: DataPlaneProbe }>(
+    `${projectsApiBase}/api/projects/${projectId}/data-plane`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ optionId }),
     },
   );

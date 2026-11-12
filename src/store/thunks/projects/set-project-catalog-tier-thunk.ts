@@ -19,7 +19,7 @@ export const hydrateProjectSectionOverridesThunk =
   };
 
 /**
- * Sets a project's launcher table tier (temp admin override) and persists to localStorage.
+ * Sets a project's launcher table tier (drag-and-drop between sections) and persists to localStorage.
  */
 export const setProjectCatalogTierThunk =
   (projectId: string, tier: ProjectCatalogTier): AppThunk<Promise<200>> =>

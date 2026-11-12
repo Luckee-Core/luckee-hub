@@ -2,14 +2,16 @@ import type { AppThunk } from '@/store/store';
 import { CurrentProjectActions } from '@/store/current/currentProject';
 import { BreadcrumbBuilderActions } from '@/store/builders/breadcrumbBuilder';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
+import { ProjectDetailBuilderActions } from '@/store/builders/projectDetailBuilder';
 import { DETAIL_PROJECT_SESSION_KEY, PROJECTS_PATH } from '@/config';
 import { probeLocalDatabaseThunk } from './local-database-thunk';
 import { probeSupabaseConfigThunk } from './supabase-config-thunk';
-import { probeExpressEnvGroupThunk } from './express-env-thunk';
+import { probeDataPlaneThunk } from './data-plane-thunk';
+import { probeExpressRepoEnvForProjectThunk } from './project-env-thunk';
+import { loadProjectOverviewThunk } from './project-overview-thunk';
 
 /**
- * Hydrate `currentProject`, then probe env in order: Supabase first (so that tab
- * can render), then each express-env group one at a time.
+ * Hydrate `currentProject` and probe data needed for repo cards.
  */
 export const setCurrentProjectThunk =
   (projectId: string): AppThunk<Promise<200 | 400 | 500>> =>
@@ -24,7 +26,7 @@ export const setCurrentProjectThunk =
     try {
       sessionStorage.setItem(DETAIL_PROJECT_SESSION_KEY, projectId);
     } catch {
-      // ignore private mode / quota
+      // ignore
     }
 
     dispatch(
@@ -36,20 +38,27 @@ export const setCurrentProjectThunk =
 
     dispatch(ProjectsBuilderActions.resetLocalDatabaseState());
     dispatch(ProjectsBuilderActions.resetSupabaseState());
-    dispatch(ProjectsBuilderActions.resetExpressEnvForm());
+    dispatch(ProjectDetailBuilderActions.reset());
+
+    // Always refetch so edits to data/project-overviews/<id>.json show up; the last copy stays visible meanwhile.
+    void dispatch(loadProjectOverviewThunk(projectId));
 
     if (project.localDatabaseSupported) {
       void dispatch(probeLocalDatabaseThunk(projectId));
     }
 
-    // Fire-and-forget ordered probes so navigation isn't blocked, but Supabase
-    // always completes before AI / Maps / Email start.
     void (async () => {
+      if (project.dataPlane) {
+        await dispatch(probeDataPlaneThunk(projectId));
+      }
       if (project.supabaseSupported) {
         await dispatch(probeSupabaseConfigThunk(projectId));
       }
-      for (const groupId of project.expressEnvGroupIds) {
-        await dispatch(probeExpressEnvGroupThunk(groupId));
+      const expressRepo = getState().projectRepos.find(
+        (r) => r.projectId === projectId && r.role === 'express',
+      );
+      if (expressRepo) {
+        await dispatch(probeExpressRepoEnvForProjectThunk(projectId, expressRepo.repoName));
       }
     })();
 

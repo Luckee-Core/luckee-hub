@@ -27,7 +27,8 @@ export const LuckeeParentRequiredModal = () => {
           <code className={styles.code}>luckee/{'{project}'}/</code> inside the folder you pick.
         </p>
         <p className={styles.note}>
-          Finder will open so you can select a folder. You do not need to type a path.
+          Finder will open so you can select a folder. You do not need to type a path. You can
+          change it later in Settings.
         </p>
         {hubConfigError ? <p className={styles.error}>{hubConfigError}</p> : null}
         <button
@@ -67,7 +68,7 @@ const styles = {
   error: `text-sm text-red-600`,
   primaryButton: `
     inline-flex w-full items-center justify-center gap-2 rounded-md px-4 py-2.5
-    text-sm font-medium text-white bg-orange-500 hover:bg-orange-600 disabled:opacity-60
+    text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-60
   `,
   buttonIcon: `h-4 w-4`,
 };

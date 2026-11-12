@@ -1,12 +1,22 @@
 'use client';
 
 import { useAppSelector } from '@/store';
+import type { RepoSetupStep } from '../repo-workstation/setup-steps/use-repo-setup-steps';
+import { WorkstationStep } from '../repo-workstation/step';
 import { LocalDatabaseActions } from './actions';
 import { DatabaseUrl } from './database-url';
 import { LocalDatabaseMessages } from './messages';
 import { LocalDatabaseSetupSteps } from './setup-steps';
 
-export const ProjectDetailLocalDatabase = () => {
+type ProjectDetailLocalDatabaseProps = {
+  step: RepoSetupStep;
+};
+
+/**
+ * Local database walkthrough step (Storage workstation) — Postgres setup steps run from Hub,
+ * plus the resulting DATABASE_URL.
+ */
+export const ProjectDetailLocalDatabase = ({ step }: ProjectDetailLocalDatabaseProps) => {
   const currentProject = useAppSelector((s) => s.currentProject);
 
   if (!currentProject.localDatabaseSupported) {
@@ -14,25 +24,22 @@ export const ProjectDetailLocalDatabase = () => {
   }
 
   return (
-    <section className={styles.card}>
-      <h2 className={styles.title}>Local database</h2>
-      <p className={styles.subtitle}>
-        Hub runs each setup step from this page — install/start Postgres, create the database,
-        apply migrations, and write <code className={styles.code}>DATABASE_URL</code> to the
-        storage-express repo <code className={styles.code}>.env</code> (migrations live in that
-        checkout).
-      </p>
-      <LocalDatabaseMessages />
-      <LocalDatabaseSetupSteps />
-      <DatabaseUrl />
-      <LocalDatabaseActions />
-    </section>
+    <WorkstationStep step={step} actions={<LocalDatabaseActions />}>
+      <div className={styles.body}>
+        <p className={styles.note}>
+          Install and start Postgres, create the database, apply migrations from the storage repo,
+          and write <code className={styles.code}>DATABASE_URL</code> to its .env.
+        </p>
+        <LocalDatabaseMessages />
+        <LocalDatabaseSetupSteps />
+        <DatabaseUrl />
+      </div>
+    </WorkstationStep>
   );
 };
 
 const styles = {
-  card: `bg-white border border-gray-300 rounded p-6 space-y-3`,
-  title: `text-lg font-semibold text-gray-900`,
-  subtitle: `text-sm text-gray-600`,
-  code: `text-xs bg-gray-100 px-1 rounded font-mono`,
+  note: `text-xs text-gray-500`,
+  code: `font-mono text-[11px]`,
+  body: `space-y-4`,
 };

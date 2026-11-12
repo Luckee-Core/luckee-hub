@@ -2,13 +2,20 @@ import type { ProjectCatalogTier } from '@/config/project-catalog-tier';
 
 export const PROJECT_SECTION_OVERRIDES_STORAGE_KEY = 'luckee-hub-project-section-overrides';
 
-const isProjectCatalogTier = (value: unknown): value is ProjectCatalogTier =>
-  value === 'active' ||
-  value === 'finalSteps' ||
-  value === 'almostReady' ||
-  value === 'workInProgress' ||
-  value === 'comingSoon' ||
-  value === 'cancelled';
+const parseStoredProjectCatalogTier = (value: unknown): ProjectCatalogTier | null => {
+  if (value === 'comingSoon' || value === 'cancelled') {
+    return 'almostReady';
+  }
+  if (
+    value === 'active' ||
+    value === 'finalSteps' ||
+    value === 'almostReady' ||
+    value === 'workInProgress'
+  ) {
+    return value;
+  }
+  return null;
+};
 
 /**
  * Reads per-project section overrides from localStorage (client only).
@@ -25,8 +32,12 @@ export const readStoredProjectSectionOverrides = (): Record<string, ProjectCatal
     }
     const next: Record<string, ProjectCatalogTier> = {};
     for (const [projectId, tier] of Object.entries(parsed)) {
-      if (typeof projectId === 'string' && isProjectCatalogTier(tier)) {
-        next[projectId] = tier;
+      if (typeof projectId !== 'string') {
+        continue;
+      }
+      const parsedTier = parseStoredProjectCatalogTier(tier);
+      if (parsedTier) {
+        next[projectId] = parsedTier;
       }
     }
     return next;

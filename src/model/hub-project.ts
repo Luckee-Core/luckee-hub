@@ -8,6 +8,8 @@ export type HookStatus =
   | 'web_running'
   | 'ready';
 
+import type { DataPlaneConfig } from './project-env';
+
 export type HubProject = {
   id: string;
   name: string;
@@ -21,27 +23,11 @@ export type HubProject = {
   };
   localDatabaseSupported: boolean;
   supabaseSupported: boolean;
-  expressEnvGroupIds: string[];
+  dataPlane?: DataPlaneConfig;
   postgresActiveConsumer?: boolean;
   storageExpressSupported: boolean;
   storagePort: number;
   storageRunning?: boolean;
-};
-
-export type ExpressEnvGroupProbe = {
-  supported: boolean;
-  groupId: string;
-  label?: string;
-  expressEnvPath?: string;
-  keysPresent: Record<string, boolean>;
-  configured: boolean;
-  message?: string;
-};
-
-export type ExpressEnvGroupSaveResult = {
-  success: boolean;
-  message: string;
-  expressEnvPath: string;
 };
 
 export type CloseProjectResponse = {
@@ -143,10 +129,13 @@ export type SupabaseProbe = {
   expectedTables?: string[];
   hasSupabaseUrl: boolean;
   hasServiceKey: boolean;
-  hasDatabaseUrl: boolean;
   configured: boolean;
-  /** True when expectedTables exist on DATABASE_URL (remote check). */
+  /** True when every expected table exists (checked via Supabase REST with the service key). */
   schemaReady: boolean;
+  /** Expected tables not found — present when the table check ran. */
+  missingTables?: string[];
+  /** Why the table check could not run (bad key, unreachable, …). */
+  schemaCheckError?: string;
   message?: string;
 };
 
@@ -156,10 +145,3 @@ export type SupabaseConfigSaveResult = {
   expressEnvPath: string;
 };
 
-export type SupabaseSchemaSeedResult = {
-  success: boolean;
-  schemaReady: boolean;
-  bootstrapSql: string;
-  expectedTables: string[];
-  message: string;
-};

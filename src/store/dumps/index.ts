@@ -3,5 +3,7 @@ export * from './projectRepos';
 export * from './terminalSessions';
 export * from './localDatabaseProbes';
 export * from './supabaseProbes';
-export * from './expressEnvProbes';
+export * from './envProbes';
+export * from './dataPlaneProbes';
 export * from './runningJobs';
+export * from './projectOverviews';

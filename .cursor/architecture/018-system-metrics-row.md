@@ -12,8 +12,9 @@ Developers use the projects list as the hub home screen. Machine CPU/GPU spikes 
 
 ### UI
 
-- Package: `src/packages/projects/system-metrics-row/`
-- Rendered at the top of [`ProjectsTableView`](../src/packages/projects/table/table-view/index.tsx), above the search toolbar
+- Package: `src/packages/projects/system-metrics-header-item/`
+- Compact CPU / GPU bars on the right of the app header. `AppShell` passes it to `AppLayout` as `headerEndContent`; the item renders nothing off `/projects` and is hidden below the `md` breakpoint so it never covers the breadcrumb
+- Top CPU processes show in the item's hover title, not inline
 - Polls only while the route is `/projects` via `SystemMetricsPollingListener` in root layout (stops on project detail and other routes)
 
 ### Data
@@ -27,9 +28,8 @@ Developers use the projects list as the hub home screen. Machine CPU/GPU spikes 
 
 - Default interval **5000ms**
 - Module-level in-flight guard so slow ~800ms samples do not stack
-- Keep last snapshot on refresh errors (stale UI + status chip)
+- Keep last snapshot on refresh errors (dimmed bars, error in the hover title)
 
 ## Out of scope
 
-- Metrics when the registry is empty (`ProjectsTable` early return before `ProjectsTableView`)
 - Next.js BFF proxy
