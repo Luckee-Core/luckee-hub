@@ -1,4 +1,4 @@
-# Starts luckee-hub-express-server (:3001) and luckee-hub (:3000), then opens the browser.
+# Starts luckee-hub-express-server (:3001) and luckee-hub (first free port from 3000), then opens the browser.
 
 $ErrorActionPreference = "Stop"
 
@@ -33,15 +33,32 @@ Start-Process -FilePath "powershell.exe" -ArgumentList @(
 
 Start-Sleep -Seconds 1
 
+$PortFile = Join-Path $env:TEMP "luckee-hub-web.port"
+if (Test-Path $PortFile) {
+  Remove-Item -LiteralPath $PortFile -Force
+}
+
 Write-Log "hub:web starting ($HubWebDir)"
 Start-Process -FilePath "powershell.exe" -ArgumentList @(
   "-NoExit",
   "-Command",
-  "Set-Location -LiteralPath '$HubWebDir'; Write-Host '>>> Luckee Hub Web (:3000)'; npm run dev"
+  "Set-Location -LiteralPath '$HubWebDir'; npm run dev"
 )
 
-Start-Sleep -Seconds 2
-Start-Process "http://localhost:3000"
+$WebPort = ""
+for ($i = 0; $i -lt 40; $i++) {
+  if (Test-Path $PortFile) {
+    $WebPort = (Get-Content -LiteralPath $PortFile -Raw).Trim()
+    break
+  }
+  Start-Sleep -Milliseconds 250
+}
 
-Write-Host "Luckee Dev Hub starting — Express :3001, Web :3000"
+if ($WebPort) {
+  Start-Sleep -Seconds 1
+  Start-Process "http://localhost:$WebPort"
+  Write-Host "Luckee Dev Hub starting — Express :3001, Web :$WebPort"
+} else {
+  Write-Host "Luckee Dev Hub starting — Express :3001. Web port was not reported yet; use the URL printed in the Web terminal."
+}
 Write-Host "Log: $LauncherLog"

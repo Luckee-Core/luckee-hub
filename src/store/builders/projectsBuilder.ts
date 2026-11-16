@@ -14,13 +14,6 @@ type LocalDatabaseOperation = 'probe' | 'setup' | 'step';
 type ProjectsBuilderState = {
   listLoadStatus: LoadStatus;
   listError: string | null;
-  activeTerminalSessionId: string | null;
-  terminalDockOpen: boolean;
-  terminalSessionOrder: string[];
-  /** Session ids the user closed. Later polls must not put those tabs back. */
-  closedTerminalSessionIds: string[];
-  /** Bumped on Refresh so terminal panels reopen WebSockets for the same session ids. */
-  terminalConnectionEpoch: number;
   localDatabaseLoadStatus: LoadStatus;
   localDatabaseOperation: LocalDatabaseOperation | null;
   activeLocalDatabaseStepId: string | null;
@@ -56,11 +49,6 @@ type ProjectsBuilderState = {
 const initialState: ProjectsBuilderState = {
   listLoadStatus: 'idle',
   listError: null,
-  activeTerminalSessionId: null,
-  terminalDockOpen: false,
-  terminalSessionOrder: [],
-  closedTerminalSessionIds: [],
-  terminalConnectionEpoch: 0,
   localDatabaseLoadStatus: 'idle',
   localDatabaseOperation: null,
   activeLocalDatabaseStepId: null,
@@ -103,29 +91,6 @@ export const projectsBuilderSlice = createSlice({
     setListError: (state, action: PayloadAction<string | null>) => {
       state.listError = action.payload;
     },
-    setActiveTerminalSessionId: (state, action: PayloadAction<string | null>) => {
-      state.activeTerminalSessionId = action.payload;
-    },
-    setTerminalDockOpen: (state, action: PayloadAction<boolean>) => {
-      state.terminalDockOpen = action.payload;
-    },
-    setTerminalSessionOrder: (state, action: PayloadAction<string[]>) => {
-      state.terminalSessionOrder = action.payload;
-    },
-    addClosedTerminalSessionId: (state, action: PayloadAction<string>) => {
-      if (!state.closedTerminalSessionIds.includes(action.payload)) {
-        state.closedTerminalSessionIds.push(action.payload);
-      }
-    },
-    removeClosedTerminalSessionIds: (state, action: PayloadAction<string[]>) => {
-      const remove = new Set(action.payload);
-      if (remove.size === 0) {
-        return;
-      }
-      state.closedTerminalSessionIds = state.closedTerminalSessionIds.filter(
-        (id) => !remove.has(id),
-      );
-    },
     setStorageExpressInFlight: (
       state,
       action: PayloadAction<StorageExpressInFlight | null>,
@@ -151,9 +116,6 @@ export const projectsBuilderSlice = createSlice({
       if (action.payload.message) {
         state.storageExpressError = null;
       }
-    },
-    incrementTerminalConnectionEpoch: (state) => {
-      state.terminalConnectionEpoch += 1;
     },
     setLocalDatabaseLoadStatus: (state, action: PayloadAction<LoadStatus>) => {
       state.localDatabaseLoadStatus = action.payload;

@@ -16,7 +16,13 @@ import type {
   ProjectOverview,
 } from '@/model';
 import { requestApi } from '@/api/_shared';
-import type { HubConfigData, ListProjectsResponse, SetupProjectResponse } from './types';
+import type {
+  GetHubUiPreferencesResponse,
+  HubConfigData,
+  HubUiPreferencesData,
+  ListProjectsResponse,
+  SetupProjectResponse,
+} from './types';
 import { projectsApiBase } from './config';
 
 type ListProjectsOptions = {
@@ -114,6 +120,22 @@ export const putHubConfigApi = (luckeeParent: string) =>
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ luckeeParent }),
+  });
+
+/**
+ * Read hub UI preferences (favorites, table section overrides) from data/ui-preferences.json (committed).
+ */
+export const getUiPreferencesApi = () =>
+  requestApi<GetHubUiPreferencesResponse>(`${projectsApiBase}/api/projects/ui-preferences`);
+
+/**
+ * Save hub UI preferences (either field may be omitted to leave it unchanged).
+ */
+export const putUiPreferencesApi = (patch: Partial<HubUiPreferencesData>) =>
+  requestApi<HubUiPreferencesData>(`${projectsApiBase}/api/projects/ui-preferences`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(patch),
   });
 
 /**

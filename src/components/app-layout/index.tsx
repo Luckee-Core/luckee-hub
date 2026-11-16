@@ -9,6 +9,7 @@ import {
 } from '@/components/app-layout-header';
 import { resolveDefaultNavBreadcrumbForPathname } from '@/components/navigation/resolve-default-nav-breadcrumb-for-pathname';
 import { Sidebar } from '@/components/sidebar';
+import { TerminalSidebar } from '@/components/terminal-sidebar';
 import { PROJECT_DETAIL_PAGE_PATH, PROJECTS_PATH } from '@/config';
 import { BreadcrumbBuilderActions } from '@/store/builders/breadcrumbBuilder';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -25,11 +26,10 @@ const getStoredSidebarVisible = (): boolean => {
 
 type AppLayoutProps = {
   children: ReactNode;
-  terminalDock?: ReactNode;
   headerEndContent?: ReactNode;
 };
 
-export const AppLayout = ({ children, terminalDock, headerEndContent }: AppLayoutProps) => {
+export const AppLayout = ({ children, headerEndContent }: AppLayoutProps) => {
   const dispatch = useAppDispatch();
   const currentProject = useAppSelector((s) => s.currentProject);
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -98,8 +98,8 @@ export const AppLayout = ({ children, terminalDock, headerEndContent }: AppLayou
         <div className={styles.content}>
           <div className={styles.inner}>{children}</div>
         </div>
-        {terminalDock}
       </div>
+      <TerminalSidebar />
     </div>
   );
 };

@@ -6,24 +6,27 @@ import { Terminal } from '@xterm/xterm';
 import '@xterm/xterm/css/xterm.css';
 
 import { connectTerminalWebSocket } from '@/api/projects';
-import { useAppSelector } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { reconnectTerminalSessionThunk } from '@/store/thunks/terminal-sidebar';
 
 type TerminalSessionPanelProps = {
   sessionId: string;
   isActive: boolean;
-  dockOpen: boolean;
+  isSidebarOpen: boolean;
 };
 
 /**
- * One xterm + WebSocket per session so tab switches preserve scrollback.
+ * Interactive xterm + PTY WebSocket for one hub terminal. One per session so tab switches preserve
+ * scrollback. When the socket's retries run out, re-sync and reconnect if the session is still live (G8).
  */
 export const TerminalSessionPanel = ({
   sessionId,
   isActive,
-  dockOpen,
+  isSidebarOpen,
 }: TerminalSessionPanelProps) => {
-  const projectsBuilder = useAppSelector((state) => state.projectsBuilder);
-  const { terminalConnectionEpoch } = projectsBuilder;
+  const dispatch = useAppDispatch();
+  const builder = useAppSelector((state) => state.terminalSidebarBuilder);
+  const { connectionEpoch } = builder;
   const containerRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<Terminal | null>(null);
   const fitRef = useRef<FitAddon | null>(null);
@@ -78,7 +81,8 @@ export const TerminalSessionPanel = ({
         terminal.write(data);
       },
       onClose: () => {
-        terminal.writeln('\r\n\r\n[session disconnected]');
+        terminal.writeln('\r\n\r\n[session disconnected — re-syncing…]');
+        void dispatch(reconnectTerminalSessionThunk(sessionId));
       },
       onError: () => {
         // Unexpected close retries in the connection helper.
@@ -114,20 +118,20 @@ export const TerminalSessionPanel = ({
       terminalRef.current = null;
       fitRef.current = null;
     };
-  }, [sessionId, terminalConnectionEpoch, safeFit]);
+  }, [connectionEpoch, dispatch, safeFit, sessionId]);
 
   useEffect(() => {
-    if (isActive && dockOpen) {
+    if (isActive && isSidebarOpen) {
       requestAnimationFrame(() => {
         requestAnimationFrame(() => safeFit());
       });
     }
-  }, [isActive, dockOpen, safeFit]);
+  }, [isActive, isSidebarOpen, safeFit]);
 
   return (
     <div
       ref={containerRef}
-      className={isActive && dockOpen ? styles.panelActive : styles.panelInactive}
+      className={isActive && isSidebarOpen ? styles.panelActive : styles.panelInactive}
       aria-hidden={!isActive}
     />
   );

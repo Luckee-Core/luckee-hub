@@ -21,16 +21,16 @@ The dev hub listed studios at `/` in `packages/dev-hub`. Users need a projects l
 ```text
 src/packages/projects/              # list table, header, row actions
 src/packages/project-detail-page/   # summary + Overview / Environment / Local database tabs (ADR 024)
-src/packages/terminal-dock/         # shared dock (extracted from dev-hub)
+src/components/terminal-sidebar/     # app-wide terminal sidebar (ADR 025)
 ```
 
 Layout exception (this pass): existing `packages/projects/actions/`, `packages/project-detail-page/actions/`, and `packages/projects/index.ts` + `projects.tsx` stay. New packages follow ADRs 002 / 005 / 017.
 
 ### Catalog load
 
-[`AppShell`](../../src/components/app-shell/index.tsx) owns the first catalog load (`loadHubConfigThunk`, non-live `loadProjectsThunk`, `syncTerminalSessionsThunk`). Visiting `/projects` does not reload the catalog. Reloading `/project-detail-page` still restores terminal tabs.
+[`AppShell`](../../src/components/app-shell/index.tsx) dispatches `initializeAppThunk` (ADR 025), which owns the first catalog load (`loadHubConfigThunk`, non-live `loadProjectsThunk`, full terminal sync). Visiting `/projects` does not reload the catalog. Reloading `/project-detail-page` still restores terminal tabs.
 
-Live Refresh (`refreshProjectsThunk({ reconnectTerminals: true })`) probes ports, syncs terminals, bumps `terminalConnectionEpoch`, and copies `hookStatus`, `webUrl`, `apiPort`, `enabled`, and `postgresActiveConsumer` onto `currentProject` when they differ.
+Live Refresh (`refreshProjectsThunk({ reconnectTerminals: true })`) probes ports, syncs terminals, bumps `terminalSidebarBuilder.connectionEpoch`, and copies `hookStatus`, `webUrl`, `apiPort`, `enabled`, and `postgresActiveConsumer` onto `currentProject` when they differ.
 
 ### Redux
 

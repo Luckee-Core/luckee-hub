@@ -29,13 +29,14 @@ ADRs keep implementation consistent by documenting:
 ### Product ADRs
 
 11. [011 – Dev hub feature](./011-dev-hub-feature.md) — legacy; see 013 for projects routing.
-12. [012 – Terminal dock UI](./012-terminal-dock-ui.md) — bottom panel, xterm, WebSocket sessions.
+12. [012 – Terminal dock UI](./012-terminal-dock-ui.md) — superseded by 025.
 13. [013 – Projects and project detail](./013-projects-and-project-detail.md) — `/projects`, `/project-detail-page`, local DB panel.
 18. [018 – System metrics row](./018-system-metrics-row.md) — compact CPU/GPU in the app header on `/projects`.
 21. [021 – Storage Express launcher](./021-storage-express-launcher.md) — third repo type, detail-only storage Run, `envRepo` for local DB.
 22. [022 – Settings page](./022-settings-page.md) — `/settings` in the sidebar under Projects; Luckee folder card.
 23. [023 – App chrome matches my-ops-tracker-web](./023-app-chrome-matches-ops-tracker.md) — white sidebar, header, list table and filter bar styles, blue primary actions.
 24. [024 – Project detail layout](./024-project-detail-layout.md) — summary panel, Overview / Environment / Local database tabs, generic env groups.
+25. [025 – Terminal sidebar and app init](./025-terminal-sidebar.md) — right sidebar, Running list with Start / Stop all, app-wide sync scheduler.
 
 
 ## How to use

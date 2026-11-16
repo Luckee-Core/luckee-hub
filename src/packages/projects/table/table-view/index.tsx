@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type { HubProject } from '@/model';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -12,8 +12,6 @@ import {
   type ProjectCatalogTier,
 } from '@/config';
 import {
-  hydrateProjectFavoritesThunk,
-  hydrateProjectSectionOverridesThunk,
   setCurrentProjectThunk,
 } from '@/store/thunks/projects';
 import { setProjectCatalogTierThunk } from '@/store/thunks/projects/set-project-catalog-tier-thunk';
@@ -68,10 +66,6 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
   const projectSectionOverrides = useAppSelector((s) => s.projectSectionOverrides);
   const router = useRouter();
 
-  useEffect(() => {
-    void dispatch(hydrateProjectFavoritesThunk());
-    void dispatch(hydrateProjectSectionOverridesThunk());
-  }, [dispatch]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortColumn, setSortColumn] = useState<SortableColumn>('name');
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
@@ -305,7 +299,9 @@ export const ProjectsTableView = ({ projects }: ProjectsTableViewProps) => {
                 title={PROJECT_CATALOG_TIER_LABELS[tier]}
                 variant={TIER_SECTION_VARIANTS[tier]}
                 projects={tierProjects}
-                showWhenEmpty={tier === 'workInProgress' || draggingProjectId !== null}
+                showWhenEmpty={
+                  tier === 'active' || tier === 'workInProgress' || draggingProjectId !== null
+                }
                 draggingProjectId={draggingProjectId}
                 isDropTarget={dropTargetTier === tier}
                 onDragOverTier={setDropTargetTier}

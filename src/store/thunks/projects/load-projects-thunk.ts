@@ -5,7 +5,8 @@ import { CurrentProjectActions } from '@/store/current/currentProject';
 import { ProjectsActions } from '@/store/dumps/projects';
 import { ProjectReposActions } from '@/store/dumps/projectRepos';
 import { wait } from '@/utils/async';
-import { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
+import { TerminalSidebarBuilderActions } from '@/store/builders/terminalSidebarBuilder';
+import { syncTerminalSessionsThunk } from '@/store/thunks/terminal-sidebar/sync-terminal-sessions-thunk';
 
 /** First load keeps the loading state up at least this long so it doesn't flash. */
 const MIN_INITIAL_LOAD_MS = 2000;
@@ -15,6 +16,8 @@ type LoadProjectsOptions = {
   live?: boolean;
   /** After a live list, reopen WebSockets for existing session ids. */
   reconnectTerminals?: boolean;
+  /** With `live`, also run a full terminal sync (restore PTYs). Default true; the 30s poll passes false. */
+  syncTerminals?: boolean;
 };
 
 /**
@@ -25,6 +28,7 @@ export const loadProjectsThunk =
   async (dispatch, getState) => {
     const live = options.live ?? false;
     const reconnectTerminals = options.reconnectTerminals ?? false;
+    const syncTerminals = options.syncTerminals ?? true;
     const hasProjects = Object.keys(getState().projects).length > 0;
 
     if (!hasProjects) {
@@ -79,10 +83,10 @@ export const loadProjectsThunk =
       );
     }
 
-    if (live) {
-      await dispatch(syncTerminalSessionsThunk());
+    if (live && syncTerminals) {
+      await dispatch(syncTerminalSessionsThunk({ mode: 'sync' }));
       if (reconnectTerminals) {
-        dispatch(ProjectsBuilderActions.incrementTerminalConnectionEpoch());
+        dispatch(TerminalSidebarBuilderActions.bumpConnectionEpoch());
       }
     }
 

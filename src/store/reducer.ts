@@ -11,6 +11,7 @@ import { projectOverviewsReducer } from './dumps/projectOverviews';
 import { runningJobsReducer } from './dumps/runningJobs';
 import { breadcrumbBuilderReducer } from './builders/breadcrumbBuilder';
 import { projectsBuilderReducer } from './builders/projectsBuilder';
+import { terminalSidebarBuilderReducer } from './builders/terminalSidebarBuilder';
 import { projectDetailBuilderReducer } from './builders/projectDetailBuilder';
 import { currentProjectReducer } from './current/currentProject';
 import { systemMetricsBuilderReducer } from './builders/systemMetricsBuilder';
@@ -30,6 +31,7 @@ export const rootReducer = combineReducers({
   projectOverviews: projectOverviewsReducer,
   runningJobs: runningJobsReducer,
   projectsBuilder: projectsBuilderReducer,
+  terminalSidebarBuilder: terminalSidebarBuilderReducer,
   projectDetailBuilder: projectDetailBuilderReducer,
   currentProject: currentProjectReducer,
   systemMetricsBuilder: systemMetricsBuilderReducer,

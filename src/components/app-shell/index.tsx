@@ -3,36 +3,22 @@
 import { useEffect, type ReactNode } from 'react';
 import { AppLayout } from '@/components/app-layout';
 import { SystemMetricsHeaderItem } from '@/packages/projects/system-metrics-header-item';
-import { TerminalDock } from '@/packages/terminal-dock';
 import { useAppDispatch } from '@/store';
-import {
-  loadHubConfigThunk,
-  loadProjectsThunk,
-  syncTerminalSessionsThunk,
-} from '@/store/thunks/projects';
+import { initializeAppThunk } from '@/store/thunks/terminal-sidebar';
 
 type AppShellProps = {
   children: ReactNode;
 };
 
 /**
- * Shared layout + terminal dock. Loads hub config, the catalog, and terminal sessions once.
+ * Shared layout (nav sidebar, header, terminal sidebar). Kicks off app init once; it holds no state.
  */
 export const AppShell = ({ children }: AppShellProps) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const load = async (): Promise<void> => {
-      await dispatch(loadHubConfigThunk());
-      await dispatch(loadProjectsThunk());
-      void dispatch(syncTerminalSessionsThunk());
-    };
-    void load();
+    void dispatch(initializeAppThunk());
   }, [dispatch]);
 
-  return (
-    <AppLayout terminalDock={<TerminalDock />} headerEndContent={<SystemMetricsHeaderItem />}>
-      {children}
-    </AppLayout>
-  );
+  return <AppLayout headerEndContent={<SystemMetricsHeaderItem />}>{children}</AppLayout>;
 };

@@ -2,7 +2,7 @@ import { closeStorageExpressApi } from '@/api/projects';
 import type { AppThunk } from '@/store/store';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import { loadProjectsThunk } from './load-projects-thunk';
-import { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
+import { syncTerminalSessionsThunk } from '@/store/thunks/terminal-sidebar/sync-terminal-sessions-thunk';
 
 /**
  * Close Storage Express terminal for a project.
@@ -29,7 +29,7 @@ export const closeStorageExpressThunk =
       }
 
       await dispatch(syncTerminalSessionsThunk());
-      await dispatch(loadProjectsThunk({ live: true }));
+      await dispatch(loadProjectsThunk({ live: true, syncTerminals: false }));
       dispatch(
         ProjectsBuilderActions.setStorageExpressMessage({
           projectId,

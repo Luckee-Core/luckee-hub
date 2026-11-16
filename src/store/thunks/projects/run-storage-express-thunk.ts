@@ -1,11 +1,12 @@
-import { runStorageExpressApi, syncTerminalSessionsApi } from '@/api/projects';
+import { runStorageExpressApi } from '@/api/projects';
 import type { AppThunk } from '@/store/store';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
-import { addTerminalSessionsThunk, syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
+import { focusProjectTerminalThunk } from '@/store/thunks/terminal-sidebar/focus-project-terminal-thunk';
+import { syncTerminalSessionsThunk } from '@/store/thunks/terminal-sidebar/sync-terminal-sessions-thunk';
 import { loadProjectsThunk } from './load-projects-thunk';
 
 /**
- * Start Storage Express from project detail (not list Run).
+ * Start Storage Express from project detail (not list Run), then focus its terminal in the sidebar.
  */
 export const runStorageExpressThunk =
   (projectId: string): AppThunk<Promise<200 | 400 | 500>> =>
@@ -29,45 +30,22 @@ export const runStorageExpressThunk =
       }
 
       const { sessions = [] } = result.data;
+      await dispatch(syncTerminalSessionsThunk({ mode: 'sync' }));
+      const focused = await dispatch(focusProjectTerminalThunk(projectId, 'storage-express'));
 
-      const syncResult = await syncTerminalSessionsApi();
-      if (syncResult.success && syncResult.data) {
-        const storageSessionIds = syncResult.data
-          .filter((s) => s.projectId === projectId && s.role === 'storage-express')
-          .map((s) => s.sessionId);
-        const reopenIds = [
-          ...sessions.map((s) => s.sessionId),
-          ...storageSessionIds,
-        ];
-        dispatch(ProjectsBuilderActions.removeClosedTerminalSessionIds(reopenIds));
-      } else if (sessions.length > 0) {
-        dispatch(
-          ProjectsBuilderActions.removeClosedTerminalSessionIds(
-            sessions.map((s) => s.sessionId),
-          ),
-        );
-      }
+      dispatch(
+        ProjectsBuilderActions.setStorageExpressMessage({
+          projectId,
+          message:
+            sessions.length > 0
+              ? 'Storage terminal opened in the terminal sidebar.'
+              : focused === 200
+                ? 'Storage was already running — its terminal is focused in the sidebar.'
+                : 'Storage was already running.',
+        }),
+      );
 
-      if (sessions.length > 0) {
-        await dispatch(addTerminalSessionsThunk(sessions));
-        dispatch(
-          ProjectsBuilderActions.setStorageExpressMessage({
-            projectId,
-            message: 'Storage terminal opened — check the dock below.',
-          }),
-        );
-      } else {
-        await dispatch(syncTerminalSessionsThunk());
-        dispatch(
-          ProjectsBuilderActions.setStorageExpressMessage({
-            projectId,
-            message:
-              'Storage was already running — terminal dock opened (or scroll to the dock below).',
-          }),
-        );
-      }
-
-      await dispatch(loadProjectsThunk({ live: true }));
+      await dispatch(loadProjectsThunk({ live: true, syncTerminals: false }));
       return 200;
     } finally {
       dispatch(ProjectsBuilderActions.setStorageExpressInFlight(null));

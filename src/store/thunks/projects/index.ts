@@ -1,13 +1,7 @@
-export {
-  hydrateProjectFavoritesThunk,
-  toggleProjectFavoriteThunk,
-} from './toggle-project-favorite-thunk';
-export {
-  hydrateProjectSectionOverridesThunk,
-  setProjectCatalogTierThunk,
-} from './set-project-catalog-tier-thunk';
+export { hydrateUiPreferencesThunk } from './hydrate-ui-preferences-thunk';
+export { toggleProjectFavoriteThunk } from './toggle-project-favorite-thunk';
+export { setProjectCatalogTierThunk } from './set-project-catalog-tier-thunk';
 export { loadProjectsThunk, refreshProjectsThunk } from './load-projects-thunk';
-export { syncTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
 export { runProjectThunk } from './run-project-thunk';
 export { runStorageExpressThunk } from './run-storage-express-thunk';
 export { closeStorageExpressThunk } from './close-storage-express-thunk';
@@ -17,10 +11,7 @@ export { pollProjectSetupJobThunk } from './poll-project-setup-job-thunk';
 export { loadHubConfigThunk, pickHubConfigFolderThunk, openLuckeeParentModalThunk } from './hub-config-thunk';
 export { openProjectCursorThunk } from './open-project-cursor-thunk';
 export { openProjectChromeThunk } from './open-project-chrome-thunk';
-export { setActiveTerminalTabThunk } from './set-active-terminal-tab-thunk';
-export { closeTerminalSessionThunk } from './close-terminal-session-thunk';
 export { closeProjectTerminalsThunk } from './close-project-terminals-thunk';
-export { toggleTerminalDockThunk } from './toggle-terminal-dock-thunk';
 export { setCurrentProjectThunk } from './set-current-project-thunk';
 export { probeLocalDatabaseThunk, setupLocalDatabaseThunk } from './local-database-thunk';
 export { runLocalDatabaseStepThunk } from './run-local-database-step-thunk';

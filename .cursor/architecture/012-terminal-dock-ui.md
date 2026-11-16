@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [025 – Terminal sidebar and app init](./025-terminal-sidebar.md)
 
 ## Context
 

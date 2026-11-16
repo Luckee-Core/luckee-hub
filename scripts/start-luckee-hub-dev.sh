@@ -1,6 +1,6 @@
 #!/bin/zsh
 #
-# Starts luckee-hub-express-server (:3001) and luckee-hub (:3000), then opens the browser.
+# Starts luckee-hub-express-server (:3001) and luckee-hub (first free port from 3000), then opens the browser.
 
 set -euo pipefail
 
@@ -76,12 +76,27 @@ DEPS_PREFIX="$(ensure_deps_cmd)"
 
 EXPRESS_CMD="$(escape_for_applescript "cd '${HUB_EXPRESS_DIR}' && ${NVM_PREFIX}${DEPS_PREFIX}echo '>>> Luckee Hub Express (:3001)' && PORT=3001 npm run dev")"
 
-WEB_CMD="$(escape_for_applescript "cd '${HUB_WEB_DIR}' && ${NVM_PREFIX}${DEPS_PREFIX}echo '>>> Luckee Hub Web (:3000)' && npm run dev")"
+WEB_CMD="$(escape_for_applescript "cd '${HUB_WEB_DIR}' && ${NVM_PREFIX}${DEPS_PREFIX}npm run dev")"
+PORT_FILE="/tmp/luckee-hub-web.port"
+rm -f "$PORT_FILE"
 
 open_terminal_window "express" "$EXPRESS_CMD"
 sleep 1
 open_terminal_window "web" "$WEB_CMD"
-sleep 2
-open "http://localhost:3000"
 
-echo "Luckee Dev Hub starting — Express :3001, Web :3000"
+web_port=""
+for _ in {1..40}; do
+  if [[ -f "$PORT_FILE" ]]; then
+    web_port="$(tr -d '[:space:]' < "$PORT_FILE")"
+    break
+  fi
+  sleep 0.25
+done
+
+if [[ -n "$web_port" ]]; then
+  sleep 1
+  open "http://localhost:${web_port}"
+  echo "Luckee Dev Hub starting — Express :3001, Web :${web_port}"
+else
+  echo "Luckee Dev Hub starting — Express :3001. Web port was not reported yet; use the URL printed in the Web terminal."
+fi

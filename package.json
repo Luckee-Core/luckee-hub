@@ -6,7 +6,7 @@
     "luckeehub": "./bin/luckeehub"
   },
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "node scripts/dev-with-dynamic-port.mjs",
     "dev:desktop": "node scripts/install-desktop-app.js",
     "build": "next build",
     "start": "next start",

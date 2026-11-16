@@ -5,6 +5,10 @@ type TerminalSessionsState = Record<string, TerminalSession>;
 
 const initialState: TerminalSessionsState = {};
 
+/**
+ * Live PTY sessions keyed by session id — a mirror of hub Express's session registry.
+ * Single writer: syncTerminalSessionsThunk (ADR 025 G1).
+ */
 export const terminalSessionsSlice = createSlice({
   name: 'terminalSessions',
   initialState,
@@ -15,14 +19,6 @@ export const terminalSessionsSlice = createSlice({
         next[session.sessionId] = session;
       }
       return next;
-    },
-    upsertTerminalSessions: (state, action: PayloadAction<TerminalSession[]>) => {
-      for (const session of action.payload) {
-        state[session.sessionId] = session;
-      }
-    },
-    removeTerminalSession: (state, action: PayloadAction<string>) => {
-      delete state[action.payload];
     },
   },
 });

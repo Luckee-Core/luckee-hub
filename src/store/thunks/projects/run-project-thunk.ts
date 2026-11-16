@@ -5,7 +5,8 @@ import { ProjectsActions } from '@/store/dumps/projects';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import { RunningJobsActions } from '@/store/dumps/runningJobs';
 import { hasActiveRunOperation, hasActiveSetupOperation } from '@/utils/projects';
-import { addTerminalSessionsThunk } from './sync-terminal-sessions-thunk';
+import { focusProjectTerminalThunk } from '@/store/thunks/terminal-sidebar/focus-project-terminal-thunk';
+import { syncTerminalSessionsThunk } from '@/store/thunks/terminal-sidebar/sync-terminal-sessions-thunk';
 import { pollProjectJobThunk } from './poll-project-job-thunk';
 
 /**
@@ -30,8 +31,9 @@ export const runProjectThunk =
 
     const { jobId, sessions = [] } = result.data;
     dispatch(RunningJobsActions.setRunningJob({ projectId, jobId }));
+    await dispatch(syncTerminalSessionsThunk());
     if (sessions.length > 0) {
-      await dispatch(addTerminalSessionsThunk(sessions));
+      await dispatch(focusProjectTerminalThunk(projectId));
     }
 
     const project = getState().projects[projectId];

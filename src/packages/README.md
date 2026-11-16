@@ -1,6 +1,6 @@
 # `src/packages` — Feature modules
 
-**Domain-owned UI** for Luckee Hub: one folder per screen (e.g. **`projects/`**, **`project-detail-page/`**, **`terminal-dock/`**). Route files under **`src/app`** import the package export only.
+**Domain-owned UI** for Luckee Hub: one folder per screen (e.g. **`projects/`**, **`project-detail-page/`**). Route files under **`src/app`** import the package export only.
 
 ## Layout (typical)
 
@@ -30,6 +30,6 @@ Packages dispatch thunks via **`useAppDispatch`** / **`useAppSelector`** from **
 ## Related
 
 - [013 – Projects and project detail](../../.cursor/architecture/013-projects-and-project-detail.md)
-- [012 – Terminal dock UI](../../.cursor/architecture/012-terminal-dock-ui.md)
+- [025 – Terminal sidebar](../../.cursor/architecture/025-terminal-sidebar.md)
 - [001 – Redux patterns](../../.cursor/architecture/001-redux-patterns.md)
 - [005 – File organization](../../.cursor/architecture/005-file-organization.md)
