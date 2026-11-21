@@ -17,6 +17,7 @@ export const HUB_ALMOST_READY_PROJECT_IDS = [
   'mac-manager',
   'make-it-sound-like-me',
   'my-ai-threads',
+  'my-business-context',
   'my-fundraise',
   'my-gmail-manager',
   'my-health',

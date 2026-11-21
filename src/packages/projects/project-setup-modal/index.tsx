@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { CheckCircle2, Circle, Loader2, MinusCircle, XCircle } from 'lucide-react';
+import { CheckCircle2, Circle, Loader2, MinusCircle, X, XCircle } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { ProjectsBuilderActions } from '@/store/builders/projectsBuilder';
 import { setupProjectThunk } from '@/store/thunks/projects';
@@ -66,6 +66,19 @@ export const ProjectSetupModal = () => {
     return () => window.clearInterval(intervalId);
   }, [setupModalOpen, setupModalStartedAt, setupModalStatus]);
 
+  useEffect(() => {
+    if (!setupModalOpen) {
+      return;
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        dispatch(ProjectsBuilderActions.closeSetupModal());
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [dispatch, setupModalOpen]);
+
   if (!setupModalOpen || !setupModalProjectId) {
     return null;
   }
@@ -73,6 +86,10 @@ export const ProjectSetupModal = () => {
   const isRunning = setupModalStatus === 'running';
   const isCompleted = setupModalStatus === 'completed';
   const isFailed = setupModalStatus === 'failed';
+
+  const handleClose = () => {
+    dispatch(ProjectsBuilderActions.closeSetupModal());
+  };
 
   const handleRetry = () => {
     dispatch(ProjectsBuilderActions.closeSetupModal());
@@ -82,10 +99,22 @@ export const ProjectSetupModal = () => {
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="setup-modal-title">
       <div className={styles.card}>
-        <h2 id="setup-modal-title" className={styles.title}>
-          Setting up {projectName}
-        </h2>
+        <div className={styles.header}>
+          <h2 id="setup-modal-title" className={styles.title}>
+            Setting up {projectName}
+          </h2>
+          <button
+            type="button"
+            className={styles.closeIcon}
+            onClick={handleClose}
+            aria-label="Close setup window"
+            title={isRunning ? 'Hide (setup keeps running)' : 'Close'}
+          >
+            <X className="h-4 w-4" aria-hidden />
+          </button>
+        </div>
 
+        <div className={styles.body}>
         <div className={styles.statusRow}>
           {isRunning ? (
             <Loader2 className={`${styles.statusIcon} animate-spin text-blue-600`} aria-hidden />
@@ -129,6 +158,7 @@ export const ProjectSetupModal = () => {
             few minutes. Steps update as each repo is cloned and installed.
           </p>
         ) : null}
+        </div>
 
         {!isRunning ? (
           <div className={styles.actions}>
@@ -140,7 +170,7 @@ export const ProjectSetupModal = () => {
             <button
               type="button"
               className={isFailed ? styles.secondaryButton : styles.primaryButton}
-              onClick={() => dispatch(ProjectsBuilderActions.closeSetupModal())}
+              onClick={handleClose}
             >
               Close
             </button>
@@ -156,8 +186,14 @@ const styles = {
     fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4
   `,
   card: `
-    w-full max-w-xl rounded-lg border border-gray-300 bg-white p-6 shadow-xl space-y-4
+    flex w-full max-w-xl max-h-[calc(100dvh-2rem)] flex-col rounded-lg border border-gray-300
+    bg-white shadow-xl
   `,
+  header: `flex shrink-0 items-center justify-between gap-3 border-b border-gray-200 px-6 py-4`,
+  closeIcon: `
+    rounded-md p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-900
+  `,
+  body: `min-h-0 flex-1 space-y-4 overflow-y-auto px-6 py-4`,
   title: `text-lg font-semibold text-gray-900`,
   statusRow: `flex items-center gap-2`,
   statusIcon: `h-5 w-5 shrink-0`,
@@ -176,7 +212,7 @@ const styles = {
   `,
   note: `text-sm text-gray-500 leading-relaxed`,
   code: `font-mono text-xs bg-gray-100 px-1 py-0.5 rounded`,
-  actions: `flex flex-col gap-2`,
+  actions: `flex shrink-0 flex-col gap-2 border-t border-gray-200 px-6 py-4`,
   primaryButton: `
     inline-flex w-full items-center justify-center rounded-md px-4 py-2.5
     text-sm font-medium text-white bg-blue-600 hover:bg-blue-700
