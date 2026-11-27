@@ -13,7 +13,9 @@ type StorageControlsProps = {
 export const StorageControls = ({ cloned }: StorageControlsProps) => {
   const dispatch = useAppDispatch();
   const { id, storageRunning, storagePort } = useAppSelector((s) => s.currentProject);
-  const { storageExpressInFlight } = useAppSelector((s) => s.projectsBuilder);
+  const { storageExpressInFlight, storageExpressFeedbackProjectId, storageExpressError } =
+    useAppSelector((s) => s.projectsBuilder);
+  const error = storageExpressFeedbackProjectId === id ? storageExpressError : null;
 
   const isBusy = storageExpressInFlight?.projectId === id;
   const isStarting = isBusy && storageExpressInFlight?.action === 'start';
@@ -45,6 +47,11 @@ export const StorageControls = ({ cloned }: StorageControlsProps) => {
           {isStarting ? 'Starting…' : 'Start'}
         </button>
       )}
+      {error && !isBusy ? (
+        <span className={styles.error} role="alert">
+          {error}
+        </span>
+      ) : null}
     </div>
   );
 };
@@ -59,6 +66,7 @@ const styles = {
     inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-medium font-mono
     bg-gray-50 text-gray-600 border border-gray-200
   `,
+  error: `text-xs text-red-600`,
   dotUp: `h-1.5 w-1.5 rounded-full bg-green-500`,
   dotDown: `h-1.5 w-1.5 rounded-full bg-gray-300`,
   button: `
