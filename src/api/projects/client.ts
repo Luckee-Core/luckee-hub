@@ -41,12 +41,22 @@ export const listProjectsApi = (options: ListProjectsOptions = {}) => {
 /**
  * Start project dev servers (async job).
  */
-export const runProjectApi = (projectId: string, targets?: ProjectRunTarget[]) =>
-  requestApi<RunProjectResponse>(`${projectsApiBase}/api/launcher/projects/${projectId}/run`, {
+export const runProjectApi = (
+  projectId: string,
+  targets?: ProjectRunTarget[],
+  options: { openChrome?: boolean } = {},
+) => {
+  const body = {
+    ...(targets?.length ? { targets } : {}),
+    ...(options.openChrome === false ? { openChrome: false } : {}),
+  };
+  const hasBody = Object.keys(body).length > 0;
+  return requestApi<RunProjectResponse>(`${projectsApiBase}/api/launcher/projects/${projectId}/run`, {
     method: 'POST',
-    headers: targets?.length ? { 'Content-Type': 'application/json' } : undefined,
-    body: targets?.length ? JSON.stringify({ targets }) : undefined,
+    headers: hasBody ? { 'Content-Type': 'application/json' } : undefined,
+    body: hasBody ? JSON.stringify(body) : undefined,
   });
+};
 
 /**
  * Close project dev servers and stop hub-managed Postgres when idle.
@@ -62,6 +72,15 @@ export const closeProjectApi = (projectId: string) =>
 export const runStorageExpressApi = (projectId: string) =>
   requestApi<RunProjectResponse>(
     `${projectsApiBase}/api/launcher/projects/${projectId}/run-storage-express`,
+    { method: 'POST' },
+  );
+
+/**
+ * Stop Storage Express and start it again (detail header Restart).
+ */
+export const restartStorageExpressApi = (projectId: string) =>
+  requestApi<RunProjectResponse & { wasRunning: boolean }>(
+    `${projectsApiBase}/api/launcher/projects/${projectId}/restart-storage-express`,
     { method: 'POST' },
   );
 

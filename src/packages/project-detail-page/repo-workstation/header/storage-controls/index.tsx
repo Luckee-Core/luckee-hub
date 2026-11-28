@@ -1,14 +1,18 @@
 'use client';
 
 import { useAppDispatch, useAppSelector } from '@/store';
-import { closeStorageExpressThunk, runStorageExpressThunk } from '@/store/thunks/projects';
+import {
+  closeStorageExpressThunk,
+  restartStorageExpressThunk,
+  runStorageExpressThunk,
+} from '@/store/thunks/projects';
 
 type StorageControlsProps = {
   cloned: boolean;
 };
 
 /**
- * Running state + Start / Stop for Storage Express — project Run does not start it.
+ * Running state + Start / Restart / Stop for Storage Express — project Run does not start it.
  */
 export const StorageControls = ({ cloned }: StorageControlsProps) => {
   const dispatch = useAppDispatch();
@@ -20,6 +24,7 @@ export const StorageControls = ({ cloned }: StorageControlsProps) => {
   const isBusy = storageExpressInFlight?.projectId === id;
   const isStarting = isBusy && storageExpressInFlight?.action === 'start';
   const isStopping = isBusy && storageExpressInFlight?.action === 'close';
+  const isRestarting = isBusy && storageExpressInFlight?.action === 'restart';
 
   return (
     <div className={styles.row}>
@@ -28,14 +33,25 @@ export const StorageControls = ({ cloned }: StorageControlsProps) => {
         {storageRunning ? `Running :${storagePort}` : 'Stopped'}
       </span>
       {storageRunning ? (
-        <button
-          type="button"
-          className={styles.button}
-          disabled={isBusy}
-          onClick={() => void dispatch(closeStorageExpressThunk(id))}
-        >
-          {isStopping ? 'Stopping…' : 'Stop'}
-        </button>
+        <>
+          <button
+            type="button"
+            className={styles.button}
+            disabled={isBusy}
+            title="Stop Storage and start it again"
+            onClick={() => void dispatch(restartStorageExpressThunk(id))}
+          >
+            {isRestarting ? 'Restarting…' : 'Restart'}
+          </button>
+          <button
+            type="button"
+            className={styles.button}
+            disabled={isBusy}
+            onClick={() => void dispatch(closeStorageExpressThunk(id))}
+          >
+            {isStopping ? 'Stopping…' : 'Stop'}
+          </button>
+        </>
       ) : (
         <button
           type="button"
