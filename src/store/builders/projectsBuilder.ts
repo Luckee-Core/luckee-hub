@@ -6,7 +6,7 @@ type LoadStatus = 'idle' | 'loading' | 'loaded' | 'error';
 
 type StorageExpressInFlight = {
   projectId: string;
-  action: 'start' | 'close';
+  action: 'start' | 'close' | 'restart';
 };
 
 type LocalDatabaseOperation = 'probe' | 'setup' | 'step';

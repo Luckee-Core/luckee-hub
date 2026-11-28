@@ -5,6 +5,7 @@ export { loadProjectsThunk, refreshProjectsThunk } from './load-projects-thunk';
 export { runProjectThunk } from './run-project-thunk';
 export { runStorageExpressThunk } from './run-storage-express-thunk';
 export { closeStorageExpressThunk } from './close-storage-express-thunk';
+export { restartStorageExpressThunk } from './restart-storage-express-thunk';
 export { setupProjectThunk } from './setup-project-thunk';
 export { pollProjectJobThunk } from './poll-project-job-thunk';
 export { pollProjectSetupJobThunk } from './poll-project-setup-job-thunk';

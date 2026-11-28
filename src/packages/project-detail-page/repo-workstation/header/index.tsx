@@ -11,6 +11,7 @@ import { getRepoRoleLabelForRepo } from '../../get-repo-role-label';
 import { StatusDot } from '../../status';
 import { workstationStepAnchorId, type RepoSetupStep } from '../setup-steps/use-repo-setup-steps';
 import { CloneCopyButton } from './clone-copy-button';
+import { DevServerControls } from './dev-server-controls';
 import { StorageControls } from './storage-controls';
 
 type RepoWorkstationHeaderProps = {
@@ -54,6 +55,9 @@ export const RepoWorkstationHeader = ({ repo, steps }: RepoWorkstationHeaderProp
         </div>
         <div className={styles.actions}>
           {repo.role === 'storage' ? <StorageControls cloned={repo.dirExists === true} /> : null}
+          {repo.role === 'express' || repo.role === 'web' ? (
+            <DevServerControls target={repo.role} cloned={repo.dirExists === true} />
+          ) : null}
           {repo.repoUrl ? (
             <CloneCopyButton
               repoUrl={repo.repoUrl}

@@ -1,23 +1,30 @@
 'use client';
 
 import { useAppDispatch, useAppSelector } from '@/store';
-import { closeStorageExpressThunk, runStorageExpressThunk } from '@/store/thunks/projects';
+import {
+  closeStorageExpressThunk,
+  restartStorageExpressThunk,
+  runStorageExpressThunk,
+} from '@/store/thunks/projects';
 
 type StorageControlsProps = {
   cloned: boolean;
 };
 
 /**
- * Running state + Start / Stop for Storage Express — project Run does not start it.
+ * Running state + Start / Restart / Stop for Storage Express — project Run does not start it.
  */
 export const StorageControls = ({ cloned }: StorageControlsProps) => {
   const dispatch = useAppDispatch();
   const { id, storageRunning, storagePort } = useAppSelector((s) => s.currentProject);
-  const { storageExpressInFlight } = useAppSelector((s) => s.projectsBuilder);
+  const { storageExpressInFlight, storageExpressFeedbackProjectId, storageExpressError } =
+    useAppSelector((s) => s.projectsBuilder);
+  const error = storageExpressFeedbackProjectId === id ? storageExpressError : null;
 
   const isBusy = storageExpressInFlight?.projectId === id;
   const isStarting = isBusy && storageExpressInFlight?.action === 'start';
   const isStopping = isBusy && storageExpressInFlight?.action === 'close';
+  const isRestarting = isBusy && storageExpressInFlight?.action === 'restart';
 
   return (
     <div className={styles.row}>
@@ -26,14 +33,25 @@ export const StorageControls = ({ cloned }: StorageControlsProps) => {
         {storageRunning ? `Running :${storagePort}` : 'Stopped'}
       </span>
       {storageRunning ? (
-        <button
-          type="button"
-          className={styles.button}
-          disabled={isBusy}
-          onClick={() => void dispatch(closeStorageExpressThunk(id))}
-        >
-          {isStopping ? 'Stopping…' : 'Stop'}
-        </button>
+        <>
+          <button
+            type="button"
+            className={styles.button}
+            disabled={isBusy}
+            title="Stop Storage and start it again"
+            onClick={() => void dispatch(restartStorageExpressThunk(id))}
+          >
+            {isRestarting ? 'Restarting…' : 'Restart'}
+          </button>
+          <button
+            type="button"
+            className={styles.button}
+            disabled={isBusy}
+            onClick={() => void dispatch(closeStorageExpressThunk(id))}
+          >
+            {isStopping ? 'Stopping…' : 'Stop'}
+          </button>
+        </>
       ) : (
         <button
           type="button"
@@ -45,6 +63,11 @@ export const StorageControls = ({ cloned }: StorageControlsProps) => {
           {isStarting ? 'Starting…' : 'Start'}
         </button>
       )}
+      {error && !isBusy ? (
+        <span className={styles.error} role="alert">
+          {error}
+        </span>
+      ) : null}
     </div>
   );
 };
@@ -59,6 +82,7 @@ const styles = {
     inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-medium font-mono
     bg-gray-50 text-gray-600 border border-gray-200
   `,
+  error: `text-xs text-red-600`,
   dotUp: `h-1.5 w-1.5 rounded-full bg-green-500`,
   dotDown: `h-1.5 w-1.5 rounded-full bg-gray-300`,
   button: `

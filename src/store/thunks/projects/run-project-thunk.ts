@@ -13,7 +13,11 @@ import { pollProjectJobThunk } from './poll-project-job-thunk';
  * Run project dev servers and poll job until complete.
  */
 export const runProjectThunk =
-  (projectId: string, targets?: ProjectRunTarget[]): AppThunk<Promise<200 | 400 | 500>> =>
+  (
+    projectId: string,
+    targets?: ProjectRunTarget[],
+    options: { openChrome?: boolean } = {},
+  ): AppThunk<Promise<200 | 400 | 500>> =>
   async (dispatch, getState) => {
     if (hasActiveRunOperation(getState()) || hasActiveSetupOperation(getState())) {
       return 400;
@@ -22,7 +26,7 @@ export const runProjectThunk =
     dispatch(ProjectsBuilderActions.setListError(null));
     dispatch(ProjectsBuilderActions.setRunInFlightProjectId(projectId));
 
-    const result = await runProjectApi(projectId, targets);
+    const result = await runProjectApi(projectId, targets, options);
     if (!result.success || !result.data?.jobId) {
       dispatch(ProjectsBuilderActions.setRunInFlightProjectId(null));
       dispatch(ProjectsBuilderActions.setListError(result.error ?? 'Run failed'));
